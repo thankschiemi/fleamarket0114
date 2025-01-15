@@ -1,0 +1,13 @@
+.header {
+    display: flex;
+    align-items: center;
+    background-color: #000;
+    /* 背景色 */
+    padding: 10px 20px;
+    /* パディング */
+}
+
+.header__logo-img {
+    width: 150px;
+    height: auto;
+}
