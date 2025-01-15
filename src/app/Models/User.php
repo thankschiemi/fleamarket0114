@@ -6,27 +6,37 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * モデルに関連付けるテーブル
      *
-     * @var array<int, string>
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * 代入可能な属性
+     *
+     * @var array
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'profile_image_path',
+        'postal_code',
+        'address',
+        'building_name',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * 属性を隠す配列（シリアライズ時）
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -34,11 +44,35 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * キャストする属性
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * リレーション: ユーザーのお気に入り
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * リレーション: ユーザーのレビュー
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * リレーション: ユーザーの購入
+     */
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
 }
