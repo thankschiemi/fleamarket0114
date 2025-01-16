@@ -20,3 +20,19 @@ Route::get('/', function () {
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/search', function () {
+    return view('search');
+})->name('search');
+
+Route::get('/mypage', function () {
+    return view('mypage');
+})->name('mypage');
+
+Route::get('/post/create', function () {
+    return '出品ページ (仮)';
+})->name('post.create');

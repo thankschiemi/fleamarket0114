@@ -25,10 +25,10 @@
             <label for="password_confirmation" class="register__label">確認用パスワード</label>
             <input type="password" id="password_confirmation" name="password_confirmation" class="register__input" required>
         </div>
-        <button type="submit" class="register__button">登録</button>
+        <button type="submit" class="register__button">登録する</button>
     </form>
     <p class="register__login-link">
-        すでにアカウントをお持ちの方は <a href="{{ route('login') }}">こちら</a> からログイン
+        <a href="{{ route('login') }}">ログインはこちら</a>
     </p>
 </div>
 @endsection
