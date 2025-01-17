@@ -20,11 +20,9 @@
             </a>
         </div>
         <nav class="header__nav">
-            <!-- 検索フォーム -->
             <form action="{{ route('search') }}" method="GET" class="header__search-form">
                 <input type="text" name="query" class="header__search-input" placeholder="なにをお探しですか？">
             </form>
-            <!-- ナビゲーションメニュー -->
             <ul class="header__menu">
                 <li class="header__menu-item"><a href="{{ route('logout') }}" class="header__menu-link">ログアウト</a></li>
                 <li class="header__menu-item"><a href="{{ route('mypage') }}" class="header__menu-link">マイページ</a></li>
