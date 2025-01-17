@@ -29,10 +29,10 @@ Route::get('/search', function () {
     return view('search');
 })->name('search');
 
-Route::get('/mypage', function () {
-    return view('mypage');
-})->name('mypage');
-
 Route::get('/post/create', function () {
     return '出品ページ (仮)';
 })->name('post.create');
+
+Route::get('/mypage', function () {
+    return view('auth.update-profile-information');
+})->name('mypage');

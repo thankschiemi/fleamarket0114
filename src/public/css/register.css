@@ -62,7 +62,7 @@
 
 @media (max-width: 850px) and (min-width: 768px) {
     .register {
-        width: 90%;
+        width: 50%;
         margin: 50px auto;
     }
 
