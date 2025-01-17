@@ -94,42 +94,33 @@
     background-color: #0056b3;
 }
 
-/* タブレット用レスポンシブ */
 @media (max-width: 850px) and (min-width: 768px) {
-    .profile {
-        width: 90%;
-        /* タブレット時の幅 */
+    .register {
+        width: 50%;
+        margin: 50px auto;
     }
 
-    .profile__image-wrapper {
-        width: 120px;
-        height: 120px;
-        /* サイズを小さくする */
+    .register__label {
+        font-size: 22px;
     }
 
-    .profile__image-label {
-        margin-left: 10px;
-        /* ボタンと画像の間隔を調整 */
-        font-size: 16px;
-        /* フォントサイズを小さく */
-    }
-
-    .profile__input {
-        font-size: 16px;
-        /* 入力欄のフォントサイズを調整 */
+    .register__input {
+        font-size: 18px;
         padding: 10px;
+    }
+
+    .register__button {
+        font-size: 22px;
+    }
+
+    .register__login-link {
+        font-size: 18px;
     }
 }
 
-/* PC用レスポンシブ (1400px〜1540px) */
 @media (max-width: 1540px) and (min-width: 1400px) {
-    .profile {
-        max-width: 680px;
-        margin: 0 auto;
-    }
-
-    .profile__image-wrapper {
-        width: 150px;
-        height: 150px;
+    .register {
+        width: 680px;
+        margin: 100px auto;
     }
 }
