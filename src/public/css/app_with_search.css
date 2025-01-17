@@ -87,13 +87,21 @@
 /* タブレット対応（768pxから850pxの範囲） */
 @media (max-width: 850px) and (min-width: 768px) {
     .header {
+        display: flex;
         flex-wrap: wrap;
-        padding: 15px 30px;
+        /* 折り返しを有効化 */
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        /* 余白を調整 */
         height: auto;
+        /* 高さを自動調整 */
     }
 
     .header__logo {
+        flex: 1 1 auto;
         margin-bottom: 10px;
+        /* 下部に余白を追加 */
     }
 
     .header__logo-img {
@@ -108,26 +116,35 @@
     }
 
     .header__search-form {
-        justify-content: center;
         width: 100%;
-        margin-top: 10px;
+        justify-content: center;
     }
 
     .header__search-input {
         width: 90%;
+        /* 検索バーの幅を制限 */
+        max-width: 600px;
+        /* 最大幅を設定 */
         height: 40px;
-        font-size: 20px;
-        padding: 5px 20px;
+        font-size: 18px;
+        padding: 5px 15px;
+        /* 内側の余白を調整 */
     }
 
     .header__menu {
-        flex-direction: row;
+        flex-wrap: wrap;
+        /* 必要に応じて折り返し */
         justify-content: center;
-        gap: 15px;
+        gap: 10px;
+        /* メニュー間のスペースを調整 */
     }
 
     .header__menu-link {
-        font-size: 18px;
+        font-size: 16px;
+        /* リンクのフォントサイズを調整 */
+        white-space: nowrap;
+        /* リンクが折り返されないようにする */
+        text-align: center;
     }
 
     .header__button {
@@ -144,6 +161,7 @@
 
     .header__menu {
         gap: 20px;
+        /* メニュー間のスペースを調整 */
     }
 
     .header__menu-link {
