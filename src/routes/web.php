@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,42 +16,49 @@ use Illuminate\Http\Request;
 |
 */
 
+// ホームページ
 Route::get('/', function () {
     return view('welcome');
 });
 
+// メール認証ページ
+Route::get('/email/verify', function () {
+    return view('auth.verify-email'); // メール認証ビュー
+})->middleware('auth')->name('verification.notice');
+
+// メール認証の処理
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); // メール認証を完了
+    return redirect('/dashboard'); // 認証後のリダイレクト
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// 認証メールの再送信
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', '認証メールを再送しました！');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// ダッシュボード
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// ユーザー登録ページ
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
+// POSTリクエストを処理するルート
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware(['guest'])
+    ->name('register');
 
-
-// 認証ページを表示
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-// 認証処理
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // 認証を完了する
-    return redirect('/dashboard'); // 認証後のリダイレクト先
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-// 認証メールの再送
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('message', '認証メールを再送しました！');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified']);
-
+// ログインページ
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
+// その他のルート
 Route::get('/search', function () {
     return view('search');
 })->name('search');
@@ -61,4 +69,4 @@ Route::get('/post/create', function () {
 
 Route::get('/mypage', function () {
     return view('auth.update-profile-information');
-})->name('mypage');
+})->middleware(['auth', 'verified'])->name('mypage');

@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Illuminate\Support\Facades\Log;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -33,10 +34,7 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.verify-email'); // メール認証ページ
         });
 
-        // ★ 登録後に /email/verify へリダイレクト
         Fortify::redirects('register', '/email/verify');
-
-        // ★ ログイン後に /dashboard へリダイレクト
         Fortify::redirects('login', '/dashboard');
 
         // その他の既存コードをそのまま保持

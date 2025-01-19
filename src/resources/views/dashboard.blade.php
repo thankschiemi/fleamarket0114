@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
+<div class="dashboard">
+    <h1 class="dashboard__title">会員登録ありがとうございます。</h1>
+    <p class="dashboard__welcome-message">ここでは、登録後の機能を確認することができます。</p>
 
-<body>
-    <h1>登録ありがとうございます！</h1>
-    <p>これは登録後のダッシュボード画面です。</p>
-</body>
+</div>
 @endsection
