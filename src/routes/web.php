@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,8 +73,6 @@ Route::post('/logout', function (Request $request) {
     return redirect('/login'); // ログアウト後のリダイレクト
 })->middleware('auth')->name('logout');
 
-
-
 // その他のルート
 Route::get('/search', function () {
     return view('search');
@@ -82,3 +81,9 @@ Route::get('/search', function () {
 Route::get('/post/create', function () {
     return '出品ページ (仮)';
 })->name('post.create');
+
+Route::get('/', function () {
+    return view('products.product-list');
+});
+
+Route::get('/', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');

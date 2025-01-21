@@ -9,18 +9,8 @@ class Product extends Model
 {
     use HasFactory;
 
-    /**
-     * モデルに関連付けるテーブル
-     *
-     * @var string
-     */
     protected $table = 'products';
 
-    /**
-     * 代入可能な属性
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'price',
@@ -30,24 +20,29 @@ class Product extends Model
     ];
 
     /**
-     * リレーション: 商品のレビュー
+     * 商品画像のフルパスを取得するアクセサ
+     *
+     * @return string
      */
+    public function getImagePathAttribute()
+    {
+        // storage/images/ ディレクトリを基にフルURLを返す
+        return asset('storage/images/' . $this->img_url);
+    }
+
+    // リレーション: 商品のレビュー
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * リレーション: 商品のお気に入り
-     */
-    public function favorites()
+    // リレーション: 商品のお気に入り
+    public function favoritedByUsers()
     {
-        return $this->hasMany(Favorite::class);
+        return $this->belongsToMany(User::class, 'favorites', 'product_id', 'user_id');
     }
 
-    /**
-     * リレーション: 商品の購入履歴
-     */
+    // リレーション: 商品の購入履歴
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
