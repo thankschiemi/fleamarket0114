@@ -64,8 +64,13 @@ Route::get('/mypage', function () {
     return view('auth.update-profile-information');
 })->middleware(['auth', 'verified'])->name('mypage');
 
-
-
+// ログアウト
+Route::post('/logout', function (Request $request) {
+    auth()->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login'); // ログアウト後のリダイレクト
+})->middleware('auth')->name('logout');
 
 
 

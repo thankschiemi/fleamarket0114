@@ -24,7 +24,14 @@
                 <input type="text" name="query" class="header__search-input" placeholder="なにをお探しですか？">
             </form>
             <ul class="header__menu">
-                <li class="header__menu-item"><a href="{{ route('logout') }}" class="header__menu-link">ログアウト</a></li>
+
+                <li class="header__menu-item">
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="header__menu-link-button">ログアウト</button>
+                    </form>
+                </li>
+
                 <li class="header__menu-item"><a href="{{ route('mypage') }}" class="header__menu-link">マイページ</a></li>
                 <li class="header__menu-item">
                     <a href="{{ route('post.create') }}" class="header__button">出品</a>
