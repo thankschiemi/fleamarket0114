@@ -3,7 +3,8 @@
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +22,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// ユーザー登録ページ
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
+
+Route::post('/register', [RegisterController::class, 'store'])
+    ->name('register');
+
 // メール認証ページ
 Route::get('/email/verify', function () {
-    return view('auth.verify-email'); // メール認証ビュー
+    return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
 // メール認証の処理
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // メール認証を完了
-    return redirect('/dashboard'); // 認証後のリダイレクト
+    $request->fulfill();
+    return redirect('/dashboard');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 // 認証メールの再送信
@@ -43,20 +52,19 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// ユーザー登録ページ
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
-// POSTリクエストを処理するルート
-Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware(['guest'])
-    ->name('register');
-
-// ログインページ
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+// ログインページ
+Route::post('/login', [LoginController::class, 'login'])
+    ->name('login');
+
+
+
+
+
+
 
 // その他のルート
 Route::get('/search', function () {
