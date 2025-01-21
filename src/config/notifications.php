@@ -14,7 +14,7 @@ return [
     */
 
     'mail' => [
-        'transport' => env('MAIL_MAILER', 'smtp'), // メール送信に使用するトランスポート
+        'transport' => env('MAIL_MAILER', 'smtp'),
     ],
 
 ];

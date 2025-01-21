@@ -38,7 +38,7 @@ Route::get('/email/verify', function () {
 // メール認証の処理
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/dashboard');
+    return redirect('/mypage');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 // 認証メールの再送信
@@ -60,6 +60,9 @@ Route::get('/login', function () {
 Route::post('/login', [LoginController::class, 'login'])
     ->name('login');
 
+Route::get('/mypage', function () {
+    return view('auth.update-profile-information');
+})->middleware(['auth', 'verified'])->name('mypage');
 
 
 
@@ -74,7 +77,3 @@ Route::get('/search', function () {
 Route::get('/post/create', function () {
     return '出品ページ (仮)';
 })->name('post.create');
-
-Route::get('/mypage', function () {
-    return view('auth.update-profile-information');
-})->middleware(['auth', 'verified'])->name('mypage');

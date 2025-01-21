@@ -23,6 +23,6 @@ class RegisterController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        return redirect()->route('verification.notice');
+        return redirect()->route('mypage');
     }
 }
