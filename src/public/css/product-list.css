@@ -97,3 +97,52 @@
     font-size: 16px;
     padding: 32px 0;
 }
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .tabs {
+        margin-left: 100px;
+        font-size: 22px;
+        gap: 50px;
+    }
+
+    .product-list {
+        grid-template-columns: repeat(3, 1fr);
+        /* 3列表示 */
+    }
+
+    .product-list__image {
+        max-width: 450px;
+        /* 最大幅を450pxに調整 */
+    }
+
+    .product-list__name {
+        font-size: 22px;
+    }
+}
+
+/* --- タブレット (768-850px) 用のスタイル --- */
+@media (min-width: 768px) and (max-width: 850px) {
+    .tabs {
+        margin-left: 20px;
+        font-size: 18px;
+        gap: 30px;
+    }
+
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2列表示 */
+        gap: 12px;
+    }
+
+    .product-list__item {
+        padding: 12px;
+    }
+
+    .product-list__image {
+        max-width: 300px;
+        /* 最大幅を300pxに調整 */
+    }
+
+    .product-list__name {
+        font-size: 20px;
+    }
+}
