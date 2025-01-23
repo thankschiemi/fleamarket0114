@@ -17,12 +17,17 @@ class RegisterController extends Controller
             'name'     => $validatedData['name'],
             'email'    => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
+            'is_first_login' => true,
         ]);
 
         Auth::login($user);
 
         $user->sendEmailVerificationNotification();
 
-        return redirect()->route('mypage');
+        return redirect()->route('verification.notice');
+    }
+    public function show()
+    {
+        return view('auth.register');
     }
 }

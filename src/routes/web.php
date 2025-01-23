@@ -6,43 +6,24 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/', [ProductController::class, 'index'])->name('products.index');
 
-// ホームページ
-Route::get('/', function () {
-    return view('welcome');
-});
+// ユーザー登録
+Route::get('/register', [RegisterController::class, 'show'])->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->name('register');
 
-// ユーザー登録ページ
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
-Route::post('/register', [RegisterController::class, 'store'])
-    ->name('register');
-
-// メール認証ページ
+// メール認証
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-// メール認証の処理
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/mypage');
+    return redirect('/login');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// 認証メールの再送信
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', '認証メールを再送しました！');
@@ -53,37 +34,30 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// ログイン
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
-
-// ログインページ
-Route::post('/login', [LoginController::class, 'login'])
-    ->name('login');
-
-Route::get('/mypage', function () {
-    return view('auth.update-profile-information');
-})->middleware(['auth', 'verified'])->name('mypage');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 // ログアウト
 Route::post('/logout', function (Request $request) {
     auth()->logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    return redirect('/login'); // ログアウト後のリダイレクト
+    return redirect('/login');
 })->middleware('auth')->name('logout');
 
 // その他のルート
 Route::get('/search', function () {
     return view('search');
 })->name('search');
-
 Route::get('/post/create', function () {
     return '出品ページ (仮)';
 })->name('post.create');
 
-Route::get('/', function () {
-    return view('products.product-list');
+// マイページ（認証必須）
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mypage', [UserController::class, 'showProfile'])->name('mypage');
+    Route::put('/mypage', [UserController::class, 'updateProfile'])->name('mypage.update');
 });
-
-Route::get('/', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');

@@ -7,14 +7,24 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-
     public function login(LoginRequest $request)
     {
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('/');
+
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            if ($user->is_first_login) {
+                $user->is_first_login = false;
+                $user->save();
+
+
+                return redirect()->route('mypage'); // 初回ログイン時
+            }
+
+            return redirect('/'); // 通常ログイン時
         }
 
         return back()->withErrors([

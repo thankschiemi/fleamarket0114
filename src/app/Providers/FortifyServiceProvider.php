@@ -31,7 +31,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
-        Fortify::redirects('verification.verify', '/mypage');
+        Fortify::redirects('verification.verify', '/login');
         Fortify::redirects('logout', '/login');
 
         RateLimiter::for('login', function (Request $request) {
