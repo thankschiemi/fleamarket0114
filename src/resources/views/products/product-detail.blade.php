@@ -43,10 +43,17 @@
             <div class="product-detail__information">
                 <h2 class="product-detail__information-title">商品の情報</h2>
                 <ul class="product-detail__information-list">
-                    <li class="product-detail__information-item">カテゴリ：{{ $product->category }}</li>
+                    <li class="product-detail__information-item">
+                        カテゴリ：
+                        @foreach ($product->categories as $category)
+                        <span class="category-tag">{{ $category->name }}</span>
+                        @endforeach
+                    </li>
                     <li class="product-detail__information-item">商品の状態：{{ $product->condition }}</li>
                 </ul>
             </div>
+
+
 
             <!-- コメントセクション -->
             <div class="product-detail__comments">

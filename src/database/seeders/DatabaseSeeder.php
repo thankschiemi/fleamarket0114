@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         // 他のシーダーがあればここに追加
         $this->call([
             ProductSeeder::class,
+            CategorySeeder::class,
+            CategoryProductSeeder::class,
         ]);
     }
 }

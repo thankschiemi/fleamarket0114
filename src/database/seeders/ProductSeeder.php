@@ -24,7 +24,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => '腕時計',
-                'category' => 'ファッション',
                 'price' => 15000,
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'img_url' => 'Armani+Mens+Clock.jpg',
@@ -36,7 +35,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'HDD',
-                'category' => '家電',
                 'price' => 5000,
                 'description' => '高速で信頼性の高いハードディスク',
                 'img_url' => 'HDD+Hard+Disk.jpg',
@@ -48,7 +46,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => '玉ねぎ3束',
-                'category' => 'キッチン',
                 'price' => 300,
                 'description' => '新鮮な玉ねぎ3束のセット',
                 'img_url' => 'iLoveIMG+d.jpg',
@@ -60,7 +57,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => '革靴',
-                'category' => 'メンズ',
                 'price' => 4000,
                 'description' => 'クラシックなデザインの革靴',
                 'img_url' => 'Leather+Shoes+Product+Photo.jpg',
@@ -72,7 +68,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'ノートPC',
-                'category' => '家電',
                 'price' => 45000,
                 'description' => '高性能なノートパソコン',
                 'img_url' => 'Living+Room+Laptop.jpg',
@@ -84,7 +79,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'マイク',
-                'category' => '家電',
                 'price' => 8000,
                 'description' => '高音質のレコーディング用マイク',
                 'img_url' => 'Music+Mic+4632231.jpg',
@@ -96,7 +90,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'ショルダーバッグ',
-                'category' => 'ファッション',
                 'price' => 3500,
                 'description' => 'おしゃれなショルダーバッグ',
                 'img_url' => 'Purse+fashion+pocket.jpg',
@@ -108,7 +101,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'タンブラー',
-                'category' => 'キッチン',
                 'price' => 500,
                 'description' => '使いやすいタンブラー',
                 'img_url' => 'Tumbler+souvenir.jpg',
@@ -120,7 +112,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'コーヒーミル',
-                'category' => 'キッチン',
                 'price' => 4000,
                 'description' => '手動のコーヒーミル',
                 'img_url' => 'Waitress+with+Coffee+Grinder.jpg',
@@ -132,7 +123,6 @@ class ProductSeeder extends Seeder
             [
                 'user_id' => $user->id,
                 'name' => 'メイクセット',
-                'category' => 'コスメ',
                 'price' => 2500,
                 'description' => '便利なメイクアップセット',
                 'img_url' => 'Makeup+Set.jpg',
