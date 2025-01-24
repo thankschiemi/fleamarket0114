@@ -17,25 +17,20 @@ class Product extends Model
         'description',
         'img_url',
         'condition',
+        'user_id',
+        'is_sold',
     ];
 
-    /**
-     * 商品画像のフルパスを取得するアクセサ
-     *
-     * @return string
-     */
     public function getImagePathAttribute()
     {
         // storage/images/ ディレクトリを基にフルURLを返す
         return asset('storage/images/' . $this->img_url);
     }
-
     // リレーション: 商品のレビュー
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
-
     // リレーション: 商品のお気に入り
     public function favoritedByUsers()
     {
@@ -46,5 +41,10 @@ class Product extends Model
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
+    }
+    // リレーション: 商品の出品者 (Userモデルと関連付け)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -52,12 +52,6 @@
         </div>
 
         <button type="submit" class="profile__button">更新する</button>
-        @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-        @endif
-
     </form>
 </div>
 @endsection

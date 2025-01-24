@@ -5,28 +5,42 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // タブの切り替え: ?tab=mylist の場合は「マイリスト」を表示
-        $tab = $request->query('tab', 'recommend'); // デフォルトは "recommend"
+        $tab = $request->query('tab', 'recommend');
 
         if ($tab === 'mylist') {
             if (Auth::check()) {
-                $products = Auth::user()->favorites; // お気に入りの商品を取得
-
+                $products = Auth::user()->favorites;
+                Log::info('マイリストの商品データ:', $products->toArray());
             } else {
-                return redirect()->route('login'); // ログインしていない場合はログイン画面へ
+                return redirect()->route('login');
             }
         } else {
-            $products = Product::all(); // 全商品を取得
+            $products = Product::when(Auth::check(), function ($query) {
+                $query->where('user_id', '!=', Auth::id());
+            })
+                ->get()
+                ->map(function ($product) {
+                    $product->is_sold = (bool) $product->is_sold;
+                    return $product;
+                });
         }
-
         return view('products.product-list', [
             'products' => $products,
             'tab' => $tab,
         ]);
+    }
+    public function show($id)
+    {
+        // 商品データを取得
+        $product = Product::findOrFail($id);
+
+        // 商品詳細ページを表示
+        return view('products.product-detail', compact('product'));
     }
 }

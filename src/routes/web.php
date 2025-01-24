@@ -8,8 +8,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 
-Route::get('/', [ProductController::class, 'index'])->name('products.index');
-
 // ユーザー登録
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register');
@@ -61,3 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mypage', [UserController::class, 'showProfile'])->name('mypage');
     Route::put('/mypage', [UserController::class, 'updateProfile'])->name('mypage.update');
 });
+
+Route::get('/', [ProductController::class, 'index'])->name('products.index');
+
+Route::get('/item/{item_id}', [ProductController::class, 'show'])->name('product.show');

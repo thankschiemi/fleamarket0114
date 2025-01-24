@@ -45,8 +45,8 @@ class UserController extends Controller
             'building_name' => $request->input('building'),
         ]);
 
-        // プロフィールページにリダイレクト
-        return redirect()->route('mypage')->with('success', 'プロフィールが更新されました！');
+        // フォーム送信後に http://localhost/ にリダイレクト
+        return redirect('/');
     }
 
     public function showProfile()
