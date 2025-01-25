@@ -8,7 +8,8 @@
 <div class="product-detail">
     <!-- 商品画像 -->
     <div class="product-detail__image">
-        <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="product-detail__image--main">
+        <img src="{{ $product->image_path ?? asset('images/default-product.jpg') }}" alt="商品画像"
+            class="product-detail__image--main">
     </div>
 
     <!-- 商品情報 -->

@@ -39,9 +39,9 @@ class CategoryProductSeeder extends Seeder
         $product6 = Product::find(6);
         $product6->categories()->attach([2]);
 
-        // 商品ID 7 (ショルダーバッグ) → カテゴリ: ファッション
+        // 商品ID 7 (ショルダーバッグ) → カテゴリ: ファッション、レディ－ス
         $product7 = Product::find(7);
-        $product7->categories()->attach([1]);
+        $product7->categories()->attach([1, 4]);
 
         // 商品ID 8 (タンブラー) → カテゴリ: キッチン
         $product8 = Product::find(8);
@@ -51,8 +51,8 @@ class CategoryProductSeeder extends Seeder
         $product9 = Product::find(9);
         $product9->categories()->attach([10]);
 
-        // 商品ID 10 (メイクセット) → カテゴリ: コスメ
+        // 商品ID 10 (メイクセット) → カテゴリ: コスメ,レディース
         $product10 = Product::find(10);
-        $product10->categories()->attach([6]);
+        $product10->categories()->attach([6, 4]);
     }
 }
