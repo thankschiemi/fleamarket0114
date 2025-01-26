@@ -7,6 +7,9 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\ReviewController;
+
 
 // ユーザー登録
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
@@ -63,3 +66,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
 
 Route::get('/item/{item_id}', [ProductController::class, 'show'])->name('product.show');
+
+Route::middleware(['auth'])->group(
+    function () {
+        Route::post('/favorites/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+        Route::post('/reviews/{product}', [ReviewController::class, 'store'])->name('reviews.store');
+    }
+);

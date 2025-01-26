@@ -53,9 +53,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * リレーション: ユーザーのお気に入り
-     */
     public function favorites()
     {
         return $this->belongsToMany(Product::class, 'favorites', 'user_id', 'product_id');
@@ -75,5 +72,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
+    }
+    public function getProfileImagePathAttribute()
+    {
+        return $this->attributes['profile_image_path']
+            ? asset('storage/profile_images/' . $this->attributes['profile_image_path'])
+            : asset('images/default-avatar.png');
     }
 }

@@ -23,7 +23,6 @@ class Product extends Model
 
     public function getImagePathAttribute()
     {
-        // storage/images/ ディレクトリを基にフルURLを返す
         return asset('storage/images/' . $this->img_url);
     }
     // リレーション: 商品のレビュー

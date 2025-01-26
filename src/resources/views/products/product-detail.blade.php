@@ -19,69 +19,81 @@
         <p class="product-detail__price">¥{{ number_format($product->price) }}（税込）</p>
 
         <div class="product-detail__actions">
-            <div class="product-detail__icons">
+            <div class="product-detail__icon-group">
+                <!-- いいね機能 -->
                 <div class="product-detail__icon">
-                    <span class="product-detail__icon-star">★</span>
-                    <span class="product-detail__icon-count">3</span>
+                    <form method="POST" action="{{ route('favorites.toggle', $product->id) }}">
+                        @csrf
+                        <button type="submit" class="product-detail__icon-star">
+                            @if (Auth::check() && Auth::user()->favorites->contains($product->id))
+                            ★
+                            @else
+                            ☆
+                            @endif
+                        </button>
+                    </form>
+                    <span class="product-detail__icon-count">{{ $product->favoritedByUsers->count() }}</span>
                 </div>
+
+                <!-- コメント数表示 -->
                 <div class="product-detail__icon">
                     <span class="product-detail__icon-comment">💬</span>
-                    <span class="product-detail__icon-count">1</span>
+                    <span class="product-detail__icon-count">{{ $product->reviews->count() }}</span>
                 </div>
             </div>
-
 
             <!-- ボタン -->
             <button class="product-detail__buy-button">購入手続きへ</button>
-
-            <!-- 商品説明 -->
-            <div class="product-detail__description">
-                <h2 class="product-detail__description-title">商品説明</h2>
-                <p class="product-detail__description-text">{{ $product->description }}</p>
-            </div>
-
-            <!-- 商品情報 -->
-            <div class="product-detail__information">
-                <h2 class="product-detail__information-title">商品の情報</h2>
-                <ul class="product-detail__information-list">
-                    <li class="product-detail__information-item">
-                        カテゴリ：
-                        @foreach ($product->categories as $category)
-                        <span class="category-tag">{{ $category->name }}</span>
-                        @endforeach
-                    </li>
-                    <li class="product-detail__information-item">商品の状態：{{ $product->condition }}</li>
-                </ul>
-            </div>
-
-
-
-            <!-- コメントセクション -->
-            <div class="product-detail__comments">
-                <h2 class="product-detail__comments-title">レビュー</h2>
-                @if ($product->reviews && $product->reviews->isNotEmpty())
-                @foreach ($product->reviews as $review)
-                <div class="product-detail__comment">
-                    <p class="product-detail__comment-username">{{ $review->user->name }}</p>
-                    <p class="product-detail__comment-text">{{ $review->content }}</p>
-                </div>
-                @endforeach
-                @else
-                <p class="product-detail__no-comments">レビューはまだありません。</p>
-                @endif
-
-                @auth
-                <form action="{{ route('reviews.store', ['product_id' => $product->id]) }}" method="POST" class="product-detail__comment-form">
-                    @csrf
-                    <textarea name="review" class="product-detail__comment-input" placeholder="商品のレビューを入力"></textarea>
-                    <button type="submit" class="product-detail__comment-submit">レビューを送信する</button>
-                </form>
-                @else
-                <p class="product-detail__login-reminder">レビューを投稿するには<a href="{{ route('login') }}">ログイン</a>してください。</p>
-                @endauth
-            </div>
-
         </div>
+
+        <!-- 商品説明 -->
+        <div class="product-detail__description">
+            <h2 class="product-detail__description-title">商品説明</h2>
+            <p class="product-detail__description-text">{{ $product->description }}</p>
+        </div>
+
+        <!-- 商品情報 -->
+        <div class="product-detail__information">
+            <h2 class="product-detail__information-title">商品の情報</h2>
+            <ul class="product-detail__information-list">
+                <li class="product-detail__information-item">
+                    カテゴリ：
+                    @foreach ($product->categories as $category)
+                    <span class="category-tag">{{ $category->name }}</span>
+                    @endforeach
+                </li>
+                <li class="product-detail__information-item">商品の状態：{{ $product->condition }}</li>
+            </ul>
+        </div>
+
+        <!-- コメントセクション -->
+        <div class="product-detail__comments">
+            <h3 class="product-detail__comments-title">コメント ({{ $product->reviews->count() }})</h3>
+
+            @if ($product->reviews->isNotEmpty())
+            @foreach ($product->reviews as $review)
+            <div class="comment">
+                <img src="{{ $review->user->profile_image_path ?? asset('images/default-avatar.png') }}" alt="{{ $review->user->name }}" class="profile-image">
+                <p><strong>{{ $review->user->name }}</strong>（{{ $review->created_at->format('Y-m-d H:i') }}）</p>
+                <p>{{ $review->comment }}</p>
+            </div>
+
+            <p><strong>{{ $review->user->name }}</strong>（{{ $review->created_at->format('Y-m-d H:i') }}）</p>
+            <p>{{ $review->comment }}</p>
+        </div>
+        @endforeach
+        @else
+        <p class="product-detail__no-comments">コメントはまだありません。</p>
+        @endif
+
+        <!-- コメント投稿フォーム -->
+        <form method="POST" action="{{ route('reviews.store', $product->id) }}">
+            @csrf
+            <textarea name="comment" placeholder="コメントを入力してください" rows="3"></textarea>
+            <button type="submit">コメントを送信する</button>
+        </form>
     </div>
 
-    @endsection
+</div>
+</div>
+@endsection

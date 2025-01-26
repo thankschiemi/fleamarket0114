@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
+        "doctrine/dbal": "^2.13",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/fortify": "^1.19",
         "laravel/framework": "^8.0",
@@ -20,6 +21,9 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
         "phpunit/phpunit": "^9.5.10"
+    },
+    "conflict": {
+        "carbonphp/carbon-doctrine-types": "*"
     },
     "autoload": {
         "psr-4": {
