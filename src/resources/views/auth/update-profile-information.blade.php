@@ -11,12 +11,9 @@
         @csrf
         @method('PUT')
         <div class="profile__image-group">
+
             <div class="profile__image-wrapper">
-
-                <img src="{{ $user->profile_image_path ? asset('storage/' . $user->profile_image_path) : asset('images/default-avatar.jpg') }}"
-                    alt="プロフィール画像"
-                    class="profile__image">
-
+                <div class="profile__placeholder"></div>
             </div>
             <input type="file" id="image" name="image" class="profile__image-input">
             <label for="image" class="profile__image-label">画像を選択する</label>

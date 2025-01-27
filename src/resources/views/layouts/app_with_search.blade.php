@@ -16,7 +16,7 @@
     <header class="header">
         <div class="header__logo">
             <a href="{{ url('/') }}">
-                <img src="{{ asset('images/coachtech_logo.svg') }}" alt="COACHTECH Logo" class="header__logo-img">
+                <img src="{{ asset('storage/images/coachtech_logo.svg') }}" alt="COACHTECH Logo" class="header__logo-img">
             </a>
         </div>
         <nav class="header__nav">
