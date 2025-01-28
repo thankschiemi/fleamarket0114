@@ -1,0 +1,95 @@
+/* 商品購入画面のスタイル */
+
+.purchase {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.purchase__title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.purchase__container {
+    display: flex;
+    gap: 20px;
+}
+
+.purchase__product {
+    flex: 1;
+    text-align: center;
+}
+
+.purchase__image {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+.purchase__name,
+.purchase__price {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.purchase__details {
+    flex: 1;
+}
+
+.purchase__payment,
+.purchase__address,
+.purchase-summary {
+    margin-bottom: 20px;
+}
+
+.purchase__label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.purchase__select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.purchase__address-text {
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.purchase__change {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.purchase-summary__item {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.purchase__button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #ff5a5f;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.purchase__button:hover {
+    background: #e04e52;
+}
