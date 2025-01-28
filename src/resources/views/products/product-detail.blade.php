@@ -58,23 +58,31 @@
 
             @if ($product->reviews->isNotEmpty())
             @foreach ($product->reviews as $review)
-            <div class="comment">
-                <div class="comment">
-                    <img src="{{ $review->user->profile_image_path ?? asset('images/default-avatar.jpg') }}" alt="{{ $review->user->name }}" class="profile-image">
-                    <p><strong>{{ $review->user->name }}</strong>（{{ $review->created_at->format('Y-m-d H:i') }}）</p>
-                    <p>{{ $review->comment }}</p>
+
+            <div class="product-detail__comment">
+                <!-- 1. プロフィール画像とユーザー名 -->
+                <div class="product-detail__comment-header">
+                    <img src="{{ $review->user->profile_image_path ?? asset('images/default-avatar.jpg') }}"
+                        alt="{{ $review->user->name }}"
+                        class="product-detail__comment-image">
+                    <p class="product-detail__comment-username"><strong>{{ $review->user->name }}</strong></p>
                 </div>
+
+                <p class="product-detail__comment-text">{{ $review->comment }}</p>
             </div>
             @endforeach
             @else
             <p class="product-detail__no-comments">コメントはまだありません。</p>
             @endif
-            <form method="POST" action="{{ route('reviews.store', $product->id) }}">
+
+            <!-- 3. コメント入力フォーム -->
+            <form method="POST" action="{{ route('reviews.store', $product->id) }}" class="product-detail__comment-form">
                 @csrf
-                <textarea name="comment" placeholder="コメントを入力してください" rows="3"></textarea>
-                <button type="submit">コメントを送信する</button>
+                <textarea name="comment" placeholder="コメントを入力してください" rows="3" class="product-detail__comment-input"></textarea>
+                <button type="submit" class="product-detail__comment-submit">コメントを送信する</button>
             </form>
         </div>
+
     </div>
 </div>
 @endsection

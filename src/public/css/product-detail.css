@@ -7,6 +7,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 50px;
+    font-family: 'Inter', sans-serif;
 }
 
 /* 商品画像 */
@@ -41,52 +42,77 @@
 .product-detail__title {
     font-size: 45px;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
+    line-height: 1;
+    padding: 0
 }
 
 .product-detail__brand {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 15px;
+    font-size: 15px;
+    color: #000000;
+    margin-bottom: 3px;
+    line-height: 1;
+    padding: 0
 }
 
 .product-detail__price {
     font-size: 30px;
-    color: red;
-    margin-bottom: 20px;
+    color: #000000;
+    margin-bottom: 3px;
+    line-height: 1;
+    padding: 0
 }
 
 /* 商品説明 */
 .product-detail__description-title {
-    font-size: 18px;
+    font-size: 36px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
 .product-detail__description-text {
-    font-size: 14px;
-    color: gray;
+    font-size: 24px;
+    color: #000000;
     margin-bottom: 20px;
 }
 
 /* 商品情報 */
 .product-detail__information-title {
-    font-size: 18px;
+    font-size: 36px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
 .product-detail__information-list {
     list-style: none;
-    padding: 0;
+    padding: 10px;
     margin: 0;
 }
-
-.product-detail__information-item {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 10px;
+/* 商品情報リストのカテゴリータグに適用 */
+.product-detail__information-list .category-tag {
+    display: inline-block;
+    /* インラインで並ぶように */
+    padding: 5px 15px;
+    /* タグの内側の余白 */
+    font-size: 20px;
+    /* フォントサイズ */
+    color: #000000;
+    /* テキストの色 */
+    background-color: #D9D9D9;
+    /* 背景色をグレーに設定 */
+    border-radius: 20px;
+    /* 丸みを付ける */
+    margin-right: 10px;
+    /* タグ間の余白を設定 */
+    text-align: center;
+    /* テキストを中央揃え */
 }
+.product-detail__information-item {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
 /* アイコンとカウントを横並びに調整 */
 .product-detail__icon-group {
     display: flex;
@@ -98,10 +124,8 @@
 
 .product-detail__icon {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    /* アイコンと数字を縦方向で揃える */
-    gap: 5px;
-    /* アイコンと数字の間隔 */
     font-size: 14px;
     /* 数字の文字サイズ */
 }
@@ -111,7 +135,7 @@
 .product-detail__icon-comment {
     font-size: 30px;
     /* アイコンのサイズ */
-    color: black;
+    color: #000000;
     /* 必要に応じてアイコンの色を設定 */
     background: none;
     /* 背景色をリセット */
@@ -128,7 +152,7 @@
 .product-detail__icon-count {
     font-size: 14px;
     /* カウントの文字サイズ */
-    color: gray;
+    color: #000000;
     /* カウントの色 */
 }
 /* アクションエリア */
@@ -141,8 +165,7 @@
 
 .product-detail__buy-button {
     display: inline-block;
-    padding: 12px 20px;
-    font-size: 16px;
+    font-size: 30px;
     color: white;
     background-color: #ff6f61;
     border: none;
@@ -156,63 +179,72 @@
     transform: translateY(-2px);
 }
 
-/* コメントセクション */
-.product-detail__comments {
-    margin-top: 20px;
-}
 
-.comment {
+.product-detail__comment {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    /* 縦並び */
     gap: 10px;
-    margin-bottom: 15px;
+    /* 各要素間のスペース */
+    width: 100%;
 }
 
-.comment__profile-image {
+/* 1. ヘッダー部分（プロフィール画像とユーザー名） */
+.product-detail__comment-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* プロフィール画像 */
+.product-detail__comment-image {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.comment__content {
-    flex: 1;
+/* ユーザー名 */
+.product-detail__comment-username {
     font-size: 14px;
-}
-
-.comment__username {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin: 0;
 }
 
-.comment__text {
+/* 2. コメント本文 */
+.product-detail__comment-text {
     font-size: 14px;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0;
 }
 
-/* コメントフォーム */
+/* 3. コメント入力フォーム */
 .product-detail__comment-form {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .product-detail__comment-input {
     width: 100%;
     padding: 10px;
     font-size: 14px;
-    border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
 }
 
 .product-detail__comment-submit {
     width: 100%;
     padding: 10px;
-    background-color: #ff6f61;
+    font-size: 16px;
     color: white;
+    background-color: #ff6f61;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .product-detail__comment-submit:hover {
