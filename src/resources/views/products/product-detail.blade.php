@@ -54,7 +54,8 @@
             </ul>
         </div>
         <div class="product-detail__comments">
-            <h3 class="product-detail__comments-title">コメント ({{ $product->reviews->count() }})</h3>
+            <p class="product-detail__comments-title">コメント ({{ $product->reviews->count() }})</p>
+
 
             @if ($product->reviews->isNotEmpty())
             @foreach ($product->reviews as $review)
