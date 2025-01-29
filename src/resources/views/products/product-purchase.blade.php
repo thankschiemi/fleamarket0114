@@ -24,18 +24,29 @@
                     </select>
                 </div>
                 <div class="purchase__details-address">
-                    <p class="purchase__details-label">配送先</p>
-                    <a href="#" class="purchase__details-change">変更する</a>
+                    <div class="purchase__details-header">
+                        <p class="purchase__details-label">配送先</p>
+                        <a href="#" class="purchase__details-change">変更する</a>
+                    </div>
                     <p class="purchase__details-text">〒{{ Auth::user()->postal_code }}<br>{{ Auth::user()->address }}</p>
                 </div>
+
             </div>
         </div>
 
         <div class="purchase__right">
             <div class="purchase__summary">
-                <p class="purchase__summary-item">商品代金: ¥{{ number_format($product->price) }}</p>
-                <p class="purchase__summary-item">支払い方法: <span id="selected-payment">選択してください</span></p>
+                <div class="purchase__summary-price-item">
+                    <span class="purchase__summary-label">商品代金</span>
+                    <span class="purchase__summary-value">¥{{ number_format($product->price) }}</span>
+                </div>
+                <div class="purchase__summary-item">
+                    <span class="purchase__summary-label">支払い方法</span>
+                    <span class="purchase__summary-value" id="selected-payment">選択してください</span>
+                </div>
             </div>
+
+
 
             <form method="POST" action="{{ route('purchase.complete', ['item_id' => $product->id]) }}" class="purchase__form">
                 @csrf

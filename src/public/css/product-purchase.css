@@ -2,6 +2,7 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
+    font-family: 'Inter', sans-serif;
 }
 
 .purchase__container {
@@ -17,30 +18,34 @@
 }
 
 .purchase__product {
-    text-align: center;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    /* 画像とテキストの間隔を調整 */
+    border-bottom: 1px solid #000000;
+        /* 下にラインを追加 */
+        padding-bottom: 50px;
 }
 
 .product-detail__image--main {
-    display: flex;
-    width: 100%;
-    max-width: 250px;
+    max-width: 200px;
+    /* 画像の幅を調整 */
     height: auto;
     border-radius: 5px;
 }
+
 .purchase__product-info {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
 .purchase__product-name {
-    display: flex;
     font-size: 20px;
     font-weight: bold;
-    margin-top: 10px;
 }
 
 .purchase__product-price {
-    display: flex;
     font-size: 18px;
     color: #333;
 }
@@ -49,29 +54,46 @@
     margin-top: 20px;
 }
 
-.purchase__details-payment,
+.purchase__details-payment {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #000000;
+    /* 下にラインを追加 */
+    padding-bottom: 40px;
+}
 .purchase__details-address {
     margin-bottom: 15px;
+    border-bottom: 1px solid #000000;
+    /* 下にラインを追加 */
+    padding-bottom: 10px;
 }
 
 .purchase__details-label {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
+    margin-left: 30px;
+    padding-bottom: 30px;
 }
 
 .purchase__details-select {
-    width: 100%;
+    width: 80%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-left: 60px;
 }
-
+.purchase__details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
 .purchase__details-text {
+    font-weight: bold;
     background: #fff;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    margin-left: 60px;
 }
 
 .purchase__details-change {
@@ -81,31 +103,66 @@
     text-decoration: none;
     margin-top: 5px;
 }
-
 .purchase__right {
-    flex: 1;
+    width: 60%;
+    max-width: 400px;
+    margin: 0 auto;
     background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
 }
 
 .purchase__summary {
-    background: #f8f8f8;
-    padding: 10px;
-    border-radius: 5px;
+    background: #fff;
+    border: 1px solid #000;
+    /* 外枠のみに適用 */
+    overflow: hidden;
     margin-bottom: 15px;
+    padding: 0;
+    /* paddingを0にして内側のアイテムに余白を追加 */
 }
 
+.purchase__summary-price-item,
 .purchase__summary-item {
+    display: flex;
+    justify-content: flex-start;
+    /* 左揃え */
+    padding: 12px 15px;
     font-size: 16px;
-    margin-bottom: 5px;
+    align-items: center;
+    height: 80px;
+    /* 均等な高さを設定 */
+    border-bottom: 1px solid #000;
+    /* ボーダーを適用 */
 }
 
+.purchase__summary-item:last-child {
+    border-bottom: none;
+    /* 最後の行のボーダーを削除 */
+}
+
+/* ラベルと値を揃える */
+.purchase__summary-label {
+    flex: 1;
+    text-align: left;
+    font-weight: bold;
+}
+
+.purchase__summary-value {
+    flex: 1;
+    text-align: left;
+}
+
+/* ボタンとの間隔 */
+.purchase__form-button {
+    margin-top: 15px;
+}
+/* ==========================
+   購入ボタン
+   ========================== */
 .purchase__form-button {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: #ff5a5f;
     color: white;
     font-size: 18px;
@@ -114,6 +171,7 @@
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s;
+    margin-top: 15px;
 }
 
 .purchase__form-button:hover {
