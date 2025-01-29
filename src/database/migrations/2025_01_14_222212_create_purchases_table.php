@@ -17,11 +17,12 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
+            $table->enum('payment_method', ['convenience_store', 'credit_card']);
+            $table->enum('status', ['pending', 'completed', 'canceled'])->default('pending');
             $table->timestamp('purchase_date');
-            $table->string('status', 50);
             $table->timestamps();
 
-            // 外部キー制約
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });

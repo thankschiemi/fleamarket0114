@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\PurchasesController;
 
 
 // ユーザー登録
@@ -73,3 +74,7 @@ Route::middleware(['auth'])->group(
         Route::post('/reviews/{product}', [ReviewController::class, 'store'])->name('reviews.store');
     }
 );
+
+Route::get('/purchases', [PurchasesController::class, 'index'])->name('purchases.index');
+Route::get('/purchase/{item_id}', [PurchasesController::class, 'show'])->name('purchase.show');
+Route::post('/purchase/{item_id}/complete', [PurchasesController::class, 'complete'])->name('purchase.complete');

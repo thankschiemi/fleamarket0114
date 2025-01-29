@@ -35,7 +35,8 @@
                     <span class="product-detail__icon-count">{{ $product->reviews->count() }}</span>
                 </div>
             </div>
-            <button class="product-detail__buy-button">購入手続きへ</button>
+            <a href="{{ url('/purchase/' . $product->id) }}" class="product-detail__buy-button">購入手続きへ</a>
+
         </div>
         <div class="product-detail__description">
             <h2 class="product-detail__description-title">商品説明</h2>

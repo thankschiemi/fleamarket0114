@@ -1,83 +1,108 @@
-/* 商品購入画面のスタイル */
-
 .purchase {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-}
-
-.purchase__title {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 .purchase__container {
     display: flex;
     gap: 20px;
+    align-items: flex-start;
+}
+
+.purchase__left {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .purchase__product {
-    flex: 1;
     text-align: center;
 }
 
-.purchase__image {
+.product-detail__image--main {
+    display: flex;
     width: 100%;
-    max-width: 200px;
+    max-width: 250px;
     height: auto;
-    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.purchase__product-info {
+    display: flex;
+    flex-direction: column;
 }
 
-.purchase__name,
-.purchase__price {
-    font-size: 18px;
+.purchase__product-name {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
     margin-top: 10px;
 }
 
+.purchase__product-price {
+    display: flex;
+    font-size: 18px;
+    color: #333;
+}
+
 .purchase__details {
-    flex: 1;
+    margin-top: 20px;
 }
 
-.purchase__payment,
-.purchase__address,
-.purchase-summary {
-    margin-bottom: 20px;
+.purchase__details-payment,
+.purchase__details-address {
+    margin-bottom: 15px;
 }
 
-.purchase__label {
+.purchase__details-label {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
 }
 
-.purchase__select {
+.purchase__details-select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
-.purchase__address-text {
-    background: #f9f9f9;
+.purchase__details-text {
+    background: #fff;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
-.purchase__change {
+.purchase__details-change {
+    display: block;
+    text-align: right;
     color: #007bff;
     text-decoration: none;
-    font-size: 14px;
+    margin-top: 5px;
 }
 
-.purchase-summary__item {
+.purchase__right {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.purchase__summary {
+    background: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.purchase__summary-item {
     font-size: 16px;
     margin-bottom: 5px;
 }
 
-.purchase__button {
+.purchase__form-button {
     display: block;
     width: 100%;
     padding: 10px;
@@ -88,8 +113,9 @@
     border-radius: 4px;
     cursor: pointer;
     text-align: center;
+    transition: background-color 0.3s;
 }
 
-.purchase__button:hover {
+.purchase__form-button:hover {
     background: #e04e52;
 }

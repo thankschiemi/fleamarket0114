@@ -26,29 +26,14 @@ class Purchase extends Model
         'product_id',
         'purchase_date',
         'status',
+        'payment_method',
     ];
-
-    /**
-     * リレーション: 購入を行ったユーザー
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * リレーション: 購入された商品
-     */
     public function product()
     {
         return $this->belongsTo(Product::class);
-    }
-
-    /**
-     * リレーション: 購入に関連する支払い情報
-     */
-    public function payment()
-    {
-        return $this->hasOne(Payment::class);
     }
 }

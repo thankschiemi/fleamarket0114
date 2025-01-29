@@ -124,7 +124,7 @@
 }
 
 .product-detail__buy-button {
-    font-size: 16px;
+    font-size: 14px;
     padding: 8px 12px;
     color: white;
     background-color: #ff6f61;
@@ -132,6 +132,10 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
 }
 
 .product-detail__buy-button:hover {
