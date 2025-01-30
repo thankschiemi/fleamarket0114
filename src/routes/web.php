@@ -78,3 +78,6 @@ Route::middleware(['auth'])->group(
 Route::get('/purchases', [PurchasesController::class, 'index'])->name('purchases.index');
 Route::get('/purchase/{item_id}', [PurchasesController::class, 'show'])->name('purchase.show');
 Route::post('/purchase/{item_id}/complete', [PurchasesController::class, 'complete'])->name('purchase.complete');
+
+Route::get('/purchase/address/{item_id}', [PurchasesController::class, 'editAddress'])->name('purchase.address.edit');
+Route::post('/purchase/address/{item_id}', [PurchasesController::class, 'updateAddress'])->name('shipping.update');

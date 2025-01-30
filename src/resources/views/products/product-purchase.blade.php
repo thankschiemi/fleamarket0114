@@ -32,7 +32,8 @@
                 <div class="purchase__details-address">
                     <div class="purchase__details-header">
                         <p class="purchase__details-label">配送先</p>
-                        <a href="#" class="purchase__details-change">変更する</a>
+                        <a href="{{ route('purchase.address.edit', ['item_id' => $product->id]) }}" class="purchase__details-change">変更する</a>
+
                     </div>
                     <p class="purchase__details-text">〒{{ Auth::user()->postal_code }}<br>{{ Auth::user()->address }}<br>{{ Auth::user()->building_name }}</p>
                 </div>
