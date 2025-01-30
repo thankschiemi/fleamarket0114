@@ -73,12 +73,8 @@
     padding-bottom: 30px;
 }
 
-
-
-
-
 .purchase__details-select {
-    width: 100%;
+    width: 60%;
     padding: 8px;
     border: 1.5px solid #B1B1B1;
     border-radius: 5px;
@@ -93,9 +89,9 @@
     -moz-appearance: none;
     text-align: left;
     cursor: pointer;
+    margin-left: 60px;
 }
 
-/* ✅ フォーカス時の背景色変更と矢印の色変更 */
 .purchase__details-select:focus {
     background-color: #636769;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="%23EAEAEA" d="M7 10l5 5 5-5H7z"/></svg>');
@@ -107,41 +103,35 @@
     outline: none;
 }
 
-/* ✅ 選択肢のデザインを適用 */
 .purchase__details-select option {
     background-color: #636769;
     color: #EAEAEA;
     padding: 10px;
 }
 
-/* ✅ 選択されたオプションのデザイン */
 .purchase__details-select option:checked {
     background-color: #5599EB;
     color: #FFFFFF;
 }
-/* ✅ 選択肢のデザイン */
+
 .purchase__details-select option {
     background-color: #636769;
     color: #EAEAEA;
     padding: 10px;
 }
 
-/* ✅ 選択されたオプションにチェックマークを表示 */
 .purchase__details-select option:checked {
     background-color: #5599EB;
     color: #FFFFFF;
     font-weight: bold;
 }
 
-/* ✅ 選択時の矢印アイコン変更 */
 .purchase__details-select:focus {
     background-color: #636769;
     color: #EAEAEA;
     border-color: #B1B1B1;
     outline: none;
 }
-
-
 
 .purchase__details-header {
     display: flex;

@@ -67,29 +67,41 @@
 @section('js')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const paymentSelect = document.getElementById("payment");
-        const selectedPaymentDisplay = document.getElementById("selected-payment");
+        const select = document.getElementById("payment");
 
-        // 初期状態で「選択してください」を削除
-        paymentSelect.innerHTML = `
-        <option value="convenience_store">コンビニ払い</option>
-        <option value="credit_card">カード支払い</option>
-    `;
+        // セレクトボックスを開いたとき
+        select.addEventListener("focus", function() {
+            if (select.options.length > 2) {
+                select.remove(0); // 「選択してください」を削除
+            }
 
-        // 選択肢の変更を監視
-        paymentSelect.addEventListener("change", function() {
-            const selectedOption = paymentSelect.options[paymentSelect.selectedIndex];
+            // 選択されているオプションに `✔` を追加
+            Array.from(select.options).forEach(option => {
+                if (option.selected) {
+                    option.textContent = `✔ ${option.textContent}`;
+                }
+            });
+        });
 
-            // 🚀 選択した支払い方法を右側の表示エリアにも反映
-            selectedPaymentDisplay.textContent = selectedOption.textContent;
+        // 選択肢を変更したとき
+        select.addEventListener("change", function() {
+            const selectedOption = select.options[select.selectedIndex];
 
-            // すべてのオプションのテキストをリセット
-            Array.from(paymentSelect.options).forEach(option => {
-                option.textContent = option.textContent.replace("✔ ", ""); // 既存の✔を削除
+            // すべてのオプションの `✔` を削除
+            Array.from(select.options).forEach(option => {
+                option.textContent = option.textContent.replace("✔ ", "");
             });
 
-            // ✅ 選択されたオプションに✔をつける
+            // 選択したオプションのみに `✔` を追加
             selectedOption.textContent = `✔ ${selectedOption.textContent}`;
+        });
+
+        // セレクトボックスを閉じたとき
+        select.addEventListener("blur", function() {
+            // すべての `✔` を削除（通常表示時に `✔` を表示しない）
+            Array.from(select.options).forEach(option => {
+                option.textContent = option.textContent.replace("✔ ", "");
+            });
         });
     });
 </script>
