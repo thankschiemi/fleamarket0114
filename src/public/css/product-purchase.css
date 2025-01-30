@@ -1,5 +1,5 @@
 .purchase {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     font-family: 'Inter', sans-serif;
@@ -7,29 +7,26 @@
 
 .purchase__container {
     display: flex;
-    gap: 20px;
-    align-items: flex-start;
+    gap: 60px;
+    justify-content: space-between;
 }
 
 .purchase__left {
-    flex: 1;
+    flex: 2;
     padding: 20px;
-    border-radius: 8px;
+    max-width: 800px;
 }
 
 .purchase__product {
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    /* 画像とテキストの間隔を調整 */
     border-bottom: 1px solid #000000;
-        /* 下にラインを追加 */
-        padding-bottom: 50px;
+    padding-bottom: 50px;
 }
 
 .product-detail__image--main {
     max-width: 200px;
-    /* 画像の幅を調整 */
     height: auto;
     border-radius: 5px;
 }
@@ -43,11 +40,14 @@
 .purchase__product-name {
     font-size: 20px;
     font-weight: bold;
+    white-space: normal;
+    margin-bottom: -15px;
 }
 
 .purchase__product-price {
     font-size: 18px;
     color: #333;
+    white-space: normal;
 }
 
 .purchase__details {
@@ -57,13 +57,11 @@
 .purchase__details-payment {
     margin-bottom: 15px;
     border-bottom: 1px solid #000000;
-    /* 下にラインを追加 */
     padding-bottom: 40px;
 }
 .purchase__details-address {
     margin-bottom: 15px;
     border-bottom: 1px solid #000000;
-    /* 下にラインを追加 */
     padding-bottom: 10px;
 }
 
@@ -75,16 +73,78 @@
     padding-bottom: 30px;
 }
 
+
+
+
+
 .purchase__details-select {
-    width: 80%;
+    width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1.5px solid #B1B1B1;
     border-radius: 5px;
-    margin-left: 60px;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="%23777777" d="M7 10l5 5 5-5H7z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 24px;
+    color: #333;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-align: left;
+    cursor: pointer;
 }
+
+/* ✅ フォーカス時の背景色変更と矢印の色変更 */
+.purchase__details-select:focus {
+    background-color: #636769;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="%23EAEAEA" d="M7 10l5 5 5-5H7z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 24px;
+    color: #EAEAEA;
+    border-color: #B1B1B1;
+    outline: none;
+}
+
+/* ✅ 選択肢のデザインを適用 */
+.purchase__details-select option {
+    background-color: #636769;
+    color: #EAEAEA;
+    padding: 10px;
+}
+
+/* ✅ 選択されたオプションのデザイン */
+.purchase__details-select option:checked {
+    background-color: #5599EB;
+    color: #FFFFFF;
+}
+/* ✅ 選択肢のデザイン */
+.purchase__details-select option {
+    background-color: #636769;
+    color: #EAEAEA;
+    padding: 10px;
+}
+
+/* ✅ 選択されたオプションにチェックマークを表示 */
+.purchase__details-select option:checked {
+    background-color: #5599EB;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/* ✅ 選択時の矢印アイコン変更 */
+.purchase__details-select:focus {
+    background-color: #636769;
+    color: #EAEAEA;
+    border-color: #B1B1B1;
+    outline: none;
+}
+
+
+
 .purchase__details-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
 }
@@ -101,9 +161,11 @@
     text-align: right;
     color: #007bff;
     text-decoration: none;
-    margin-top: 5px;
+    margin-top: -15px;
+    margin-left: 450px;
 }
 .purchase__right {
+    flex: 1;
     width: 60%;
     max-width: 400px;
     margin: 0 auto;
@@ -114,33 +176,26 @@
 .purchase__summary {
     background: #fff;
     border: 1px solid #000;
-    /* 外枠のみに適用 */
     overflow: hidden;
-    margin-bottom: 15px;
+    margin-bottom: 40px;
     padding: 0;
-    /* paddingを0にして内側のアイテムに余白を追加 */
 }
 
 .purchase__summary-price-item,
 .purchase__summary-item {
     display: flex;
     justify-content: flex-start;
-    /* 左揃え */
     padding: 12px 15px;
     font-size: 16px;
     align-items: center;
     height: 80px;
-    /* 均等な高さを設定 */
     border-bottom: 1px solid #000;
-    /* ボーダーを適用 */
 }
 
 .purchase__summary-item:last-child {
     border-bottom: none;
-    /* 最後の行のボーダーを削除 */
 }
 
-/* ラベルと値を揃える */
 .purchase__summary-label {
     flex: 1;
     text-align: left;
@@ -152,13 +207,10 @@
     text-align: left;
 }
 
-/* ボタンとの間隔 */
 .purchase__form-button {
     margin-top: 15px;
 }
-/* ==========================
-   購入ボタン
-   ========================== */
+
 .purchase__form-button {
     display: block;
     width: 100%;
@@ -176,4 +228,58 @@
 
 .purchase__form-button:hover {
     background: #e04e52;
+}
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .purchase {
+        max-width: 1000px;
+    }
+
+    .purchase__container {
+        gap: 40px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+        .purchase__container {
+            flex-direction: row;
+            gap: 20px;
+        }
+
+        .purchase__left,
+        .purchase__right {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .purchase__product {
+            align-items: center;
+            text-align: center;
+        }
+
+        .product-detail__image--main {
+            max-width: 180px;
+        }
+
+        .purchase__details-header {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .purchase__details-text {
+            margin-left: 0;
+            text-align: left;
+        }
+
+        .purchase__details-change {
+            margin-left: 0;
+            text-align: left;
+        }
+
+        .purchase__form-button {
+            width: 100%;
+        }
+        .purchase__summary-price-item,
+        .purchase__summary-item{
+            font-size: 11px;
+        }
 }
