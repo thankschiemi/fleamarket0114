@@ -28,16 +28,13 @@
                     </select>
                 </div>
 
-
                 <div class="purchase__details-address">
                     <div class="purchase__details-header">
                         <p class="purchase__details-label">配送先</p>
                         <a href="{{ route('purchase.address.edit', ['item_id' => $product->id]) }}" class="purchase__details-change">変更する</a>
-
                     </div>
                     <p class="purchase__details-text">〒{{ Auth::user()->postal_code }}<br>{{ Auth::user()->address }}<br>{{ Auth::user()->building_name }}</p>
                 </div>
-
             </div>
         </div>
 
@@ -53,11 +50,13 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('purchase.complete', ['item_id' => $product->id]) }}" class="purchase__form">
+            <form method="POST" action="{{ route('purchase.checkout', ['item_id' => $product->id]) }}" class="purchase__form">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                 <input type="hidden" name="price" value="{{ $product->price }}">
+                <input type="hidden" name="payment_method" id="hidden-payment-method"> <!-- ✅ 追加 -->
+
                 <button type="submit" class="purchase__form-button">購入する</button>
             </form>
         </div>
@@ -69,12 +68,15 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const select = document.getElementById("payment");
-        const selectedPaymentDisplay = document.getElementById("selected-payment"); // 小計画面の支払い方法表示
+        const selectedPaymentDisplay = document.getElementById("selected-payment");
+        const hiddenPaymentMethod = document.getElementById("hidden-payment-method");
+        const form = document.querySelector(".purchase__form");
 
-        // ✅ ページ読み込み時に選択されている支払い方法を小計に反映
+        // ✅ ページ読み込み時に支払い方法を小計に反映し、hidden input にセット
         function updateSelectedPayment() {
             const selectedOption = select.options[select.selectedIndex];
             selectedPaymentDisplay.textContent = selectedOption.textContent;
+            hiddenPaymentMethod.value = select.value; // ✅ hidden input にセット
         }
         updateSelectedPayment(); // 初回実行
 
@@ -82,9 +84,7 @@
         select.addEventListener("focus", function() {
             if (select.options.length > 2) {
                 select.remove(0); // 「選択してください」を削除
-
-                // ✅ 「選択してください」を削除後、即座に反映
-                updateSelectedPayment();
+                updateSelectedPayment(); // ✅ 削除後に即時反映
             }
 
             // 選択されているオプションに `✔` を追加
@@ -113,10 +113,17 @@
 
         // セレクトボックスを閉じたとき
         select.addEventListener("blur", function() {
-            // すべての `✔` を削除（通常表示時に `✔` を表示しない）
             Array.from(select.options).forEach(option => {
                 option.textContent = option.textContent.replace("✔ ", "");
             });
+        });
+
+        // ✅ フォーム送信前に hidden input に `payment_method` をセット
+        form.addEventListener("submit", function(event) {
+            if (!hiddenPaymentMethod.value) {
+                event.preventDefault(); // ✅ `payment_method` が空なら送信を防ぐ
+                alert("支払い方法を選択してください！");
+            }
         });
     });
 </script>
