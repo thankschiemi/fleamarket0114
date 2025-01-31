@@ -37,17 +37,17 @@ class PurchasesController extends Controller
         // 支払い方法を取得
         $paymentMethod = $session->payment_method_types[0] ?? 'card';
 
-        // ✅ コンビニ払いの場合は「支払い待ち」として処理
+        // ✅ コンビニ払いの場合は「支払い待ち」にする
         if ($paymentMethod === 'konbini') {
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'convenience_store',
-                'status' => 'completed', // ✅ すぐに「購入完了」にする
+                'status' => 'pending', // ⬅️ ここを 'pending' にする！（支払い待ち）
                 'purchase_date' => now(),
             ]);
 
-            return redirect()->route('products.index')->with('success', 'コンビニ払いの購入が完了しました！（テスト用）');
+            return view('purchase.pending', compact('item_id')); // ⬅️ 支払い待ち画面へ
         }
 
         // ✅ カード決済は即時完了
@@ -59,6 +59,12 @@ class PurchasesController extends Controller
                 'status' => 'completed', // ⬅️ カード支払いは即完了
                 'purchase_date' => now(),
             ]);
+
+            // ✅ 「SOLD」にする
+            $product = Product::find($item_id);
+            if ($product) {
+                $product->update(['is_sold' => true]);
+            }
 
             return redirect()->route('products.index')->with('success', '購入が完了しました！');
         }
@@ -96,5 +102,26 @@ class PurchasesController extends Controller
         ]);
 
         return redirect($session->url);
+    }
+    public function editAddress($item_id)
+    {
+        $product = Product::findOrFail($item_id);
+        $user = auth()->user(); // ログインユーザー情報
+        return view('products.product-shipping-edit', compact('product', 'user'));
+    }
+    public function updateAddress(Request $request, $item_id)
+    {
+        $request->validate([
+            'postal_code' => 'required|string|max:10',
+            'address' => 'required|string|max:255',
+            'building' => 'nullable|string|max:255',
+        ]);
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $user->postal_code = $request->postal_code;
+        $user->address = $request->address;
+        $user->building_name = $request->building;
+        $user->save();
+        return redirect()->route('purchase.show', ['item_id' => $item_id])->with('success', '住所が更新されました！');
     }
 }
