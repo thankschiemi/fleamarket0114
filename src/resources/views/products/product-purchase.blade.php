@@ -69,11 +69,22 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const select = document.getElementById("payment");
+        const selectedPaymentDisplay = document.getElementById("selected-payment"); // 小計画面の支払い方法表示
+
+        // ✅ ページ読み込み時に選択されている支払い方法を小計に反映
+        function updateSelectedPayment() {
+            const selectedOption = select.options[select.selectedIndex];
+            selectedPaymentDisplay.textContent = selectedOption.textContent;
+        }
+        updateSelectedPayment(); // 初回実行
 
         // セレクトボックスを開いたとき
         select.addEventListener("focus", function() {
             if (select.options.length > 2) {
                 select.remove(0); // 「選択してください」を削除
+
+                // ✅ 「選択してください」を削除後、即座に反映
+                updateSelectedPayment();
             }
 
             // 選択されているオプションに `✔` を追加
@@ -95,6 +106,9 @@
 
             // 選択したオプションのみに `✔` を追加
             selectedOption.textContent = `✔ ${selectedOption.textContent}`;
+
+            // ✅ 小計画面の支払い方法を即時更新
+            updateSelectedPayment();
         });
 
         // セレクトボックスを閉じたとき
