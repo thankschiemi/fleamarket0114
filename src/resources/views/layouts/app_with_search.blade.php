@@ -32,7 +32,7 @@
                     </form>
                 </li>
 
-                <li class="header__menu-item"><a href="{{ route('mypage') }}" class="header__menu-link">マイページ</a></li>
+                <li class="header__menu-item"><a href="{{ route('mypage.profile') }}" class="header__menu-link">マイページ</a></li>
                 <li class="header__menu-item">
                     <a href="{{ route('post.create') }}" class="header__button">出品</a>
                 </li>

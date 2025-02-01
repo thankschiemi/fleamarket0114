@@ -7,7 +7,7 @@
 @section('content')
 <div class="profile">
     <h1 class="profile__title">プロフィール設定</h1>
-    <form action="{{ route('mypage.update') }}" method="POST" enctype="multipart/form-data" class="profile__form" novalidate>
+    <form action="{{ route('mypage.profile.update') }}" method="POST" enctype="multipart/form-data" class="profile__form" novalidate>
         @csrf
         @method('PUT')
         <div class="profile__image-group">

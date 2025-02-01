@@ -49,7 +49,7 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    public function showProfile()
+    public function editProfile()
     {
         // 現在の認証ユーザーを取得
         $user = auth()->user();

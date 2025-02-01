@@ -58,11 +58,18 @@ Route::get('/post/create', function () {
     return '出品ページ (仮)';
 })->name('post.create');
 
-// マイページ（認証必須）
+
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/mypage', [UserController::class, 'showProfile'])->name('mypage');
-    Route::put('/mypage', [UserController::class, 'updateProfile'])->name('mypage.update');
+    // プロフィール閲覧ページ
+    Route::get('/mypage', [ProductController::class, 'showProfile'])->name('mypage');
+
+    // プロフィール編集ページ
+    Route::get('/mypage/profile', [UserController::class, 'editProfile'])->name('mypage.profile');
+    Route::put('/mypage/profile', [UserController::class, 'updateProfile'])->name('mypage.profile.update');
 });
+
+
 
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
 

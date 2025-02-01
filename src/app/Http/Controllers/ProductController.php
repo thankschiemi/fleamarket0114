@@ -41,4 +41,14 @@ class ProductController extends Controller
         // 商品詳細ページを表示
         return view('products.product-detail', compact('product'));
     }
+    public function showProfile(Request $request)
+    {
+        $user = auth()->user();
+        $tab = $request->query('tab', 'selling'); // デフォルトは 'selling'
+
+        $sellingProducts = $user->products ?? collect([]); // 出品した商品
+        $purchasedProducts = $user->purchases->map->product ?? collect([]); // 購入した商品
+
+        return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts'));
+    }
 }
