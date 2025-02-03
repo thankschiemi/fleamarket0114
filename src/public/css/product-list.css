@@ -36,7 +36,7 @@
 
 .product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
     gap: 16px;
 }
 
@@ -54,7 +54,7 @@
 
 .product-list__image {
     width: 100%;
-    max-width: 500px;
+    max-width: 380px;
     height: auto;
     margin: 0 auto 8px;
     background-color: #eaeaea;

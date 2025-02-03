@@ -1,76 +1,200 @@
 .profile {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 40px 0;
 }
 
 .profile__header {
+    width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    padding: 50px 0;
 }
 
 .profile__image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-}
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        background-color: #eaeaea;
+        border: 2px solid #ccc;
+    }
 
 .profile__name {
-    font-size: 24px;
+    font-size: 36px;
     font-weight: bold;
+    color: #333;
+    margin-left: 50px;
 }
 
+.profile-edit {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-edit__label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.profile-edit__input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f8f8;
+}
+
+
 .profile__edit-button {
-    padding: 8px 12px;
-    background-color: #ff5a5f;
-    color: white;
     text-decoration: none;
-    border-radius: 5px;
+    padding: 8px 16px;
+    border: 2px solid #ff5555;
+    color: #ff5555;
+    font-size: 24px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 350px;
+}
+
+.profile__edit-button:hover {
+    background-color: #ff5555;
+    color: white;
 }
 
 .profile__tabs {
     display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+    justify-content: flex-start;
+    gap: 40px;
+    padding-left: 140px;
+    margin-top: 10px;
+    border-bottom: 3px solid #5F5F5F;
+    padding-bottom: 8px;
 }
 
 .profile__tab {
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-    font-size: 16px;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.profile__tab:hover {
+    color: #007bff;
 }
 
 .profile__tab--active {
-    border-bottom: 2px solid #ff5a5f;
+    color: #FF0000;
+    font-weight: bold;
 }
 
 .profile__products {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+}
+
+.profile__product-link {
+    text-decoration: none;
 }
 
 .profile__product-card {
-    width: 150px;
-    border: 1px solid #ddd;
-    padding: 10px;
+    padding: 16px;
     text-align: center;
+    transition: box-shadow 0.3s;
+    position: relative;
+    display: inline-block;
+}
+
+.profile__product-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile__product-image {
     width: 100%;
+    max-width: 380px;
     height: auto;
+    margin: 0 auto 8px;
+    background-color: #eaeaea;
+    border-radius: 8px;
+    display: block;
+}
+
+.profile__product-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 8px;
+    text-align: left;
 }
 
 .profile__empty {
-    font-size: 16px;
-    color: #777;
     text-align: center;
-    margin-top: 20px;
+    color: #666;
+    font-size: 26px;
+    padding: 32px 0;
+}
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .profile__products {
+        grid-template-columns: repeat(4, 1fr);
+        /* PCは4列表示 */
+    }
+
+    .profile__product-image {
+        max-width: 400px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .profile__products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .profile__product-image {
+        max-width: 300px;
+    }
+
+    .profile__header {
+        padding: 10px 15px;
+    }
+
+    .profile__image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .profile__name {
+        font-size: 16px;
+        margin-left: 8px;
+    }
+
+    .profile__edit-button {
+        font-size: 12px;
+        padding: 4px 8px;
+        margin-left: 200px;
+    }
+
+    .profile__tabs {
+        font-size: 12px;
+        gap: 10px;
+        padding-left: 0;
+    }
+
+    .profile__tab {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+
 }
