@@ -21,7 +21,7 @@ class LoginController extends Controller
                 $user->save();
 
 
-                return redirect()->route('mypage'); // 初回ログイン時
+                return redirect()->route('mypage.profile'); // 初回ログイン時
             }
 
             return redirect('/'); // 通常ログイン時

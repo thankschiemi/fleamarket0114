@@ -50,16 +50,6 @@ Route::post('/logout', function (Request $request) {
     return redirect('/login');
 })->middleware('auth')->name('logout');
 
-// その他のルート
-Route::get('/search', function () {
-    return view('search');
-})->name('search');
-Route::get('/post/create', function () {
-    return '出品ページ (仮)';
-})->name('post.create');
-
-
-
 Route::middleware(['auth'])->group(function () {
     // プロフィール閲覧ページ
     Route::get('/mypage', [ProductController::class, 'showProfile'])->name('mypage');
@@ -92,3 +82,12 @@ Route::post('/purchase/{item_id}/complete', [PurchasesController::class, 'comple
 Route::get('/purchase/address/{item_id}', [PurchasesController::class, 'editAddress'])->name('purchase.address.edit');
 Route::post('/purchase/address/{item_id}', [PurchasesController::class, 'updateAddress'])->name('shipping.update');
 Route::post('/purchase/{item_id}/checkout', [PurchasesController::class, 'checkout'])->name('purchase.checkout');
+
+Route::get('/sell', [ProductController::class, 'create'])->name('products.create');
+Route::post('/sell', [ProductController::class, 'store'])->name('products.store');
+
+
+// その他のルート
+Route::get('/search', function () {
+    return view('search');
+})->name('search');
