@@ -1,0 +1,115 @@
+/* 出品ページの全体レイアウト */
+.product-exhibit {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.product-exhibit__title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 画像アップロード部分 */
+.product-exhibit__image-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.product-exhibit__image-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-exhibit__image-preview {
+    max-width: 100px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.product-exhibit__image-text {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.product-exhibit__image-input {
+    display: none;
+}
+
+/* 商品詳細セクション */
+.product-exhibit__details-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-exhibit__form-group {
+    margin-bottom: 15px;
+}
+
+.product-exhibit__form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.product-exhibit__form-input,
+.product-exhibit__form-textarea,
+.product-exhibit__form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* カテゴリ選択（タグ風） */
+.product-exhibit__category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.product-exhibit__category-item {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.product-exhibit__category-item input[type="radio"] {
+    display: none;
+}
+
+.product-exhibit__category-item input[type="radio"]:checked+label {
+    background-color: #e85050;
+}
+
+/* 出品ボタン */
+.product-exhibit__submit {
+    width: 100%;
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.product-exhibit__submit:hover {
+    background-color: #e85050;
+}
