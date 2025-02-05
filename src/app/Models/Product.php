@@ -23,8 +23,19 @@ class Product extends Model
 
     public function getImagePathAttribute()
     {
-        return asset('storage/images/' . $this->img_url);
+        $imagePath = $this->attributes['img_url'] ?? null;
+
+        if ($imagePath) {
+            if (!str_starts_with($imagePath, 'products/') && !str_starts_with($imagePath, 'images/')) {
+                $imagePath = 'images/' . $imagePath;
+            }
+            return asset('storage/' . $imagePath);
+        }
+
+        return asset('images/default-product.jpg');
     }
+
+
     // リレーション: 商品のレビュー
     public function reviews()
     {

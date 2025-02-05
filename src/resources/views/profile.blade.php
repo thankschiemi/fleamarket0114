@@ -22,8 +22,7 @@
     @forelse ($sellingProducts as $product)
     <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="profile__product-link">
         <div class="profile__product-card">
-            <img src="{{ $product->image_path ?? asset('images/default-product.jpg') }}" alt="商品画像"
-                class="profile__product-image">
+            <img src="{{ $product->image_path }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $product->name }}</p>
         </div>
     </a>
@@ -37,8 +36,7 @@
     @forelse ($purchasedProducts as $product)
     <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="profile__product-link">
         <div class="profile__product-card">
-            <img src="{{ $product->image_path ?? asset('images/default-product.jpg') }}" alt="商品画像"
-                class="profile__product-image">
+            <img src="{{ $product->image_path }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $product->name }}</p>
         </div>
     </a>

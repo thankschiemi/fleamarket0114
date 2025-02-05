@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -78,5 +79,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->attributes['profile_image_path']
             ? asset('storage/' . $this->attributes['profile_image_path'])
             : asset('images/default-avatar.png');
+    }
+
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'user_id');
     }
 }

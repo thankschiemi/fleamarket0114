@@ -20,8 +20,7 @@
         @forelse ($products as $product)
         <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="product-list__link">
             <div class="product-list__item">
-                <img src="{{ $product->image_path ?? asset('images/default-product.jpg') }}" alt="商品画像"
-                    class="product-list__image">
+                <img src="{{ $product->image_path }}" alt="商品画像" class="product-list__image">
                 @if ($product->is_sold)
                 <span class="product-list__sold">Sold</span>
                 @endif

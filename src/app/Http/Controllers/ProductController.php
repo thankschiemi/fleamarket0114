@@ -20,20 +20,20 @@ class ProductController extends Controller
                 return redirect()->route('login');
             }
         } else {
-            $products = Product::when(Auth::check(), function ($query) {
-                $query->where('user_id', '!=', Auth::id());
-            })
-                ->get()
-                ->map(function ($product) {
-                    $product->is_sold = (bool) $product->is_sold;
-                    return $product;
-                });
+            $products = Product::query()
+                ->when(Auth::check(), function ($query) {
+                    $query->where('user_id', '!=', Auth::id());
+                })
+                ->get();
         }
+
         return view('products.product-list', [
             'products' => $products,
             'tab' => $tab,
         ]);
     }
+
+
     public function show($id)
     {
         // 商品データを取得
@@ -44,10 +44,13 @@ class ProductController extends Controller
     }
     public function showProfile(Request $request)
     {
+        /** @var \App\Models\User $user */
+
         $user = auth()->user();
         $tab = $request->query('tab', 'selling'); // デフォルトは 'selling'
 
-        $sellingProducts = $user->products ?? collect([]); // 出品した商品
+        $sellingProducts = $user->products()->latest()->get() ?? collect([]);
+        // 出品した商品
         $purchasedProducts = $user->purchases->map->product ?? collect([]); // 購入した商品
 
 
@@ -73,11 +76,29 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        // 画像アップロード処理
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $file = $request->file('image');
+
+            // 拡張子が取得できない場合の対応
+            $originalName = $file->getClientOriginalName();
+            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+            if (!$extension) {
+                $extension = 'jpg'; // 拡張子が取得できない場合はデフォルトを設定
+            }
+
+            // ランダムなファイル名を生成
+            $filename = time() . '_' . uniqid() . '.' . $extension;
+
+            // public/storage/products に保存
+            $file->storeAs('public/products', $filename);
+
+            // データベースには 'products/filename.jpg' の形で保存
+            $imagePath = 'products/' . $filename;
         }
+
+
 
         // 商品の保存
         $product = Product::create([
@@ -86,13 +107,13 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'condition' => $request->condition,
-            'image_path' => $imagePath,
+            'img_url' => $imagePath,
         ]);
 
         if ($request->has('category')) {
             $product->categories()->attach($request->category);
         }
 
-        return redirect()->route('mypage')->with('success', '商品を出品しました！');
+        return redirect()->route('mypage', ['tab' => 'selling'])->with('success', '商品を出品しました！');
     }
 }
