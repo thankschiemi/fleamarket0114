@@ -1,13 +1,14 @@
 /* 出品ページの全体レイアウト */
 .product-exhibit {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
 .product-exhibit__title {
     text-align: center;
-    font-size: 24px;
+    font-size: 36px;
+    color: #000000;
     font-weight: bold;
     margin-bottom: 20px;
 }
@@ -19,23 +20,23 @@
     width: 100%;
     height: 120px;
     /* 適度な高さ */
-    border: 2px dashed #ccc;
+    border: 1px dashed #5F5F5F;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 /* 左上の「商品画像」ラベル */
 .product-exhibit__image-label-title {
     position: absolute;
-    top: -25px;
+    top: -35px;
     left: 10px;
     padding: 0 5px;
-    font-size: 14px;
+    font-size: 24px;
     color: #000000;
     font-weight: bold;
 }
@@ -47,7 +48,7 @@
     border: 1px solid #FF5655;
     padding: 8px 15px;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -84,11 +85,16 @@
     display: none;
 }
 
-/* 商品詳細セクション */
+/* ✅ 商品詳細タイトルのデザイン調整 */
 .product-exhibit__details-title {
-    font-size: 18px;
+    font-size: 30px;
+    color: #5F5F5F;
     font-weight: bold;
     margin-bottom: 10px;
+    padding-bottom: 8px;
+    /* ← 下線との間隔 */
+    border-bottom: 1px solid #5F5F5F;
+    /* ✅ 下線を追加 */
 }
 
 .product-exhibit__form-group {
@@ -106,15 +112,27 @@
 .product-exhibit__form-select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #5F5F5F;
     border-radius: 5px;
+}
+/* ✅ 「商品名と説明」小タイトルのスタイル */
+.product-exhibit__sub-title {
+    font-size: 30px;
+    color: #5F5F5F;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    /* ← 下線との間隔 */
+    border-bottom: 1px solid #5F5F5F;
+    /* ✅ 下線を追加 */
 }
 
 /* カテゴリ選択（タグ風） */
 .product-exhibit__category-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
+    margin-bottom: 40px;
 }
 
 /* ✅ カテゴリのデフォルトデザイン */
@@ -129,6 +147,15 @@
     user-select: none;
     border: 1px solid #FF5655;
     transition: background-color 0.3s, color 0.3s;
+}
+/* ✅ 商品情報のラベルデザイン統一 */
+.product-exhibit__form-label {
+    font-size: 24px;
+    /* 文字サイズを24pxに */
+    color: #000000;
+    /* 文字色を黒に */
+    font-family: 'Inter', sans-serif;
+    /* Interフォントを適用 */
 }
 
 /* ✅ チェックボックスを隠す */

@@ -47,6 +47,7 @@
                     <option value="damaged">傷や汚れあり</option>
                 </select>
             </div>
+            <h2 class="product-exhibit__sub-title">商品名と説明</h2>
 
             <div class="product-exhibit__form-group">
                 <label class="product-exhibit__form-label" for="product-name">商品名</label>
