@@ -47,6 +47,7 @@
                     <option value="damaged">傷や汚れあり</option>
                 </select>
             </div>
+
             <h2 class="product-exhibit__sub-title">商品名と説明</h2>
 
             <div class="product-exhibit__form-group">
@@ -68,4 +69,36 @@
         </div>
     </form>
 </div>
+@endsection
+
+@section('js')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const conditionSelect = document.getElementById("product-condition");
+
+        function updateSelectedCondition() {
+            Array.from(conditionSelect.options).forEach(option => {
+                option.textContent = option.textContent.replace("✔ ", "");
+            });
+
+            const selectedOption = conditionSelect.options[conditionSelect.selectedIndex];
+            selectedOption.textContent = `✔ ${selectedOption.textContent}`;
+        }
+
+        // セレクトボックスを開いたとき
+        conditionSelect.addEventListener("focus", function() {
+            updateSelectedCondition();
+        });
+
+        // 選択肢を変更したとき
+        conditionSelect.addEventListener("change", function() {
+            updateSelectedCondition();
+        });
+
+        // セレクトボックスを閉じたとき
+        conditionSelect.addEventListener("blur", function() {
+            updateSelectedCondition();
+        });
+    });
+</script>
 @endsection
