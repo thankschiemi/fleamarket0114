@@ -71,8 +71,8 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|integer|min:1',
             'condition' => 'required|string',
-            'category' => 'required|array',
-            'category' => 'required|exists:categories,id',
+            'category' => 'required|array', // ✅ 配列として受け取るように変更
+            'category.*' => 'exists:categories,id', // ✅ 各カテゴリがDBに存在するかチェック
             'image' => 'nullable|image|max:2048',
         ]);
 

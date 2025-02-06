@@ -13,16 +13,54 @@
 }
 
 /* 画像アップロード部分 */
+/* 画像アップロードの全体デザイン */
 .product-exhibit__image-upload {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 120px;
+    /* 適度な高さ */
     border: 2px dashed #ccc;
     border-radius: 8px;
-    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     cursor: pointer;
+    margin-bottom: 20px;
+}
+
+/* 左上の「商品画像」ラベル */
+.product-exhibit__image-label-title {
+    position: absolute;
+    top: -25px;
+    left: 10px;
+    padding: 0 5px;
+    font-size: 14px;
+    color: #000000;
+    font-weight: bold;
+}
+
+/* 画像選択ボタン */
+.product-exhibit__image-button {
+    background-color: white;
+    color: #FF5655;
+    border: 1px solid #FF5655;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* ホバー時のスタイル */
+.product-exhibit__image-button:hover {
+    background-color: #FF5655;
+    color: white;
+}
+
+/* input[type="file"] を隠す */
+.product-exhibit__image-input {
+    display: none;
 }
 
 .product-exhibit__image-label {
@@ -79,21 +117,29 @@
     gap: 10px;
 }
 
+/* ✅ カテゴリのデフォルトデザイン */
 .product-exhibit__category-item {
-    background-color: #ff6b6b;
-    color: white;
+    display: inline-block;
+    background-color: white;
+    color: #FF5655;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 14px;
     cursor: pointer;
+    user-select: none;
+    border: 1px solid #FF5655;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.product-exhibit__category-item input[type="radio"] {
+/* ✅ チェックボックスを隠す */
+.product-exhibit__category-input {
     display: none;
 }
 
-.product-exhibit__category-item input[type="radio"]:checked+label {
-    background-color: #e85050;
+/* ✅ 選択時のスタイル（背景を赤に、文字を白に） */
+.product-exhibit__category-input:checked+.product-exhibit__category-item {
+    background-color: #FF5655;
+    color: white;
 }
 
 /* 出品ボタン */

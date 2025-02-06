@@ -12,12 +12,13 @@
         @csrf
 
         <div class="product-exhibit__image-upload">
-            <label for="product-image" class="product-exhibit__image-label">
-                <img id="preview-image" src="{{ asset('images/default-product.jpg') }}" alt="商品画像" class="product-exhibit__image-preview">
-                <span class="product-exhibit__image-text">画像を選択する</span>
+            <span class="product-exhibit__image-label-title">商品画像</span> <!-- ✅ 左上のラベル -->
+            <label for="product-image" class="product-exhibit__image-button">
+                画像を選択する
                 <input type="file" name="image" id="product-image" class="product-exhibit__image-input" accept="image/*">
             </label>
         </div>
+
 
 
         <div class="product-exhibit__details">
@@ -27,13 +28,14 @@
                 <h3 class="product-exhibit__category-title">カテゴリー</h3>
                 <div class="product-exhibit__category-list">
                     @foreach($categories as $category)
-                    <label class="product-exhibit__category-item">
-                        <input type="radio" name="category" value="{{ $category->id }}"> {{ $category->name }}
-                    </label>
+                    <input type="checkbox" name="category[]" value="{{ $category->id }}" id="category-{{ $category->id }}" class="product-exhibit__category-input">
+                    <label for="category-{{ $category->id }}" class="product-exhibit__category-item">{{ $category->name }}</label>
                     @endforeach
-
                 </div>
             </div>
+
+
+
 
             <div class="product-exhibit__form-group">
                 <label class="product-exhibit__form-label" for="product-condition">商品の状態</label>
