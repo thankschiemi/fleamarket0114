@@ -8,12 +8,14 @@
 <div class="container">
 
     <div class="tabs-container">
+
         <div class="tabs">
-            <a href="{{ route('products.index', ['tab' => 'recommend']) }}"
+            <a href="{{ route('products.index', ['tab' => 'recommend', 'query' => request('query')]) }}"
                 class="tabs__link {{ $tab === 'recommend' ? 'tabs__link--active' : '' }}">おすすめ</a>
-            <a href="{{ route('products.index', ['tab' => 'mylist']) }}"
+            <a href="{{ route('products.index', ['tab' => 'mylist', 'query' => request('query')]) }}"
                 class="tabs__link {{ $tab === 'mylist' ? 'tabs__link--active' : '' }}">マイリスト</a>
         </div>
+
     </div>
     <div class="product-list">
         @forelse ($products as $product)
@@ -30,6 +32,7 @@
         <p class="product-list__empty">商品がありません。</p>
         @endforelse
     </div>
+
 
 </div>
 @endsection

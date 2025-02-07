@@ -85,9 +85,3 @@ Route::post('/purchase/{item_id}/checkout', [PurchasesController::class, 'checko
 
 Route::get('/sell', [ProductController::class, 'create'])->name('products.create');
 Route::post('/sell', [ProductController::class, 'store'])->name('products.store');
-
-
-// その他のルート
-Route::get('/search', function () {
-    return view('search');
-})->name('search');

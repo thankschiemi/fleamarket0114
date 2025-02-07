@@ -12,17 +12,28 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $tab = $request->query('tab', 'recommend');
+        $query = $request->query('query', ''); // 🔍 検索ワード（デフォルトは空）
 
         if ($tab === 'mylist') {
-            if (Auth::check()) {
-                $products = Auth::user()->favorites;
-            } else {
-                return redirect()->route('login');
+            if (!Auth::check()) {
+                return redirect()->route('login')->with('redirect_to', request()->fullUrl());
             }
+
+            // `favoritedByUsers()` を使用してお気に入りの商品を取得
+            $products = Product::whereHas('favoritedByUsers', function ($queryBuilder) {
+                $queryBuilder->where('users.id', Auth::id());
+            })
+                ->when($query, function ($queryBuilder) use ($query) {
+                    return $queryBuilder->where('name', 'LIKE', "%{$query}%");
+                })
+                ->get();
         } else {
             $products = Product::query()
-                ->when(Auth::check(), function ($query) {
-                    $query->where('user_id', '!=', Auth::id());
+                ->when(Auth::check(), function ($queryBuilder) {
+                    return $queryBuilder->where('user_id', '!=', Auth::id());
+                })
+                ->when($query, function ($queryBuilder) use ($query) {
+                    return $queryBuilder->where('name', 'LIKE', "%{$query}%");
                 })
                 ->get();
         }
@@ -30,37 +41,50 @@ class ProductController extends Controller
         return view('products.product-list', [
             'products' => $products,
             'tab' => $tab,
+            'searchQuery' => $query, // 🔍 検索ワードを保持
         ]);
     }
 
 
+
     public function show($id)
     {
-        // 商品データを取得
-        $product = Product::findOrFail($id);
+        // `favoritedByUsers` をロードし、null になるのを防ぐ
+        $product = Product::with(['favoritedByUsers', 'reviews.user', 'categories'])->findOrFail($id);
 
-        // 商品詳細ページを表示
         return view('products.product-detail', compact('product'));
     }
+
+    /**
+     * プロフィールページを表示
+     */
     public function showProfile(Request $request)
     {
         /** @var \App\Models\User $user */
-
         $user = auth()->user();
         $tab = $request->query('tab', 'selling'); // デフォルトは 'selling'
 
-        $sellingProducts = $user->products()->latest()->get() ?? collect([]);
-        // 出品した商品
+        $sellingProducts = $user->products()->latest()->get() ?? collect([]); // 出品した商品
         $purchasedProducts = $user->purchases->map->product ?? collect([]); // 購入した商品
-
 
         return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts'));
     }
+
+    /**
+     * 商品出品ページを表示
+     */
     public function create()
     {
         $categories = Category::all(); // `categories` テーブルから全て取得
         return view('products.product-exhibit', compact('categories'));
     }
+
+
+
+
+
+
+
 
     public function store(Request $request)
     {

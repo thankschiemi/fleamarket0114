@@ -21,11 +21,12 @@
                     <form method="POST" action="{{ route('favorites.toggle', $product->id) }}">
                         @csrf
                         <button type="submit" class="product-detail__icon-star">
-                            @if (Auth::check() && Auth::user()->favorites->contains($product->id))
-                            ★
+                            @if (Auth::check() && Auth::user()->favoritedByProducts()->where('product_id', $product->id)->exists())
+                            <button type="submit" class="product-detail__icon-star">★</button>
                             @else
-                            ☆
+                            <button type="submit" class="product-detail__icon-star">☆</button>
                             @endif
+
                         </button>
                     </form>
                     <span class="product-detail__icon-count">{{ $product->favoritedByUsers->count() }}</span>
@@ -36,12 +37,13 @@
                 </div>
             </div>
             <a href="{{ url('/purchase/' . $product->id) }}" class="product-detail__buy-button">購入手続きへ</a>
-
         </div>
+
         <div class="product-detail__description">
             <h2 class="product-detail__description-title">商品説明</h2>
             <p class="product-detail__description-text">{{ $product->description }}</p>
         </div>
+
         <div class="product-detail__information">
             <h2 class="product-detail__information-title">商品の情報</h2>
             <ul class="product-detail__information-list">
@@ -54,13 +56,12 @@
                 <li class="product-detail__information-item">商品の状態：{{ $product->condition }}</li>
             </ul>
         </div>
+
         <div class="product-detail__comments">
             <p class="product-detail__comments-title">コメント ({{ $product->reviews->count() }})</p>
 
-
             @if ($product->reviews->isNotEmpty())
             @foreach ($product->reviews as $review)
-
             <div class="product-detail__comment">
                 <div class="product-detail__comment-header">
                     <img src="{{ $review->user->profile_image_path ?? asset('images/default-avatar.jpg') }}"
@@ -68,7 +69,6 @@
                         class="product-detail__comment-image">
                     <p class="product-detail__comment-username"><strong>{{ $review->user->name }}</strong></p>
                 </div>
-
                 <p class="product-detail__comment-text">{{ $review->comment }}</p>
             </div>
             @endforeach
@@ -82,7 +82,6 @@
                 <button type="submit" class="product-detail__comment-submit">コメントを送信する</button>
             </form>
         </div>
-
     </div>
 </div>
 @endsection

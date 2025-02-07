@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -41,11 +42,11 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
-    // リレーション: 商品のお気に入り
-    public function favoritedByUsers()
+    public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'product_id', 'user_id');
+        return $this->hasMany(Favorite::class, 'product_id');
     }
+
 
     // リレーション: 商品の購入履歴
     public function purchases()
@@ -60,5 +61,9 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_product');
+    }
+    public function favoritedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'product_id', 'user_id');
     }
 }

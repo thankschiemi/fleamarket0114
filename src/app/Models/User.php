@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -54,10 +56,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function favorites()
+    public function favoritedByProducts(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'favorites', 'user_id', 'product_id');
     }
+
+
 
     /**
      * リレーション: ユーザーのレビュー
