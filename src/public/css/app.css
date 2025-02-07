@@ -36,7 +36,6 @@
         width: 200px;
     }
 }
-  
 
 @media (min-width: 1400px) and (max-width: 1540px) {
     .header {
@@ -47,12 +46,12 @@
             padding: 15px 20px;
             height: auto;
         }
-    
+
         .header__logo {
             flex: 1 1 auto;
             margin-bottom: 10px;
         }
-    
+
         .header__logo-img {
             width: 200px;
         }
