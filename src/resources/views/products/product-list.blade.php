@@ -15,7 +15,6 @@
                 class="tabs__link {{ $tab === 'mylist' ? 'tabs__link--active' : '' }}">マイリスト</a>
         </div>
     </div>
-
     <div class="product-list">
         @forelse ($products as $product)
         <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="product-list__link">

@@ -62,7 +62,6 @@
             @foreach ($product->reviews as $review)
 
             <div class="product-detail__comment">
-                <!-- 1. プロフィール画像とユーザー名 -->
                 <div class="product-detail__comment-header">
                     <img src="{{ $review->user->profile_image_path ?? asset('images/default-avatar.jpg') }}"
                         alt="{{ $review->user->name }}"
@@ -77,7 +76,6 @@
             <p class="product-detail__no-comments">コメントはまだありません。</p>
             @endif
 
-            <!-- 3. コメント入力フォーム -->
             <form method="POST" action="{{ route('reviews.store', $product->id) }}" class="product-detail__comment-form">
                 @csrf
                 <textarea name="comment" placeholder="コメントを入力してください" rows="3" class="product-detail__comment-input"></textarea>
