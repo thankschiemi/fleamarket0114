@@ -11,46 +11,52 @@ class UserController extends Controller
 {
     public function updateProfile(Request $request)
     {
-        // 入力データのバリデーション
         $request->validate([
             'username' => 'required|string|max:255',
             'postal_code' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'building' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:2048',
         ]);
 
-        // 現在の認証ユーザーを取得
         /** @var \App\Models\User $user */
         $user = auth()->user();
 
         if ($request->hasFile('image')) {
-            // 古い画像を削除（必要に応じて）
-            if ($user->profile_image_path) {
-                Storage::delete('public/' . $user->profile_image_path);
+            // 既存の画像があれば削除
+            if ($user->profile_image_path && file_exists(public_path($user->profile_image_path))) {
+                unlink(public_path($user->profile_image_path));
             }
 
-            // 新しい画像を保存
+            // 新しい画像を `storage/app/public/profile_images/` に保存
             $imagePath = $request->file('image')->store('profile_images', 'public');
 
-            // ユーザーのプロフィール画像パスを更新
-            $user->update(['profile_image_path' => $imagePath]);
+            // 🔥 `public/storage/` にアクセスできるようにパスを変更
+            $user->profile_image_path = $imagePath;
         }
 
+        // ユーザー情報の更新
+        $user->name = $request->input('username');
+        $user->postal_code = $request->input('postal_code');
+        $user->address = $request->input('address');
+        $user->building_name = $request->input('building');
 
-        // ユーザー情報を更新
-        $user->update([
-            'name' => $request->input('username'),
-            'postal_code' => $request->input('postal_code'),
-            'address' => $request->input('address'),
-            'building_name' => $request->input('building'),
-        ]);
+        // 初回ログイン時のフラグを解除
+        if ($user->is_first_login) {
+            $user->is_first_login = false;
+        }
 
-        // フォーム送信後に http://localhost/ にリダイレクト
-        return redirect('/');
+        $user->save();
+
+        return redirect()->route('mypage')->with('status', 'プロフィールを更新しました！');
     }
+
+
+
 
     public function editProfile()
     {
+        /** @var \App\Models\User $user */
         // 現在の認証ユーザーを取得
         $user = auth()->user();
 

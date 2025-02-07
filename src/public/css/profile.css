@@ -101,8 +101,9 @@
 
 .profile__products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 16px;
+    justify-content: start;
 }
 
 .profile__product-link {
@@ -110,12 +111,17 @@
 }
 
 .profile__product-card {
-    padding: 16px;
+    padding: 8px;
+    /* 余白を少し減らす */
     text-align: center;
     transition: box-shadow 0.3s;
     position: relative;
-    display: inline-block;
+    display: flex;
+    /* 縦方向のバランスを維持 */
+    flex-direction: column;
+    align-items: center;
 }
+
 
 .profile__product-card:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -124,8 +130,11 @@
 .profile__product-image {
     width: 100%;
     max-width: 380px;
-    height: auto;
-    margin: 0 auto 8px;
+    /* 画像の最大幅を小さめに統一 */
+    height: 380px;
+    /* 高さを統一 */
+    object-fit: contain;
+    /* 画像の比率を維持しつつ枠内に収める */
     background-color: #eaeaea;
     border-radius: 8px;
     display: block;
@@ -149,6 +158,7 @@
 @media (min-width: 1400px) and (max-width: 1540px) {
     .profile__products {
         grid-template-columns: repeat(4, 1fr);
+
     }
 
     .profile__product-image {
