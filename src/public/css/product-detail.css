@@ -217,7 +217,6 @@
     background-color: #ff483e;
 }
 
-/* PCスタイル */
 @media (min-width: 1400px) and (max-width: 1540px) {
     .product-detail {
         gap: 80px;
@@ -247,7 +246,6 @@
     }
 }
 
-/* タブレットスタイル */
 @media (min-width: 768px) and (max-width: 850px) {
     .product-detail {
         gap: 50px;

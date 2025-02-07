@@ -1,4 +1,3 @@
-/* 出品ページの全体レイアウト */
 .product-exhibit {
     max-width: 800px;
     margin: 0 auto;
@@ -13,13 +12,10 @@
     margin-bottom: 20px;
 }
 
-/* 画像アップロード部分 */
-/* 画像アップロードの全体デザイン */
 .product-exhibit__image-upload {
     position: relative;
     width: 100%;
     height: 120px;
-    /* 適度な高さ */
     border: 1px dashed #5F5F5F;
     border-radius: 8px;
     display: flex;
@@ -30,18 +26,15 @@
     margin-bottom: 50px;
 }
 
-/* 左上の「商品画像」ラベル */
 .product-exhibit__image-label-title {
     position: absolute;
     top: -35px;
     left: 10px;
-    padding: 0 5px;
     font-size: 24px;
     color: #000000;
     font-weight: bold;
 }
 
-/* 画像選択ボタン */
 .product-exhibit__image-button {
     background-color: white;
     color: #FF5655;
@@ -53,13 +46,11 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* ホバー時のスタイル */
 .product-exhibit__image-button:hover {
     background-color: #FF5655;
     color: white;
 }
 
-/* input[type="file"] を隠す */
 .product-exhibit__image-input {
     display: none;
 }
@@ -70,31 +61,14 @@
     align-items: center;
 }
 
-.product-exhibit__image-preview {
-    max-width: 100px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.product-exhibit__image-text {
-    color: #ff6b6b;
-    font-weight: bold;
-}
-
-.product-exhibit__image-input {
-    display: none;
-}
-
-/* ✅ 商品詳細タイトルのデザイン調整 */
-.product-exhibit__details-title {
+.product-exhibit__details-title, 
+.product-exhibit__sub-title {
     font-size: 30px;
     color: #5F5F5F;
     font-weight: bold;
     margin-bottom: 10px;
     padding-bottom: 8px;
-    /* ← 下線との間隔 */
     border-bottom: 1px solid #5F5F5F;
-    /* ✅ 下線を追加 */
 }
 
 .product-exhibit__form-group {
@@ -102,8 +76,11 @@
 }
 
 .product-exhibit__form-label {
-    display: block;
+    font-size: 24px;
+    color: #000000;
+    font-family: 'Inter', sans-serif;
     font-weight: bold;
+    display: block;
     margin-bottom: 5px;
 }
 
@@ -114,20 +91,9 @@
     padding: 10px;
     border: 1px solid #5F5F5F;
     border-radius: 5px;
-}
-/* ✅ 「商品名と説明」小タイトルのスタイル */
-.product-exhibit__sub-title {
-    font-size: 30px;
-    color: #5F5F5F;
-    font-weight: bold;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    /* ← 下線との間隔 */
-    border-bottom: 1px solid #5F5F5F;
-    /* ✅ 下線を追加 */
+    font-size: 14px;
 }
 
-/* カテゴリ選択（タグ風） */
 .product-exhibit__category-list {
     display: flex;
     flex-wrap: wrap;
@@ -135,102 +101,108 @@
     margin-bottom: 40px;
 }
 
-/* ✅ カテゴリのデフォルトデザイン */
 .product-exhibit__category-item {
     display: inline-block;
     background-color: white;
     color: #FF5655;
     padding: 5px 15px;
     border-radius: 20px;
-    font-size: 14px;
     cursor: pointer;
     user-select: none;
     border: 1px solid #FF5655;
     transition: background-color 0.3s, color 0.3s;
 }
-/* ✅ 商品情報のラベルデザイン統一 */
-.product-exhibit__form-label {
-    font-size: 24px;
-    /* 文字サイズを24pxに */
-    color: #000000;
-    /* 文字色を黒に */
-    font-family: 'Inter', sans-serif;
-    /* Interフォントを適用 */
-}
 
-/* ✅ チェックボックスを隠す */
 .product-exhibit__category-input {
     display: none;
 }
 
-/* ✅ 選択時のスタイル（背景を赤に、文字を白に） */
 .product-exhibit__category-input:checked+.product-exhibit__category-item {
     background-color: #FF5655;
     color: white;
 }
 
-/* ▼ 通常時（デフォルト） */
 .product-exhibit__form-select {
-    width: 100%;
-    padding: 10px;
-    border: 1.5px solid #B1B1B1;
-    /* ✅ 枠の色 */
-    border-radius: 5px;
-    background-color: white;
-    /* ✅ 背景色（デフォルトは白） */
-    color: #636769;
-    /* ✅ 文字色 */
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-
-    /* カスタム矢印アイコン */
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    background-color: white;
+    color: #636769;
+    border: 1.5px solid #B1B1B1;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    padding-right: 30px;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="%23636769" d="M7 10l5 5 5-5H7z"/></svg>');
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 16px;
-    padding-right: 30px;
-    /* 矢印とテキストの間隔 */
 }
 
-/* ▼ フォーカス（クリック時） */
 .product-exhibit__form-select:focus {
     background-color: #636769;
-    /* ✅ 背景色 */
     border-color: #B1B1B1;
-    /* ✅ 枠の色 */
     color: #EAEAEA;
-    /* ✅ 文字色 */
     outline: none;
-
-    /* 矢印の色を変更 */
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="%23EAEAEA" d="M7 10l5 5 5-5H7z"/></svg>');
 }
 
-/* ▼ ドロップダウンリスト全体の背景色を変更 */
 .product-exhibit__form-select option {
     background-color: #636769;
-    /* ✅ ドロップダウンリストの背景色 */
     color: #EAEAEA;
-    /* ✅ 文字色 */
     padding: 10px;
     font-size: 14px;
 }
 
-/* ▼ 選択されたオプションのスタイル */
 .product-exhibit__form-select option:checked {
     background-color: #5599EB;
-    /* ✅ 選択時の背景色 */
     color: white;
-    /* ✅ 選択時の文字色 */
     font-weight: bold;
 }
 
+.product-exhibit__price-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
 
-/* 出品ボタン */
+.product-exhibit__price-symbol {
+    position: absolute;
+    left: 10px;
+    font-size: 16px;
+    color: #000000;
+    font-weight: bold;
+}
+.product-exhibit__price-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.product-exhibit__price-symbol {
+    position: absolute;
+    left: 10px;
+    font-size: 16px;
+    color: #000000;
+    font-weight: bold;
+}
+
+.product-exhibit__form-input {
+    width: 100%;
+    padding: 10px;
+    padding-left: 30px;
+    border: 1px solid #5F5F5F;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.product-exhibit__form-input::-webkit-outer-spin-button,
+.product-exhibit__form-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .product-exhibit__submit {
     width: 100%;
     background-color: #ff6b6b;
@@ -246,4 +218,26 @@
 
 .product-exhibit__submit:hover {
     background-color: #e85050;
+}
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .product-exhibit {
+        max-width: 1000px;
+
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .product-exhibit {
+        max-width: 95%;
+        padding: 15px;
+    }
+
+    .product-exhibit__title {
+        font-size: 30px;
+    }
+
+    .product-exhibit__category-list {
+        gap: 15px;
+    }
 }
