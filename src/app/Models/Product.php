@@ -20,6 +20,7 @@ class Product extends Model
         'condition',
         'user_id',
         'is_sold',
+        'brand',
     ];
 
     public function getImagePathAttribute()

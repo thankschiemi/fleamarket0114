@@ -19,9 +19,6 @@ class LoginController extends Controller
             if ($user->is_first_login) {
                 $user->is_first_login = false;
                 $user->save();
-
-
-                return redirect()->route('mypage.profile'); // 初回ログイン時
             }
 
             return redirect('/'); // 通常ログイン時

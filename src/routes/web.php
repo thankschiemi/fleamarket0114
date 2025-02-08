@@ -83,5 +83,7 @@ Route::get('/purchase/address/{item_id}', [PurchasesController::class, 'editAddr
 Route::post('/purchase/address/{item_id}', [PurchasesController::class, 'updateAddress'])->name('shipping.update');
 Route::post('/purchase/{item_id}/checkout', [PurchasesController::class, 'checkout'])->name('purchase.checkout');
 
-Route::get('/sell', [ProductController::class, 'create'])->name('products.create');
-Route::post('/sell', [ProductController::class, 'store'])->name('products.store');
+Route::middleware('auth')->group(function () {
+    Route::get('/sell', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/sell', [ProductController::class, 'store'])->name('products.store');
+});

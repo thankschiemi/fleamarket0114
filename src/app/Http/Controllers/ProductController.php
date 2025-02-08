@@ -75,6 +75,10 @@ class ProductController extends Controller
      */
     public function create()
     {
+
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('redirect_to', request()->fullUrl());
+        }
         $categories = Category::all(); // `categories` テーブルから全て取得
         return view('products.product-exhibit', compact('categories'));
     }

@@ -12,7 +12,7 @@
     </div>
     <div class="product-detail__info">
         <h1 class="product-detail__title">{{ $product->name }}</h1>
-        <p class="product-detail__brand">ブランド名</p>
+        <p class="product-detail__brand">ブランド: {{ $product->brand ?? '未設定' }}</p>
         <p class="product-detail__price">¥{{ number_format($product->price) }}（税込）</p>
 
         <div class="product-detail__actions">
