@@ -8,6 +8,12 @@
 <div class="container">
 
     <div class="tabs-container">
+        @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+        @endif
+
 
         <div class="tabs">
             <a href="{{ route('products.index', ['tab' => 'recommend', 'query' => request('query')]) }}"

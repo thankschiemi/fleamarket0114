@@ -216,6 +216,11 @@
 .product-detail__comment-submit:hover {
     background-color: #ff483e;
 }
+.error-message {
+    font-size: 15px;
+    color: red;
+
+}
 
 @media (min-width: 1400px) and (max-width: 1540px) {
     .product-detail {

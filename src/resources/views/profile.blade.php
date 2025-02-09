@@ -13,11 +13,11 @@
         <a href="{{ route('mypage.profile') }}" class="profile__edit-button">プロフィールを編集</a>
     </div>
     <div class="profile__tabs">
-        <a href="?tab=selling" class="profile__tab {{ $tab === 'selling' ? 'profile__tab--active' : '' }}">出品した商品</a>
-        <a href="?tab=purchased" class="profile__tab {{ $tab === 'purchased' ? 'profile__tab--active' : '' }}">購入した商品</a>
+        <a href="?tab=sell" class="profile__tab {{ $tab === 'sell' ? 'profile__tab--active' : '' }}">出品した商品</a>
+        <a href="?tab=buy" class="profile__tab {{ $tab === 'buy' ? 'profile__tab--active' : '' }}">購入した商品</a>
     </div>
 </div>
-@if ($tab === 'selling')
+@if ($tab === 'sell')
 <div class="profile__products">
     @forelse ($sellingProducts as $product)
     <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="profile__product-link">
@@ -31,7 +31,7 @@
     @endforelse
 </div>
 @endif
-@if ($tab === 'purchased')
+@if ($tab === 'buy')
 <div class="profile__products">
     @forelse ($purchasedProducts as $product)
     <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="profile__product-link">

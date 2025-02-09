@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CommentRequest;
 
 class ReviewController extends Controller
 {
     /**
      * コメントを保存する
      */
-    public function store(Request $request, Product $product)
+    public function store(CommentRequest $request, Product $product)
     {
-        // バリデーション
-        $request->validate([
-            'comment' => 'nullable|string|max:500', // コメントは任意
-        ]);
+        $data = $request->validated();
 
         // コメントを保存
         $review = new Review();

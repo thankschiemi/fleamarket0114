@@ -62,7 +62,7 @@ class ProductController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
-        $tab = $request->query('tab', 'selling'); // デフォルトは 'selling'
+        $tab = $request->query('tab', 'sell');
 
         $sellingProducts = $user->products()->latest()->get() ?? collect([]); // 出品した商品
         $purchasedProducts = $user->purchases->map->product ?? collect([]); // 購入した商品

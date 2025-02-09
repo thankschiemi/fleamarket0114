@@ -21,18 +21,29 @@
                 <div class="purchase__details-payment">
                     <label for="payment" class="purchase__details-label">支払い方法</label>
                     <select id="payment" name="payment_method" class="purchase__details-select">
-                        <option value="" selected data-default>選択してください</option>
+                        <option value="" selected>選択してください</option>
                         <option value="convenience_store">コンビニ払い</option>
                         <option value="credit_card">カード支払い</option>
                     </select>
+                    @error('payment_method')
+                    <div class="error-message">{{ $message }}</div>
+                    @enderror
+
                 </div>
-                <div class="purchase__details-address">
-                    <div class="purchase__details-header">
-                        <p class="purchase__details-label">配送先</p>
-                        <a href="{{ route('purchase.address.edit', ['item_id' => $product->id]) }}" class="purchase__details-change">変更する</a>
+                <form method="POST" action="{{ route('purchase.checkout', ['item_id' => $product->id]) }}" class="purchase__form">
+                    @csrf
+                    <div class="purchase__details-address">
+                        <div class="purchase__details-header">
+                            <p class="purchase__details-label">配送先</p>
+
+                            <a href="{{ route('purchase.address.edit', ['item_id' => $product->id]) }}" class="purchase__details-change">変更する</a>
+                        </div>
+                        <p class="purchase__details-text">〒{{ Auth::user()->postal_code }}<br>{{ Auth::user()->address }}<br>{{ Auth::user()->building_name }}</p>
+                        @error('delivery_address')
+                        <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <input type="hidden" name="delivery_address" value="{{ Auth::user()->postal_code }} {{ Auth::user()->address }} {{ Auth::user()->building_name }}">
                     </div>
-                    <p class="purchase__details-text">〒{{ Auth::user()->postal_code }}<br>{{ Auth::user()->address }}<br>{{ Auth::user()->building_name }}</p>
-                </div>
             </div>
         </div>
         <div class="purchase__right">
@@ -105,12 +116,6 @@
             });
         });
 
-        form.addEventListener("submit", function(event) {
-            if (!hiddenPaymentMethod.value) {
-                event.preventDefault();
-                alert("支払い方法を選択してください！");
-            }
-        });
     });
 </script>
 @endsection

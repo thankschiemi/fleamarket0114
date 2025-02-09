@@ -219,6 +219,12 @@
 .purchase__form-button:hover {
     background: #e04e52;
 }
+.error-message {
+    font-size: 10px;
+    color: red;
+    margin-left: 60px;
+
+}
 @media (min-width: 1400px) and (max-width: 1540px) {
     .purchase {
         max-width: 1000px;

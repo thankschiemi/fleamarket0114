@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PurchaseRequest;
 
 class PurchasesController extends Controller
 {
@@ -75,8 +76,13 @@ class PurchasesController extends Controller
 
 
 
-    public function checkout(Request $request, $item_id)
+    public function checkout(PurchaseRequest $request, $item_id)
+
     {
+
+        $validatedData = $request->validated();
+
+
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $product = Product::findOrFail($item_id);

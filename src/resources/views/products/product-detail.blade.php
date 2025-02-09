@@ -76,9 +76,12 @@
             <p class="product-detail__no-comments">コメントはまだありません。</p>
             @endif
 
-            <form method="POST" action="{{ route('reviews.store', $product->id) }}" class="product-detail__comment-form">
+            <form method="POST" action="{{ route('reviews.store', $product->id) }}" class="product-detail__comment-form" novalidate>
                 @csrf
                 <textarea name="comment" placeholder="コメントを入力してください" rows="3" class="product-detail__comment-input"></textarea>
+                @error('comment')
+                <div class="error-message">{{ $message }}</div>
+                @enderror
                 <button type="submit" class="product-detail__comment-submit">コメントを送信する</button>
             </form>
         </div>

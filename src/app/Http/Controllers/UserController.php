@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('mypage')->with('status', 'プロフィールを更新しました！');
+        return redirect()->route('products.index')->with('status', 'プロフィールを更新しました！');
     }
 
 
