@@ -20,6 +20,10 @@
             <input type="file" id="image" name="image" class="profile__image-input" onchange="previewImage(event)">
             <label for="image" class="profile__image-label">画像を選択する</label>
         </div>
+        @error('image')
+        <div class="error-message">{{ $message }}</div>
+        @enderror
+
 
         <div class="profile__form-group">
             <label for="username" class="profile__label">ユーザー名</label>

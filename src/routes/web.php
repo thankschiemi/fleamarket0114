@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
 
 Route::get('/item/{item_id}', [ProductController::class, 'show'])->name('product.show');

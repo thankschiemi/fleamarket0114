@@ -14,7 +14,14 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'profile_image' => 'nullable|image|mimes:jpeg,png|max:2048',
+            'image' => 'nullable|mimes:jpeg,png',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'image.mimes' => '画像はjpegまたはpng形式でアップロードしてください。',
         ];
     }
 }
