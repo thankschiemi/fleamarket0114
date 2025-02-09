@@ -219,6 +219,10 @@
 .product-exhibit__submit:hover {
     background-color: #e85050;
 }
+.error-message {
+    font-size: 15px;
+    color: red;
+}
 
 @media (min-width: 1400px) and (max-width: 1540px) {
     .product-exhibit {

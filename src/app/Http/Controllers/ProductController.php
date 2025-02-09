@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
+use App\Http\Requests\ExhibitionRequest;
 
 class ProductController extends Controller
 {
@@ -90,19 +91,9 @@ class ProductController extends Controller
 
 
 
-    public function store(Request $request)
+    public function store(ExhibitionRequest $request)
     {
-
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|integer|min:1',
-            'condition' => 'required|string',
-            'category' => 'required|array', // ✅ 配列として受け取るように変更
-            'category.*' => 'exists:categories,id', // ✅ 各カテゴリがDBに存在するかチェック
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $data = $request->validated();
 
         $imagePath = null;
         if ($request->hasFile('image')) {
