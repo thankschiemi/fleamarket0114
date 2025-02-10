@@ -13,11 +13,11 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::first() ?? User::factory()->create([
-            'name' => 'デフォルトユーザー',
-            'email' => 'default@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'default@example.com'],
+            ['name' => 'デフォルトユーザー', 'password' => bcrypt('password')]
+        );
+
 
         DB::table('products')->insert([
             [

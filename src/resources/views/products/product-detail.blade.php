@@ -20,14 +20,12 @@
                 <div class="product-detail__icon">
                     <form method="POST" action="{{ route('favorites.toggle', $product->id) }}">
                         @csrf
-                        <button type="submit" class="product-detail__icon-star">
-                            @if (Auth::check() && Auth::user()->favoritedByProducts()->where('product_id', $product->id)->exists())
-                            <button type="submit" class="product-detail__icon-star">★</button>
-                            @else
-                            <button type="submit" class="product-detail__icon-star">☆</button>
-                            @endif
+                        <div class="product-detail__icon-star {{ Auth::check() && Auth::user()->favoritedByProducts()->where('product_id', $product->id)->exists() ? 'product-detail__icon-star--active' : '' }}">
+                            <button type="submit">
+                                {{ Auth::check() && Auth::user()->favoritedByProducts()->where('product_id', $product->id)->exists() ? '★' : '☆' }}
+                            </button>
+                        </div>
 
-                        </button>
                     </form>
                     <span class="product-detail__icon-count">{{ $product->favoritedByUsers->count() }}</span>
                 </div>
