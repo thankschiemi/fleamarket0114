@@ -3,20 +3,69 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Purchase;
 
 class PurchaseTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
+    /** @test */
+    public function ログインユーザーが購入できる()
+    {
+        $user = User::first();
+        $product = Product::first();
+        $this->actingAs($user);
+
+        $response = $this->get("/purchase/{$product->id}/complete?session_id=test_session");
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('purchases', [
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+        ]);
+    }
+    /** @test */
+    public function 購入した商品は商品一覧画面にてsoldと表示される()
+    {
+        $user = User::first();
+        $product = Product::first();
+        $this->actingAs($user);
+
+        $this->get("/purchase/{$product->id}/complete?session_id=test_session");
+
+        $response = $this->get('/');
+        $response->assertSee('sold');
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'is_sold' => true,
+        ]);
+    }
+    /** @test */
+    public function 購入した商品がプロフィール購入一覧に追加されている()
+    {
+        $user = User::first();
+        $product = Product::first();
+        $this->actingAs($user);
+
+        $response = $this->get("/purchase/{$product->id}/complete?session_id=test_session");
+
+        $response = $this->get('/mypage?tab=buy');
+        $response->assertSeeText($product->name);
+
+
+        $this->assertDatabaseHas('purchases', [
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+        ]);
     }
 }

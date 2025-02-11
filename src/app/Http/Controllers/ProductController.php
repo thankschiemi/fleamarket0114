@@ -66,7 +66,8 @@ class ProductController extends Controller
         $tab = $request->query('tab', 'sell');
 
         $sellingProducts = $user->products()->latest()->get() ?? collect([]); // 出品した商品
-        $purchasedProducts = $user->purchases->map->product ?? collect([]); // 購入した商品
+        $purchasedProducts = $user->purchases()->with('product')->get();
+        // 購入した商品
 
         return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts'));
     }

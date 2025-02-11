@@ -33,17 +33,21 @@
 @endif
 @if ($tab === 'buy')
 <div class="profile__products">
-    @forelse ($purchasedProducts as $product)
-    <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="profile__product-link">
+    @forelse ($purchasedProducts as $purchase)
+    @if ($purchase['product'])
+    <a href="{{ route('product.show', ['item_id' => $purchase['product']['id']]) }}" class="profile__product-link">
         <div class="profile__product-card">
-            <img src="{{ $product->image_path }}" alt="商品画像" class="profile__product-image">
-            <p class="profile__product-name">{{ $product->name }}</p>
+            <img src="{{ $purchase['product']['image_path'] }}" alt="商品画像" class="profile__product-image">
+            <p class="profile__product-name">{{ $purchase['product']['name'] }}</p>
         </div>
     </a>
+    @endif
     @empty
     <p class="profile__empty">商品がありません。</p>
     @endforelse
 </div>
 @endif
+
+
 </div>
 @endsection

@@ -38,7 +38,6 @@ class ProductListTest extends TestCase
         $response->assertSee('Sold');
     }
 
-
     /** @test */
     public function 自分が出品した商品が表示されない()
     {

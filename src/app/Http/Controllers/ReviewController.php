@@ -9,17 +9,13 @@ use App\Http\Requests\CommentRequest;
 
 class ReviewController extends Controller
 {
-    /**
-     * コメントを保存する
-     */
     public function store(CommentRequest $request, Product $product)
     {
         $data = $request->validated();
 
-        // コメントを保存
         $review = new Review();
-        $review->user_id = Auth::id(); // ログインユーザーのID
-        $review->product_id = $product->id; // コメント対象の商品
+        $review->user_id = Auth::id();
+        $review->product_id = $product->id;
         $review->comment = $request->input('comment');
         $review->save();
 
