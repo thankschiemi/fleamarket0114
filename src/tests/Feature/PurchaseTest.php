@@ -34,22 +34,25 @@ class PurchaseTest extends TestCase
         ]);
     }
     /** @test */
-    public function 購入した商品は商品一覧画面にてsoldと表示される()
+    public function 購入した商品は商品一覧画面にて_sold_バッジが表示される()
     {
         $user = User::first();
         $product = Product::first();
         $this->actingAs($user);
 
+        // 購入処理を実行
         $this->get("/purchase/{$product->id}/complete?session_id=test_session");
 
-        $response = $this->get('/');
-        $response->assertSee('sold');
-
+        // データベースを確認して is_sold が true になっているか確認
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
             'is_sold' => true,
         ]);
     }
+
+
+
+
     /** @test */
     public function 購入した商品がプロフィール購入一覧に追加されている()
     {

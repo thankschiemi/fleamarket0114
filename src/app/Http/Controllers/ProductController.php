@@ -36,6 +36,7 @@ class ProductController extends Controller
                 ->when($query, function ($queryBuilder) use ($query) {
                     return $queryBuilder->where('name', 'LIKE', "%{$query}%");
                 })
+                ->orderBy('is_sold')
                 ->get();
         }
 

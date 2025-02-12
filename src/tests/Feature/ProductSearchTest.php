@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Favorite;
 use Tests\TestCase;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\FavoriteSeeder;
@@ -35,8 +36,16 @@ class ProductSearchTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        $response = $this->get('/?tab=mylist&query=腕');
+        // 腕時計がProductSeederで作成されている前提
+        $product = Product::where('name', '腕時計')->first();
 
+        // 腕時計をお気に入りに登録
+        Favorite::create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+        ]);
+
+        $response = $this->get('/?tab=mylist&query=腕');
         $response->assertStatus(200);
         $response->assertSee('腕時計');
     }
