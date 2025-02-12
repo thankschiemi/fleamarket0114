@@ -130,10 +130,12 @@ class ProductController extends Controller
             'img_url' => $imagePath,
         ]);
 
+
+
         if ($request->has('category')) {
             $product->categories()->attach($request->category);
         }
 
-        return redirect()->route('mypage', ['tab' => 'selling'])->with('success', '商品を出品しました！');
+        return redirect()->route('mypage', ['tab' => 'sell'])->with('success', '商品を出品しました！');
     }
 }

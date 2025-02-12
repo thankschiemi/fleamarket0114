@@ -6,6 +6,11 @@
 
 @section('content')
 <div class="profile">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="profile__header">
         <img src="{{ $user->profile_image_path ? asset($user->profile_image_path) : asset('images/default-avatar.jpg') }}"
             alt="プロフィール画像" class="profile__image">

@@ -10,10 +10,10 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        if (!User::where('email', 'testuser@example.com')->exists()) {
+        if (!User::where('email', 'default@example.com')->exists()) {
             User::create([
                 'name' => 'テストユーザー',
-                'email' => 'testuser@example.com',
+                'email' => 'default@example.com',
                 'password' => bcrypt('password'),
             ]);
         }

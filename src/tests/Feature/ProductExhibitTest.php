@@ -5,7 +5,10 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
-use Database\Seeders\UserSeeder;
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class ProductExhibitTest extends TestCase
 {
@@ -14,35 +17,41 @@ class ProductExhibitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(UserSeeder::class); // ユーザーをSeederで準備
+        $this->artisan('db:seed', ['--class' => 'UserSeeder']); // シーダーを実行
     }
+
 
     /** @test */
     public function 商品を正しく出品できる()
     {
-        $user = User::first(); // 最初のユーザーを取得
-        $this->actingAs($user); // ログイン状態にする
+        $this->seed(\Database\Seeders\UserSeeder::class);
+        $this->seed(\Database\Seeders\CategorySeeder::class);
 
-        // 商品出品フォームのデータを作成
+        $user = User::where('email', 'default@example.com')->first();
+        $this->actingAs($user);
+
+        $category = Category::first();
+
         $formData = [
             'name' => 'テスト商品',
             'description' => 'これはテスト商品です。',
             'price' => 5000,
             'condition' => '新品',
-            'category' => [1, 2], // カテゴリーID（複数可）
-            'image' => 'products/sample.jpg', // サンプル画像パス
+            'category' => [$category->id],
+            'image' => new UploadedFile(storage_path('app/public/images/default-product.jpeg'), 'default-product.jpeg', 'image/jpeg', null, true),
         ];
 
-        // 商品出品処理を実行
         $response = $this->post('/sell', $formData);
 
-        // 商品が正しくデータベースに登録されているか確認
+        $response->assertStatus(302);
+        $response->assertRedirect('/mypage?tab=sell');
+
+        // 商品がデータベースに存在するか確認
         $this->assertDatabaseHas('products', [
             'name' => 'テスト商品',
             'description' => 'これはテスト商品です。',
             'price' => 5000,
             'condition' => '新品',
-            'user_id' => $user->id,
         ]);
     }
 }

@@ -35,10 +35,10 @@
                 <label class="product-exhibit__form-label" for="product-condition">商品の状態</label>
                 <select name="condition" id="product-condition" class="product-exhibit__form-select">
                     <option value="">選択してください</option>
-                    <option value="new">新品・未使用</option>
-                    <option value="like_new">未使用に近い</option>
-                    <option value="used">やや傷や汚れあり</option>
-                    <option value="damaged">傷や汚れあり</option>
+                    <option value="新品・未使用">新品・未使用</option>
+                    <option value="未使用に近い">未使用に近い</option>
+                    <option value="やや傷や汚れあり">やや傷や汚れあり</option>
+                    <option value="傷や汚れあり">傷や汚れあり</option>
                 </select>
                 @error('condition')
                 <div class="error-message">{{ $message }}</div>
