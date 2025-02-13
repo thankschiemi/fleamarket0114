@@ -6,24 +6,34 @@
 
 @section('content')
 <div class="verify-email">
-    <h1 class="verify-email__title">メール認証を完了してください</h1>
-    <p class="verify-email__description">
-        登録したメールアドレスに送信されたリンクをクリックして認証を完了してください。
-    </p>
-    <p class="verify-email__instruction">
-        認証メールが届かない場合は、以下のボタンを押して再送してください。
+    <h1 class="verify-email__title">登録していただいたメールアドレスに認証メールを送付しました。<br> メール認証を完了してください。</h1>
+
+    <a href="#" id="verify-btn" class="verify-email__button">認証はこちらから</a>
+
+    <p id="confirmation-message" class="verify-email__message hidden">
+        認証メールを開きましたか？以下のボタンをクリックして確認をお願いします。
     </p>
 
-    {{-- メール再送信後の成功メッセージ --}}
-    @if (session('status') == 'verification-link-sent')
-    <p class="verify-email__message verify-email__message--success">
-        認証メールを再送信しました。メールボックスをご確認ください。
-    </p>
-    @endif
-
+    {{-- メール再送信フォーム --}}
     <form class="verify-email__form" method="POST" action="{{ route('verification.send') }}">
         @csrf
-        <button class="verify-email__button" type="submit">認証メールを再送する</button>
+        <button type="submit" class="verify-email__link">認証メールを再送する</button>
     </form>
 </div>
+@endsection
+
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const verifyBtn = document.getElementById('verify-btn');
+        const confirmationMessage = document.getElementById('confirmation-message');
+
+        if (verifyBtn) {
+            verifyBtn.addEventListener('click', function(event) {
+                event.preventDefault(); // ページ遷移を防ぐ
+                confirmationMessage.classList.remove('hidden');
+            });
+        }
+    });
+</script>
 @endsection

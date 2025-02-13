@@ -40,7 +40,7 @@ class UserController extends Controller
         $user->building_name = $addressData['building'];
         $user->save();
 
-        return redirect()->route('products.index')->with('status', 'プロフィールを更新しました！');
+        return redirect()->route('mypage', ['tab' => 'sell'])->with('status', 'プロフィールを更新しました！');
     }
 
 

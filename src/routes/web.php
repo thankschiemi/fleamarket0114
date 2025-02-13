@@ -19,7 +19,8 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register')
 // メール認証
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+})->middleware(['auth'])->name('verification.notice');
+
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();

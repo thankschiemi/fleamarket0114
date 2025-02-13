@@ -14,22 +14,22 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        // 認証画面のカスタムビューを指定
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
+        });
+
 
         Fortify::redirects('verification.verify', '/login');
         Fortify::redirects('logout', '/login');
