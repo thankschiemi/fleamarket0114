@@ -111,7 +111,6 @@
 
 .product-detail__icon-star--active button {
     color: #f39c12;
-    /* アクティブ時はゴールド */
 }
 
 .product-detail__icon-star button:focus {

@@ -17,7 +17,6 @@ class PaymentMethodTest extends TestCase
     {
         parent::setUp();
 
-        // 必要なデータをSeederで作成
         $this->seed(UserSeeder::class);
         $this->seed(ProductSeeder::class);
     }
@@ -25,15 +24,13 @@ class PaymentMethodTest extends TestCase
     /** @test */
     public function 支払い方法が正しく反映される()
     {
-        $user = User::first();  // Seederで作成した最初のユーザーを取得
-        $product = Product::first();  // Seederで作成した最初の商品を取得
-        $this->actingAs($user);  // ログイン状態にする
+        $user = User::first();
+        $product = Product::first();
+        $this->actingAs($user);
 
-        // 購入画面へアクセス
         $response = $this->get("/purchase/{$product->id}");
-        $response->assertStatus(200);  // ステータス200を確認
+        $response->assertStatus(200);
 
-        // 支払い方法が正しく表示されているか確認
         $response->assertSeeText('コンビニ払い');
         $response->assertSeeText('カード支払い');
     }

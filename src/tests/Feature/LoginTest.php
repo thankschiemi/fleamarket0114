@@ -15,7 +15,7 @@ class LoginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(UserSeeder::class); // ログインテスト用にユーザーを作成
+        $this->seed(UserSeeder::class);
     }
 
     /** @test */
@@ -58,7 +58,7 @@ class LoginTest extends TestCase
 
         $response = $this->post('/login', [
             'email' => $user->email,
-            'password' => 'password', // UserSeederで生成されたパスワード
+            'password' => 'password',
         ]);
 
         $response->assertRedirect('/mypage/profile');

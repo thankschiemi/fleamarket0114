@@ -12,15 +12,12 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PurchasesController;
 
 
-// ユーザー登録
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register');
 
-// メール認証
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware(['auth'])->name('verification.notice');
-
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
@@ -32,14 +29,11 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', '認証メールを再送しました！');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-
-// ログイン
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
-// ログアウト
 Route::post('/logout', function (Request $request) {
     auth()->logout();
     $request->session()->invalidate();
@@ -48,19 +42,13 @@ Route::post('/logout', function (Request $request) {
 })->middleware('auth')->name('logout');
 
 Route::middleware(['auth'])->group(function () {
-    // プロフィール閲覧ページ
     Route::get('/mypage', [ProductController::class, 'showProfile'])->name('mypage');
 
-    // プロフィール編集ページ
     Route::get('/mypage/profile', [UserController::class, 'editProfile'])->name('mypage.profile');
     Route::put('/mypage/profile', [UserController::class, 'updateProfile'])->name('mypage.profile.update');
 });
 
-
-
-
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
-
 Route::get('/item/{item_id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::middleware(['auth'])->group(

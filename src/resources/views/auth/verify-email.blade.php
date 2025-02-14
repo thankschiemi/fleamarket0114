@@ -30,7 +30,7 @@
 
         if (verifyBtn) {
             verifyBtn.addEventListener('click', function(event) {
-                event.preventDefault(); // ページ遷移を防ぐ
+                event.preventDefault();
                 confirmationMessage.classList.remove('hidden');
             });
         }

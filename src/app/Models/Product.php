@@ -37,24 +37,21 @@ class Product extends Model
         return asset('images/default-product.jpg');
     }
 
-
-    // リレーション: 商品のレビュー
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
+
     public function favorites()
     {
         return $this->hasMany(Favorite::class, 'product_id');
     }
 
-
-    // リレーション: 商品の購入履歴
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
     }
-    // リレーション: 商品の出品者 (Userモデルと関連付け)
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

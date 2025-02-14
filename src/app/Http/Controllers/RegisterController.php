@@ -21,11 +21,11 @@ class RegisterController extends Controller
         ]);
 
         Auth::login($user);
-
         $user->sendEmailVerificationNotification();
 
         return redirect()->route('verification.notice');
     }
+
     public function show()
     {
         return view('auth.register');

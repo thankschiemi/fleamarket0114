@@ -13,14 +13,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $tab = $request->query('tab', 'recommend');
-        $query = $request->query('query', ''); // 🔍 検索ワード（デフォルトは空）
+        $query = $request->query('query', '');
 
         if ($tab === 'mylist') {
             if (!Auth::check()) {
                 return redirect()->route('login')->with('redirect_to', request()->fullUrl());
             }
 
-            // `favoritedByUsers()` を使用してお気に入りの商品を取得
             $products = Product::whereHas('favoritedByUsers', function ($queryBuilder) {
                 $queryBuilder->where('users.id', Auth::id());
             })
@@ -43,46 +42,37 @@ class ProductController extends Controller
         return view('products.product-list', [
             'products' => $products,
             'tab' => $tab,
-            'searchQuery' => $query, // 🔍 検索ワードを保持
+            'searchQuery' => $query,
         ]);
     }
 
-
-
     public function show($id)
     {
-        // `favoritedByUsers` をロードし、null になるのを防ぐ
         $product = Product::with(['favoritedByUsers', 'reviews.user', 'categories'])->findOrFail($id);
 
         return view('products.product-detail', compact('product'));
     }
 
-    /**
-     * プロフィールページを表示
-     */
     public function showProfile(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
         $tab = $request->query('tab', 'sell');
 
-        $sellingProducts = $user->products()->latest()->get() ?? collect([]); // 出品した商品
+        $sellingProducts = $user->products()->latest()->get() ?? collect([]);
         $purchasedProducts = $user->purchases()->with('product')->get();
-        // 購入した商品
 
         return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts'));
     }
 
-    /**
-     * 商品出品ページを表示
-     */
+
     public function create()
     {
 
         if (!auth()->check()) {
             return redirect()->route('login')->with('redirect_to', request()->fullUrl());
         }
-        $categories = Category::all(); // `categories` テーブルから全て取得
+        $categories = Category::all();
         return view('products.product-exhibit', compact('categories'));
     }
 

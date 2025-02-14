@@ -26,7 +26,6 @@ class PurchasesController extends Controller
 
     public function complete(Request $request, $item_id)
     {
-        // テスト環境での処理
         if (app()->environment('testing')) {
             Purchase::create([
                 'user_id' => Auth::id(),
@@ -36,7 +35,6 @@ class PurchasesController extends Controller
                 'purchase_date' => now(),
             ]);
 
-            // 商品を「SOLD」にする
             $product = Product::find($item_id);
             if ($product) {
                 $product->update(['is_sold' => true]);
@@ -45,7 +43,6 @@ class PurchasesController extends Controller
             return redirect()->route('products.index')->with('success', '購入が完了しました！（テスト環境）');
         }
 
-        // 本番環境での処理
         $session_id = $request->query('session_id');
         if (!$session_id) {
             return redirect()->route('purchase.show', ['item_id' => $item_id])
@@ -55,23 +52,20 @@ class PurchasesController extends Controller
         $stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
         $session = $stripe->checkout->sessions->retrieve($session_id);
 
-        // 支払い方法を取得
         $paymentMethod = $session->payment_method_types[0] ?? 'card';
 
-        // コンビニ払いの場合は「支払い待ち」にする
         if ($paymentMethod === 'konbini') {
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'convenience_store',
-                'status' => 'pending', // 支払い待ち
+                'status' => 'pending',
                 'purchase_date' => now(),
             ]);
 
-            return view('purchase.pending', compact('item_id')); // 支払い待ち画面へ
+            return view('purchase.pending', compact('item_id'));
         }
 
-        // カード決済は即時完了
         if ($session->payment_status === 'paid') {
             Purchase::create([
                 'user_id' => Auth::id(),
@@ -81,7 +75,6 @@ class PurchasesController extends Controller
                 'purchase_date' => now(),
             ]);
 
-            // 商品を「SOLD」にする
             $product = Product::find($item_id);
             if ($product) {
                 $product->update(['is_sold' => true]);
@@ -99,16 +92,12 @@ class PurchasesController extends Controller
     public function checkout(PurchaseRequest $request, $item_id)
 
     {
-
         $validatedData = $request->validated();
-
-
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
         $product = Product::findOrFail($item_id);
 
-        $maxPrice = 300000; // Stripeの上限額（セント単位）
-        $priceInYen = intval($product->price); // ここでは *100 しない
+        $maxPrice = 300000;
+        $priceInYen = intval($product->price);
         $unitAmount = $product->price;
 
         $session = \Stripe\Checkout\Session::create([
@@ -119,7 +108,7 @@ class PurchasesController extends Controller
                     'product_data' => [
                         'name' => $product->name,
                     ],
-                    'unit_amount' => $unitAmount, // ここが正しく設定されているか
+                    'unit_amount' => $unitAmount,
                 ],
                 'quantity' => 1,
             ]],
@@ -129,12 +118,14 @@ class PurchasesController extends Controller
 
         return redirect($session->url);
     }
+
     public function editAddress($item_id)
     {
         $product = Product::findOrFail($item_id);
-        $user = auth()->user(); // ログインユーザー情報
+        $user = auth()->user();
         return view('products.product-shipping-edit', compact('product', 'user'));
     }
+
     public function updateAddress(Request $request, $item_id)
     {
         $request->validate([

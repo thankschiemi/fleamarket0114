@@ -29,16 +29,9 @@ class UserProfileTest extends TestCase
         $user = User::where('email', 'default@example.com')->first();
         $this->actingAs($user);
 
-        // プロフィールページにアクセス
         $response = $this->get('/mypage');
-
-        // ユーザー名が表示されているか確認
         $response->assertSee($user->name);
-
-        // 出品商品が取得できているか確認
         $this->assertNotEmpty($user->products, '出品商品がありません');
-
-        // 購入商品が取得できているか確認
         $this->assertNotEmpty($user->purchases, '購入商品がありません');
     }
 }

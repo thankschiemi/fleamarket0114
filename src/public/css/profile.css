@@ -13,12 +13,12 @@
 }
 
 .profile__image {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-        background-color: #eaeaea;
-        border: 2px solid #ccc;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: #eaeaea;
+    border: 2px solid #ccc;
     }
 
 .profile__name {
@@ -112,12 +112,10 @@
 
 .profile__product-card {
     padding: 8px;
-    /* 余白を少し減らす */
     text-align: center;
     transition: box-shadow 0.3s;
     position: relative;
     display: flex;
-    /* 縦方向のバランスを維持 */
     flex-direction: column;
     align-items: center;
 }
@@ -130,11 +128,8 @@
 .profile__product-image {
     width: 100%;
     max-width: 380px;
-    /* 画像の最大幅を小さめに統一 */
     height: 380px;
-    /* 高さを統一 */
     object-fit: contain;
-    /* 画像の比率を維持しつつ枠内に収める */
     background-color: #eaeaea;
     border-radius: 8px;
     display: block;

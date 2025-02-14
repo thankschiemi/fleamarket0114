@@ -22,7 +22,7 @@ class LoginController extends Controller
                 return redirect()->route('mypage.profile');
             }
 
-            return redirect('/'); // 通常ログイン時
+            return redirect('/');
         }
 
         return back()->withErrors([

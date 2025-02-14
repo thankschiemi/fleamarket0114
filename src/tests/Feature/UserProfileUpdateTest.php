@@ -24,14 +24,10 @@ class UserProfileUpdateTest extends TestCase
         ]);
 
 
-        // ログイン状態にする
         $this->actingAs($user);
-
-        // プロフィール編集画面にアクセス
         $response = $this->get('/mypage/profile');
         $response->assertStatus(200);
 
-        // 各項目が初期値として表示されているか確認
         $response->assertSee('山田花子');
         $response->assertSee('100-0001');
         $response->assertSee('東京都千代田区千代田1-1');

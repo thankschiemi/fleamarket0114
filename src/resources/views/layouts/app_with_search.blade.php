@@ -21,7 +21,7 @@
         </div>
         <nav class="header__nav">
             <form action="{{ route('products.index') }}" method="GET" class="header__search-form">
-                <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}"> <!-- 🔥 これを追加！ -->
+                <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}">
                 <input type="text" name="query" class="header__search-input"
                     placeholder="なにをお探しですか？"
                     value="{{ request('query') }}">

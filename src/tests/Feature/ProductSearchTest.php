@@ -36,10 +36,8 @@ class ProductSearchTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        // 腕時計がProductSeederで作成されている前提
         $product = Product::where('name', '腕時計')->first();
 
-        // 腕時計をお気に入りに登録
         Favorite::create([
             'user_id' => $user->id,
             'product_id' => $product->id,

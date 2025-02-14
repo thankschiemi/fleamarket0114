@@ -17,7 +17,7 @@ class ProductExhibitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->artisan('db:seed', ['--class' => 'UserSeeder']); // シーダーを実行
+        $this->artisan('db:seed', ['--class' => 'UserSeeder']);
     }
 
 
@@ -46,7 +46,6 @@ class ProductExhibitTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('/mypage?tab=sell');
 
-        // 商品がデータベースに存在するか確認
         $this->assertDatabaseHas('products', [
             'name' => 'テスト商品',
             'description' => 'これはテスト商品です。',

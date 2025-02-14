@@ -25,10 +25,8 @@ class FavoriteTest extends TestCase
         $product = Product::first();
         $this->actingAs($user);
 
-        // 事前に削除（重複エラーを回避）
         Favorite::where('user_id', $user->id)->where('product_id', $product->id)->delete();
 
-        // いいねを追加するリクエスト
         $response = $this->post("/favorites/{$product->id}");
         $response->assertStatus(302);
 

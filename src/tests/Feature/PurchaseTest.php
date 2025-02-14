@@ -40,10 +40,8 @@ class PurchaseTest extends TestCase
         $product = Product::first();
         $this->actingAs($user);
 
-        // 購入処理を実行
         $this->get("/purchase/{$product->id}/complete?session_id=test_session");
 
-        // データベースを確認して is_sold が true になっているか確認
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
             'is_sold' => true,
