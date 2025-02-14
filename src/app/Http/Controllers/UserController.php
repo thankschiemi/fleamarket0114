@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ProfileRequest;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -38,12 +39,23 @@ class UserController extends Controller
         $user->postal_code = $addressData['postal_code'];
         $user->address = $addressData['address'];
         $user->building_name = $addressData['building'];
+
+
+        // 他のユーザー情報を更新
+        $user->name = $addressData['username'];
+        $user->postal_code = $addressData['postal_code'];
+        $user->address = $addressData['address'];
+        $user->building_name = $addressData['building'];
+
+        // 🔥 フラグを false に更新（初回も通常も統一）
+        if ($user->is_first_login) {
+            $user->is_first_login = false;
+        }
         $user->save();
 
-        return redirect()->route('mypage', ['tab' => 'sell'])->with('status', 'プロフィールを更新しました！');
+        // 🔥 どちらも `/` にリダイレクト
+        return redirect('/')->with('status', 'プロフィールを更新しました！');
     }
-
-
     public function editProfile()
     {
         /** @var \App\Models\User $user */
