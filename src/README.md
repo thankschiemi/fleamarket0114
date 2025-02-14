@@ -7,58 +7,95 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# フリーマーケットアプリ - FleaMarket0114
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**FleaMarket0114**は、簡単に商品を出品・購入できるフリーマーケットアプリです。お気に入り機能やレビュー投稿機能を提供します。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+![トップ画面](resources/diagrams/fleamarket.png)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 作成した目的
 
-## Learning Laravel
+実務に近い開発経験を積むために作成しました。
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## アプリケーション URL
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+http://localhost （または本番 URL）
 
-## Laravel Sponsors
+## 機能一覧
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+-   会員登録・ログイン（メール認証）
+-   商品検索機能
+-   商品詳細表示
+-   商品出品・購入機能
+-   レビュー投稿・閲覧機能
+-   お気に入り登録機能
+-   決済機能
 
-### Premium Partners
+**追加機能**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+-   バリデーション
+-   管理画面
+-   環境の切り分け（ローカル・本番）
+-   レスポンシブ対応
+-   AWS を利用したデプロイ
 
-## Contributing
+## 使用技術
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   **フレームワーク**: Laravel 8.x
+-   **データベース**: MySQL 8.x
+-   **サーバー**: Nginx
+-   **PHP**: 8.4.2
+-   **Node.js**: 18.x
+-   **Composer**: 2.x
+-   **Docker**
+-   **Stripe**（決済）
+-   **OS**: Ubuntu 20.04
+-   **その他**: AWS（S3, EC2, RDS）
 
-## Code of Conduct
+## テーブル設計
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+![テーブル設計](resources/diagrams/table.png)
 
-## Security Vulnerabilities
+## ER 図
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+以下は、本プロジェクトで使用しているデータベースの ER 図です：
 
-## License
+![ER図](resources/diagrams/index.drawio.png)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 環境構築
+
+1. **リポジトリをクローン**
+    ```bash
+    git clone https://github.com/thankschiemi/fleamarket0114.git
+    ```
+2. **環境設定ファイルを作成**
+    ```bash
+    cp .env.example .env
+    ```
+3. **必要な依存関係をインストール**
+    ```bash
+    composer install
+    npm install
+    npm run dev
+    ```
+4. **データベースをマイグレーション**
+    ```bash
+    php artisan migrate --seed
+    ```
+
+## ダミーユーザー情報
+
+-   **管理者**
+    -   Email: `admin@example.com`
+    -   Password: `adminpassword`
+-   **一般ユーザー**
+    -   Email: `user@example.com`
+    -   Password: `userpassword`
+
+## ライセンス
+
+このプロジェクトは、MIT ライセンスの下で公開されています。
+
+## 作者
+
+-   **名前**: 鈴木 智恵美
