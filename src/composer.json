@@ -13,7 +13,9 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "stripe/stripe-php": "*",
-        "symfony/mailer": "^6.1"
+        "symfony/mailer": "^6.1",
+        "league/flysystem": "^1.1",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
