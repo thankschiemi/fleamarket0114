@@ -85,11 +85,10 @@ cd /var/www/html/src
 ---
 
 ### 1️⃣ **（Docker環境の場合のみ）コンテナ内に入る**
-**Docker を使用する場合は、以下を実行！**
+**Docker を使用する場合は、以下を実行**
 ```bash
 docker-compose exec php bash
 ```
- **ローカル環境の場合は、この手順は不要！**
 
 ### 2️⃣ **環境設定ファイルを作成**
 ```bash
