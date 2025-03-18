@@ -62,8 +62,15 @@ class ProductController extends Controller
         $sellingProducts = $user->products()->latest()->get() ?? collect([]);
         $purchasedProducts = $user->purchases()->with('product')->get();
 
-        return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts'));
+        // 取引中の商品を取得（例：statusが 'trading' のもの）
+        $tradingProducts = $user->purchases()
+            ->where('status', 'trading')
+            ->with('product')
+            ->get();
+
+        return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts', 'tradingProducts'));
     }
+
 
 
     public function create()

@@ -31,7 +31,7 @@ class PurchasesController extends Controller
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'credit_card',
-                'status' => 'completed',
+                'status' => 'trading',
                 'purchase_date' => now(),
             ]);
 
@@ -59,7 +59,7 @@ class PurchasesController extends Controller
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'convenience_store',
-                'status' => 'pending',
+                'status' => 'trading',
                 'purchase_date' => now(),
             ]);
 
@@ -71,7 +71,7 @@ class PurchasesController extends Controller
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'credit_card',
-                'status' => 'completed',
+                'status' => 'trading',
                 'purchase_date' => now(),
             ]);
 
