@@ -25,4 +25,8 @@ class Purchase extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

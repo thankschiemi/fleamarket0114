@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PurchasesController;
+use App\Http\Controllers\TradeController;
 
 
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
@@ -75,4 +76,10 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/sell', [ProductController::class, 'create'])->name('products.create');
     Route::post('/sell', [ProductController::class, 'store'])->name('products.store');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/trade/{trade_id}', [TradeController::class, 'show'])->name('trade.show');
+    Route::post('/trade/{trade_id}/message', [TradeController::class, 'sendMessage'])->name('trade.message.send');
 });

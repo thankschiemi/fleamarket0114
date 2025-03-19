@@ -59,8 +59,8 @@
 @if ($tab === 'trade')
 <div class="profile__products">
     @forelse ($tradingProducts as $trade)
-    @if ($trade->product) {{-- 🚀 商品データが存在する場合のみ表示 --}}
-    <a href="{{ route('product.show', ['item_id' => $trade->product->id]) }}" class="profile__product-link">
+    @if ($trade->product)
+    <a href="{{ route('trade.show', ['trade_id' => $trade->id]) }}" class="profile__product-link">
         <div class="profile__product-card">
             <img src="{{ $trade['product']['image_path'] }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $trade->product->name }}</p>
