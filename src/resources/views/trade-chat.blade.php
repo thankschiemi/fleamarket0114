@@ -8,6 +8,7 @@
 <div class="trade-chat">
     <!-- サイドバー -->
     <div class="trade-chat__sidebar">
+        <h2 class="trade-chat__sidebar-title">その他の取引</h2>
         <div class="trade-chat__sidebar-item">商品名</div>
         <div class="trade-chat__sidebar-item">商品名</div>
         <div class="trade-chat__sidebar-item">商品名</div>
@@ -16,12 +17,17 @@
     <!-- メインコンテンツ -->
     <div class="trade-chat__main">
         <header class="trade-chat__header">
-            <h1 class="trade-chat__title">「{{ $tradeUser->name }}」さんとの取引画面</h1>
+            <div class="trade-chat__user">
+                <img src="{{ $tradeUser->profile_image_path ? asset($tradeUser->profile_image_path) : asset('images/default-avatar.jpg') }}"
+                    alt="プロフィール画像" class="trade-chat__user-image">
+                <h1 class="trade-chat__title">「{{ $tradeUser->name }}」さんとの取引画面</h1>
+            </div>
             <button class="trade-chat__complete-button">取引を完了する</button>
         </header>
 
+
         <div class="trade-chat__info">
-            <img src="{{ asset($product->img_url) }}" alt="商品画像" class="trade-chat__product-image">
+            <img src="{{ $trade['product']['image_path'] }}" alt="商品画像" class="trade-chat__product-image">
             <div class="trade-chat__product-details">
                 <h2 class="trade-chat__product-name">{{ $product->name }}</h2>
                 <p class="trade-chat__product-price">価格: ¥{{ number_format($product->price) }}</p>
@@ -30,15 +36,17 @@
 
         <div class="trade-chat__messages">
             @foreach ($messages as $message)
-            <div class="trade-chat__message {{ $message->user_id == auth()->id() ? 'trade-chat__message--self' : 'trade-chat__message--other' }}">
+            <div class="trade-chat__message {{ $message->user_id == auth()->id() ? 'trade-chat__message--buyer' : 'trade-chat__message--seller' }}">
                 <img src="{{ asset($message->user->profile_image_path) }}" alt="プロフィール画像" class="trade-chat__profile-image">
                 <div class="trade-chat__message-content">
+                    <p class="trade-chat__message-sender">{{ $message->user->name }}</p>
                     <p class="trade-chat__message-text">{{ $message->content }}</p>
                     <span class="trade-chat__message-time">{{ $message->created_at->format('H:i') }}</span>
                 </div>
             </div>
             @endforeach
         </div>
+
 
         <div class="trade-chat__input">
             <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" class="trade-chat__form">

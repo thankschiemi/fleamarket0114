@@ -27,17 +27,19 @@ class PurchasesController extends Controller
     public function complete(Request $request, $item_id)
     {
         if (app()->environment('testing')) {
+            // 購入データを保存（テスト環境用）
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'credit_card',
-                'status' => 'trading',
+                'status' => 'trading', // 修正なし（取引開始）
                 'purchase_date' => now(),
             ]);
 
+            // 商品のステータスを "sold" に変更
             $product = Product::find($item_id);
             if ($product) {
-                $product->update(['is_sold' => true]);
+                $product->update(['status' => 'sold']); // is_sold ではなく status を統一
             }
 
             return redirect()->route('products.index')->with('success', '購入が完了しました！（テスト環境）');
@@ -51,10 +53,10 @@ class PurchasesController extends Controller
 
         $stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
         $session = $stripe->checkout->sessions->retrieve($session_id);
-
         $paymentMethod = $session->payment_method_types[0] ?? 'card';
 
         if ($paymentMethod === 'konbini') {
+            // コンビニ支払いの場合、購入データを保存
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
@@ -67,6 +69,7 @@ class PurchasesController extends Controller
         }
 
         if ($session->payment_status === 'paid') {
+            // クレジットカード支払いが成功した場合、購入データを保存
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
@@ -75,9 +78,10 @@ class PurchasesController extends Controller
                 'purchase_date' => now(),
             ]);
 
+            // 商品のステータスを "sold" に変更
             $product = Product::find($item_id);
             if ($product) {
-                $product->update(['is_sold' => true]);
+                $product->update(['status' => 'sold']); // 修正
             }
 
             return redirect()->route('products.index')->with('success', '購入が完了しました！');
