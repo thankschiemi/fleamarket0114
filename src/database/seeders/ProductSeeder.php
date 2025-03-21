@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
             ['name' => 'ノートPC', 'brand' => 'パナソニッコ', 'price' => 45000, 'description' => '高性能PC', 'img_url' => 'Living+Room+Laptop.jpg', 'condition' => '良好'],
         ];
         foreach ($productsA as $product) {
-            Product::create(array_merge($product, ['user_id' => $userA->id, 'is_sold' => false]));
+            Product::create(array_merge($product, ['user_id' => $userA->id, 'status' => 'available']));
         }
 
         // ユーザーBの商品（C006〜C010）
@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
             ['name' => 'メイクセット', 'brand' => 'ko-ko-', 'price' => 2500, 'description' => '便利なメイクセット', 'img_url' => 'Makeup+Set.jpg', 'condition' => '目立った傷なし'],
         ];
         foreach ($productsB as $product) {
-            Product::create(array_merge($product, ['user_id' => $userB->id, 'is_sold' => false]));
+            Product::create(array_merge($product, ['user_id' => $userB->id, 'status' => 'available']));
         }
     }
 }

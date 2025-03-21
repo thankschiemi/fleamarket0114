@@ -30,12 +30,12 @@ class ProductController extends Controller
         } else {
             $products = Product::query()
                 ->when(Auth::check(), function ($queryBuilder) {
-                    return $queryBuilder->where('user_id', '!=', Auth::id());
+                    return $queryBuilder->where('user_id', '!=', Auth::id()); // 自分の商品は非表示
                 })
                 ->when($query, function ($queryBuilder) use ($query) {
                     return $queryBuilder->where('name', 'LIKE', "%{$query}%");
                 })
-                ->orderBy('is_sold')
+                ->orderByRaw("FIELD(status, 'available', 'trading', 'sold')") // 並び順を適用
                 ->get();
         }
 
@@ -45,6 +45,7 @@ class ProductController extends Controller
             'searchQuery' => $query,
         ]);
     }
+
 
     public function show($id)
     {
@@ -59,12 +60,20 @@ class ProductController extends Controller
         $user = auth()->user();
         $tab = $request->query('tab', 'sell');
 
+        // 出品した商品
         $sellingProducts = $user->products()->latest()->get() ?? collect([]);
-        $purchasedProducts = $user->purchases()->with('product')->get();
 
-        // 取引中の商品を取得（例：statusが 'trading' のもの）
+        // 購入した商品（"sold" の商品のみ取得）
+        $purchasedProducts = $user->purchases()->whereHas('product', function ($query) {
+            $query->where('status', 'sold');
+        })->with('product')->get();
+
+
+        // 取引中 or 取引完了（"trading" または "sold"）の商品
         $tradingProducts = $user->purchases()
-            ->where('status', 'trading')
+            ->whereHas('product', function ($query) {
+                $query->whereIn('status', ['trading', 'sold']);
+            })
             ->with('product')
             ->get();
 

@@ -74,7 +74,7 @@ class PurchasesController extends Controller
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'credit_card',
-                'status' => 'trading',
+                'status' => 'sold',
                 'purchase_date' => now(),
             ]);
 
@@ -91,6 +91,23 @@ class PurchasesController extends Controller
             ->with('error', '支払いが確認できませんでした。');
     }
 
+    public function completeTrade($tradeId)
+    {
+        $trade = Purchase::findOrFail($tradeId);
+
+        // 購入者のみが受取完了できるようにする
+        if ($trade->user_id !== Auth::id()) {
+            return redirect()->route('trade.show', ['trade_id' => $trade->id])
+                ->with('error', 'この商品を受け取る権限がありません。');
+        }
+
+        // 取引完了に変更
+        $trade->update(['status' => 'completed']);
+        $trade->product->update(['status' => 'completed']);
+
+        return redirect()->route('mypage', ['tab' => 'buy'])
+            ->with('success', '取引が完了しました！');
+    }
 
 
     public function checkout(PurchaseRequest $request, $item_id)

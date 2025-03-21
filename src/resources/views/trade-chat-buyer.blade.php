@@ -13,7 +13,6 @@
         <div class="trade-chat__sidebar-item">商品名</div>
         <div class="trade-chat__sidebar-item">商品名</div>
     </div>
-
     <!-- メインコンテンツ -->
     <div class="trade-chat__main">
         <header class="trade-chat__header">
@@ -22,15 +21,13 @@
                     alt="プロフィール画像" class="trade-chat__user-image">
                 <h1 class="trade-chat__title">「{{ $tradeUser->name }}」さんとの取引画面</h1>
             </div>
-            <button class="trade-chat__complete-button">取引を完了する</button>
         </header>
 
-
         <div class="trade-chat__info">
-            <img src="{{ $trade['product']['image_path'] }}" alt="商品画像" class="trade-chat__product-image">
+            <img src="{{ $trade->product->image_path }}" alt="商品画像" class="trade-chat__product-image">
             <div class="trade-chat__product-details">
-                <h2 class="trade-chat__product-name">{{ $product->name }}</h2>
-                <p class="trade-chat__product-price">価格: ¥{{ number_format($product->price) }}</p>
+                <h2 class="trade-chat__product-name">{{ $trade->product->name }}</h2>
+                <p class="trade-chat__product-price">価格: ¥{{ number_format($trade->product->price) }}</p>
             </div>
         </div>
 
@@ -46,7 +43,6 @@
             </div>
             @endforeach
         </div>
-
 
         <div class="trade-chat__input">
             <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" class="trade-chat__form">

@@ -150,6 +150,19 @@
     padding: 32px 0;
 }
 
+.profile__product-sold {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 40px;
+}
+
 @media (min-width: 1400px) and (max-width: 1540px) {
     .profile__products {
         grid-template-columns: repeat(4, 1fr);

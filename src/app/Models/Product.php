@@ -19,7 +19,7 @@ class Product extends Model
         'img_url',
         'condition',
         'user_id',
-        'is_sold',
+        'status',
         'brand',
     ];
 
