@@ -41,19 +41,18 @@
                 <p class="trade-chat__product-price">価格: ¥{{ number_format($trade->product->price) }}</p>
             </div>
         </div>
-
         <div class="trade-chat__messages">
             @foreach ($messages as $message)
-            <div class="trade-chat__message {{ $message->user_id == auth()->id() ? 'trade-chat__message--seller' : 'trade-chat__message--buyer' }}">
-                <img src="{{ asset($message->user->profile_image_path) }}" alt="プロフィール画像" class="trade-chat__profile-image">
-                <div class="trade-chat__message-content">
+            <div class="trade-chat__message {{ $message->user_id == auth()->id() ? 'trade-chat__message--buyer' : 'trade-chat__message--seller' }}">
+                <img src="{{ asset($message->user->profile_image_path) }}" alt="プロフィール画像" class="trade-chat__message-icon">
+                <div class="trade-chat__message-body">
                     <p class="trade-chat__message-sender">{{ $message->user->name }}</p>
                     <p class="trade-chat__message-text">{{ $message->content }}</p>
-                    <span class="trade-chat__message-time">{{ $message->created_at->format('H:i') }}</span>
                 </div>
             </div>
             @endforeach
         </div>
+
 
         <div class="trade-chat__input">
             <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" class="trade-chat__form">

@@ -60,25 +60,61 @@ class ProductController extends Controller
         $user = auth()->user();
         $tab = $request->query('tab', 'sell');
 
-        // 出品した商品
+        // 出品した商品（すべて）
         $sellingProducts = $user->products()->latest()->get() ?? collect([]);
 
-        // 購入した商品（"sold" の商品のみ取得）
-        $purchasedProducts = $user->purchases()->whereHas('product', function ($query) {
-            $query->where('status', 'sold');
-        })->with('product')->get();
+        // 購入した商品（status = sold のみ）
+        $purchasedProducts = $user->purchases()
+            ->whereHas('product', function ($query) {
+                $query->where('status', 'sold');
+            })
+            ->with('product')
+            ->get();
 
-
-        // 取引中 or 取引完了（"trading" または "sold"）の商品
-        $tradingProducts = $user->purchases()
+        // ▼ 購入者としての取引中 or 売却済み商品（trading, sold）
+        $buyingTrades = $user->purchases()
             ->whereHas('product', function ($query) {
                 $query->whereIn('status', ['trading', 'sold']);
             })
             ->with('product')
             ->get();
 
-        return view('profile', compact('user', 'tab', 'sellingProducts', 'purchasedProducts', 'tradingProducts'));
+        // ▼ 出品者としての取引中 or 売却済み商品（trading, sold）
+        $sellingTrades = $user->products()
+            ->whereIn('status', ['trading', 'sold'])
+            ->get();
+
+        // ▼ 両方統合（ビューで出品者か購入者か判別できるように）
+        $tradingProducts = collect();
+
+        foreach ($buyingTrades as $trade) {
+            $tradingProducts->push((object)[
+                'product' => $trade->product,
+                'id' => $trade->id, // ← これを追加
+                'is_seller' => false,
+            ]);
+        }
+
+        foreach ($sellingTrades as $product) {
+            $relatedPurchase = $product->purchases()->whereIn('status', ['trading', 'sold'])->first();
+
+            $tradingProducts->push((object)[
+                'product' => $product,
+                'purchase_id' => $relatedPurchase ? $relatedPurchase->id : null,
+                'is_seller' => true,
+            ]);
+        }
+
+
+        return view('profile', compact(
+            'user',
+            'tab',
+            'sellingProducts',
+            'purchasedProducts',
+            'tradingProducts'
+        ));
     }
+
 
 
 

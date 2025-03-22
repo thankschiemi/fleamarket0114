@@ -7,7 +7,7 @@
     background-color: #868686;
     border-radius: 8px;
     overflow: hidden;
-        z-index: 100;
+    z-index: 100;
 }
 
 /* サイドバー */
@@ -29,6 +29,7 @@
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    padding: 6px;
 }
 
 .trade-chat__sidebar-item:hover {
@@ -41,6 +42,7 @@
     display: flex;
     flex-direction: column;
     background-color: #fff;
+    position: relative;
 }
 
 /* ヘッダー */
@@ -52,11 +54,11 @@
     padding: 14px 20px;
     border-bottom: 2px solid #ddd;
 }
+
 .trade-chat__user {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* 画像とテキストの間隔を調整 */
 }
 
 .trade-chat__user-image {
@@ -71,9 +73,10 @@
     font-size: 36px;
     font-weight: bold;
     margin: 0;
-    /* 余白をリセット */
 }
-.trade-chat__complete-button {
+
+.trade-chat__complete-button,
+.trade-chat__action-button {
     background-color: #ff6b6b;
     color: white;
     border: none;
@@ -83,7 +86,8 @@
     font-size: 20px;
 }
 
-.trade-chat__complete-button:hover {
+.trade-chat__complete-button:hover,
+.trade-chat__action-button:hover {
     background-color: #e25555;
 }
 
@@ -117,9 +121,7 @@
     color: #000000;
 }
 
-
-
-/* チャットメッセージ全体 */
+/* ===== メッセージ（チャットエリア） ===== */
 .trade-chat__messages {
     flex: 1;
     overflow-y: auto;
@@ -127,84 +129,85 @@
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
 }
 
-/* メッセージ共通スタイル */
+
+/* メッセージ全体のラッパー */
 .trade-chat__message {
     display: flex;
-    align-items: center;
-    max-width: 70%;
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 16px;
-    line-height: 1.4;
-    word-wrap: break-word;
-    position: relative;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 80%;
+    margin-bottom: 20px;
 }
 
-/* 出品者のメッセージ（左側） */
+/* 左側（相手） */
 .trade-chat__message--seller {
-    background-color: #ebebeb;
+    flex-direction: row;
     align-self: flex-start;
-    text-align: left;
-    border-top-left-radius: 0;
 }
 
-/* 購入者のメッセージ（右側） */
+/* 右側（自分） */
 .trade-chat__message--buyer {
-    background-color: #dcf8c6;
+    flex-direction: row-reverse;
     align-self: flex-end;
-    text-align: right;
-    border-top-right-radius: 0;
 }
 
-/* メッセージの送信者名 */
-.trade-chat__message-sender {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-/* メッセージの送信時間 */
-.trade-chat__message-time {
-    font-size: 12px;
-    color: #666;
-    position: absolute;
-    bottom: 2px;
-    right: 10px;
-}
-
-/* メッセージのプロフィール画像 */
-.trade-chat__profile-image {
+/* プロフィール画像 */
+.trade-chat__message-icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 10px;
 }
 
-/* 出品者のアイコン（左側） */
-.trade-chat__message--seller .trade-chat__profile-image {
-    order: -1;
-    margin-right: 10px;
-    margin-left: 0;
+/* 相手の画像：青枠 */
+.trade-chat__message--seller .trade-chat__message-icon {
+    border: 2px solid #00A2FF;
 }
 
-/* 購入者のアイコン（右側） */
-.trade-chat__message--buyer .trade-chat__profile-image {
-    order: 1;
-    margin-left: 10px;
-    margin-right: 0;
+/* 自分の画像：グレー枠 */
+.trade-chat__message--buyer .trade-chat__message-icon {
+    border: 2px solid #D9D9D9;
 }
+
+/* メッセージ内容全体 */
+.trade-chat__message-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ユーザー名 */
+.trade-chat__message-sender {
+    font-weight: bold;
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 4px;
+}
+
+/* メッセージのテキスト部分 */
+.trade-chat__message-text {
+    background-color: #e0e0e0;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    margin: 0;
+}
+
+
 
 /* 入力フォーム */
 .trade-chat__input {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 12px;
     display: flex;
     align-items: center;
-    padding: 12px;
-    background-color: #fff;
     border-top: 2px solid #ddd;
+    z-index: 10;
 }
 
 .trade-chat__form {

@@ -38,7 +38,6 @@
                 <div class="trade-chat__message-content">
                     <p class="trade-chat__message-sender">{{ $message->user->name }}</p>
                     <p class="trade-chat__message-text">{{ $message->content }}</p>
-                    <span class="trade-chat__message-time">{{ $message->created_at->format('H:i') }}</span>
                 </div>
             </div>
             @endforeach

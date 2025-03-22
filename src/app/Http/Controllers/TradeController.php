@@ -9,40 +9,42 @@ use Illuminate\Support\Facades\Auth;
 
 class TradeController extends Controller
 {
-    /**
-     * 取引チャット画面を表示
-     */
     public function show($tradeId)
     {
-        // 取引データを取得（購入者 or 出品者がアクセス可能）
         $trade = Purchase::with(['product', 'product.user', 'messages.user'])
             ->where('id', $tradeId)
             ->where(function ($query) {
-                $query->where('user_id', Auth::id()) // 購入者
+                $query->where('user_id', Auth::id())
                     ->orWhereHas('product', function ($q) {
-                        $q->where('user_id', Auth::id()); // 出品者
+                        $q->where('user_id', Auth::id());
                     });
             })
             ->firstOrFail();
 
-        $messages = $trade->messages->sortBy('created_at'); // メッセージを時系列で取得
+        $messages = $trade->messages->sortBy('created_at');
 
-        // 取引相手を取得
         $tradeUser = Auth::id() === $trade->user_id
-            ? $trade->product->user // 自分が購入者なら相手は出品者
-            : $trade->user; // 自分が出品者なら相手は購入者
+            ? $trade->product->user
+            : $trade->user;
 
-        // 出品者か購入者かでビューを分ける
+        // ▼ 出品者がログインしている場合は、他の取引も取得
+        $otherTrades = collect();
+        if (Auth::id() === $trade->product->user_id) {
+            $otherTrades = Purchase::whereHas('product', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+                ->where('id', '!=', $trade->id) // 現在の取引は除外
+                ->with('product')
+                ->get();
+        }
+
         if (Auth::id() === $trade->user_id) {
             return view('trade-chat-buyer', compact('trade', 'tradeUser', 'messages'));
         } else {
-            return view('trade-chat-seller', compact('trade', 'tradeUser', 'messages'));
+            return view('trade-chat-seller', compact('trade', 'tradeUser', 'messages', 'otherTrades'));
         }
     }
 
-    /**
-     * メッセージ送信
-     */
     public function sendMessage(Request $request, $tradeId)
     {
         $request->validate([
