@@ -16,6 +16,8 @@ class Purchase extends Model
         'purchase_date',
         'status',
         'payment_method',
+        'is_rated',
+        'is_rated_by_seller',
     ];
     public function user()
     {

@@ -299,6 +299,66 @@
 .trade-chat__error-messages p {
     margin: 4px 0;
 }
+.rating-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.rating-modal__content {
+    background: #fffdee;
+    padding: 24px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.rating-modal__title {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.rating-modal__subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.rating-modal__stars {
+    font-size: 32px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.rating-modal__stars .star.active {
+    color: #ffcc00;
+}
+
+.rating-modal__footer {
+    margin-top: 20px;
+}
+
+.rating-modal__submit {
+    background-color: #ff6b6b;
+    color: #fff;
+    padding: 8px 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.rating-modal__submit:hover {
+    background-color: #e25454;
+}
 @media (max-width: 1540px) {
     .trade-chat__product-name {
         font-size: 40px;

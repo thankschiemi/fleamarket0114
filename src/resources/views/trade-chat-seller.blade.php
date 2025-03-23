@@ -24,14 +24,6 @@
                     alt="プロフィール画像" class="trade-chat__user-image">
                 <h1 class="trade-chat__title">「{{ $tradeUser->name }}」さんとの取引画面</h1>
             </div>
-            @if ($trade->status === 'sold' && Auth::id() === $trade->user_id)
-            <!-- 購入者のみ「受け取り完了」ボタンを表示 -->
-            <form action="{{ route('trade.complete', ['trade_id' => $trade->id]) }}" method="POST">
-                @csrf
-                <button type="submit" class="trade-chat__action-button">受け取り完了</button>
-            </form>
-            @endif
-
         </header>
 
         <div class="trade-chat__info">
@@ -102,3 +94,46 @@
     </div>
 </div>
 @endsection
+
+@if ($shouldShowRatingModal)
+<div id="ratingModal" class="rating-modal" style="display: flex;">
+    <div class="rating-modal__content">
+        <h2 class="rating-modal__title">取引が完了しました。</h2>
+        <p class="rating-modal__subtitle">今回の取引相手はどうでしたか？</p>
+        <form action="{{ route('trade.seller.rating', ['trade_id' => $trade->id]) }}" method="POST">
+            @csrf
+            <div class="rating-modal__stars">
+                @for ($i = 1; $i <= 5; $i++)
+                    <span class="star" data-value="{{ $i }}">&#9733;</span>
+                    @endfor
+                    <input type="hidden" name="rating" id="ratingValue" value="3">
+            </div>
+            <div class="rating-modal__footer">
+                <button type="submit" class="rating-modal__submit">送信する</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.rating-modal__stars .star');
+        const ratingInput = document.getElementById('ratingValue');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                ratingInput.value = value;
+
+                // ハイライト切り替え
+                stars.forEach(s => {
+                    s.classList.remove('active');
+                    if (s.getAttribute('data-value') <= value) {
+                        s.classList.add('active');
+                    }
+                });
+            });
+        });
+    });
+</script>

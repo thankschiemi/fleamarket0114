@@ -82,6 +82,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/trade/{trade_id}', [TradeController::class, 'show'])->name('trade.show');
     Route::post('/trade/{trade_id}/message', [TradeController::class, 'sendMessage'])->name('trade.message.send');
+    Route::post('/trade/{trade_id}/complete', [TradeController::class, 'complete'])->name('trade.complete');
+    Route::post('/trade/{trade_id}/seller-rating', [TradeController::class, 'submitSellerRating'])->name('trade.seller.rating');
 });
 
 Route::middleware('auth')->group(function () {
