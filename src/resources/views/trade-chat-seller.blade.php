@@ -52,15 +52,17 @@
             </div>
             @endforeach
         </div>
-
-
         <div class="trade-chat__input">
             <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" class="trade-chat__form">
                 @csrf
                 <input type="text" name="message" class="trade-chat__input-field" placeholder="取引メッセージを記入してください" required>
-                <button type="submit" class="trade-chat__send-button">送信</button>
+                <button type="button" class="trade-chat__upload-button">画像を追加</button>
+                <button type="submit" class="trade-chat__send-icon-button">
+                    <img src="{{ asset('storage/images/inputbuttun.png') }}" alt="送信" class="send-icon">
+
+                </button>
+
             </form>
-            <button class="trade-chat__upload-button">画像を追加</button>
         </div>
     </div>
 </div>
