@@ -11,7 +11,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PurchasesController;
 use App\Http\Controllers\TradeController;
-
+use App\Http\Controllers\MessageController;
 
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register');
@@ -82,4 +82,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/trade/{trade_id}', [TradeController::class, 'show'])->name('trade.show');
     Route::post('/trade/{trade_id}/message', [TradeController::class, 'sendMessage'])->name('trade.message.send');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/messages/{message}/edit', [MessageController::class, 'edit'])->name('messages.edit');
+    Route::put('/messages/{message}', [MessageController::class, 'update'])->name('messages.update');
+    Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 });

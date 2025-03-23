@@ -38,6 +38,17 @@
                 <div class="trade-chat__message-body">
                     <p class="trade-chat__message-sender">{{ $message->user->name }}</p>
                     <p class="trade-chat__message-text">{{ $message->content }}</p>
+                    @if ($message->user_id === auth()->id())
+                    <div class="trade-chat__message-actions">
+                        <a href="{{ route('messages.edit', $message->id) }}">編集</a>
+                        |
+                        <form action="{{ route('messages.destroy', $message->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="trade-chat__delete-link">削除</button>
+                        </form>
+                    </div>
+                    @endif
                 </div>
             </div>
             @endforeach
