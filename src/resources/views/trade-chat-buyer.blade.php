@@ -37,7 +37,19 @@
                 <img src="{{ asset($message->user->profile_image_path) }}" alt="プロフィール画像" class="trade-chat__message-icon">
                 <div class="trade-chat__message-body">
                     <p class="trade-chat__message-sender">{{ $message->user->name }}</p>
+
+                    {{-- メッセージ本文（テキスト） --}}
+                    @if ($message->content)
                     <p class="trade-chat__message-text">{{ $message->content }}</p>
+                    @endif
+
+                    {{-- メッセージ画像があれば表示 --}}
+                    @if ($message->image_path)
+                    <div class="trade-chat__message-image">
+                        <img src="{{ asset('storage/' . $message->image_path) }}" alt="添付画像" style="max-width: 200px; border-radius: 8px;">
+                    </div>
+                    @endif
+                    {{-- 編集・削除（自分のメッセージのみ） --}}
                     @if ($message->user_id === auth()->id())
                     <div class="trade-chat__message-actions">
                         <a href="{{ route('messages.edit', $message->id) }}">編集</a>
@@ -53,18 +65,29 @@
             </div>
             @endforeach
         </div>
+
+        @if ($errors->any())
+        <div class="trade-chat__error-messages">
+            @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+            @endforeach
+        </div>
+        @endif
+
         <div class="trade-chat__input">
-            <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" class="trade-chat__form">
+            <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" enctype="multipart/form-data" class="trade-chat__form">
                 @csrf
-                <input type="text" name="message" class="trade-chat__input-field" placeholder="取引メッセージを記入してください" required>
-                <button type="button" class="trade-chat__upload-button">画像を追加</button>
+                <input type="text" name="message" class="trade-chat__input-field" placeholder="取引メッセージを記入してください">
+
+                <input type="file" name="image" accept="image/*" style="display: none;" id="image-upload">
+                <button type="button" class="trade-chat__upload-button" onclick="document.getElementById('image-upload').click()">画像を追加</button>
+
                 <button type="submit" class="trade-chat__send-icon-button">
                     <img src="{{ asset('storage/images/inputbuttun.png') }}" alt="送信" class="send-icon">
-
                 </button>
-
             </form>
         </div>
+
 
     </div>
 </div>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Purchase;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreMessageRequest;
 
 class TradeController extends Controller
 {
@@ -45,12 +46,8 @@ class TradeController extends Controller
         }
     }
 
-    public function sendMessage(Request $request, $tradeId)
+    public function sendMessage(StoreMessageRequest $request, $tradeId)
     {
-        $request->validate([
-            'message' => 'required|string|max:500',
-        ]);
-
         // 取引データを取得（出品者 or 購入者のみ送信可能）
         $trade = Purchase::where('id', $tradeId)
             ->where(function ($query) {
@@ -61,11 +58,18 @@ class TradeController extends Controller
             })
             ->firstOrFail();
 
-        // メッセージを作成
+        // 画像があれば保存
+        $path = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('message_images', 'public');
+        }
+
+        // メッセージ保存
         Message::create([
             'purchase_id' => $trade->id,
             'user_id' => Auth::id(),
             'content' => $request->message,
+            'image_path' => $path,
         ]);
 
         return redirect()->route('trade.show', ['trade_id' => $trade->id])
