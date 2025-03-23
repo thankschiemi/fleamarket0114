@@ -34,15 +34,14 @@
         <div class="trade-chat__messages">
             @foreach ($messages as $message)
             <div class="trade-chat__message {{ $message->user_id == auth()->id() ? 'trade-chat__message--buyer' : 'trade-chat__message--seller' }}">
-                <img src="{{ asset($message->user->profile_image_path) }}" alt="プロフィール画像" class="trade-chat__profile-image">
-                <div class="trade-chat__message-content">
+                <img src="{{ asset($message->user->profile_image_path) }}" alt="プロフィール画像" class="trade-chat__message-icon">
+                <div class="trade-chat__message-body">
                     <p class="trade-chat__message-sender">{{ $message->user->name }}</p>
                     <p class="trade-chat__message-text">{{ $message->content }}</p>
                 </div>
             </div>
             @endforeach
         </div>
-
         <div class="trade-chat__input">
             <form action="{{ route('trade.message.send', ['trade_id' => $trade->id]) }}" method="POST" class="trade-chat__form">
                 @csrf
