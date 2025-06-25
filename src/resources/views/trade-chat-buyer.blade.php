@@ -9,9 +9,16 @@
     <!-- サイドバー -->
     <div class="trade-chat__sidebar">
         <h2 class="trade-chat__sidebar-title">その他の取引</h2>
-        <div class="trade-chat__sidebar-item">商品名</div>
-        <div class="trade-chat__sidebar-item">商品名</div>
-        <div class="trade-chat__sidebar-item">商品名</div>
+
+        @if (isset($otherTrades))
+        @foreach ($otherTrades as $otherTrade)
+        <a href="{{ route('trade.show', ['trade_id' => $otherTrade->id]) }}" class="trade-chat__sidebar-item">
+            {{ $otherTrade->product->name }}
+        </a>
+        @endforeach
+        @endif
+
+
     </div>
     <!-- メインコンテンツ -->
     <div class="trade-chat__main">
