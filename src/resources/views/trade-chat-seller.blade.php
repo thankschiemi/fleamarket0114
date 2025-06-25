@@ -14,6 +14,7 @@
             {{ $otherTrade->product->name }}
         </a>
         @endforeach
+
     </div>
 
     <!-- メインコンテンツ -->

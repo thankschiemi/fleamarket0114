@@ -54,14 +54,26 @@ class TradeController extends Controller
 
         // ビューの分岐（購入者 or 出品者）
         if (Auth::id() === $trade->user_id) {
-            return view('trade-chat-buyer', compact('trade', 'tradeUser', 'messages'));
+            // 購入者としての他の取引を取得
+            $otherTrades = Purchase::where('user_id', Auth::id())
+                ->where('id', '!=', $trade->id)
+                ->with('product')
+                ->get();
+
+            return view('trade-chat-buyer', [
+                'trade' => $trade,
+                'tradeUser' => $tradeUser,
+                'messages' => $messages,
+                'otherTrades' => $otherTrades,
+            ]);
         } else {
+            // 出品者用ビュー（すでに正しい）
             return view('trade-chat-seller', compact(
                 'trade',
                 'tradeUser',
                 'messages',
                 'otherTrades',
-                'shouldShowRatingModal' // ← 追加！
+                'shouldShowRatingModal'
             ));
         }
     }

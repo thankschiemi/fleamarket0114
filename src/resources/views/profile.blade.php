@@ -82,32 +82,35 @@
 @if ($tab === 'trade')
 <div class="profile__products">
     @forelse ($tradingProducts as $trade)
-    @if ($trade->product && in_array($trade->product->status, ['sold', 'completed']))
-    @if ($trade->is_seller && $trade->purchase_id)
-    <a href="{{ route('trade.show', ['trade_id' => $trade->purchase_id]) }}" class="profile__product-link">
-        @elseif (!$trade->is_seller)
-        <a href="{{ route('trade.show', ['trade_id' => $trade->id]) }}" class="profile__product-link">
+    @if ($trade->product && in_array($trade->status, ['pending', 'sold', 'completed']))
+
+    <a href="{{ route('trade.show', ['trade_id' => $trade->id]) }}" class="profile__product-link">
+        <div class="profile__product-card">
+            <img src="{{ $trade->product->image_path }}" alt="商品画像" class="profile__product-image">
+            <p class="profile__product-name">{{ $trade->product->name }}</p>
+
+            @if ($trade->product->status === 'completed')
+            <span class="profile__product-status">完了</span>
+            @elseif ($trade->product->status === 'trading')
+            <span class="profile__product-status">取引中</span>
+            @elseif ($trade->product->status === 'sold')
+            <span class="profile__product-status">取引中</span>
             @endif
 
 
-
-            <div class="profile__product-card">
-                <img src="{{ $trade->product->image_path }}" alt="商品画像" class="profile__product-image">
-                <p class="profile__product-name">{{ $trade->product->name }}</p>
-
-                @if ($trade->product->status === 'sold')
-                <span class="profile__product-status">Sold</span>
-                @elseif ($trade->product->status === 'completed')
-                <span class="profile__product-status">Completed</span>
-                @endif
-            </div>
-        </a>
-        @endif
-        @empty
-        <p class="profile__empty">取引中の商品がありません。</p>
-        @endforelse
+        </div>
+    </a>
+    @endif
+    @empty
+    <p class="profile__empty">取引中の商品がありません。</p>
+    @endforelse
 </div>
 @endif
+
+
+
+
+
 
 
 @endsection

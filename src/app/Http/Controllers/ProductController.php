@@ -54,57 +54,64 @@ class ProductController extends Controller
         return view('products.product-detail', compact('product'));
     }
 
+
     public function showProfile(Request $request)
     {
-        /** @var \App\Models\User $user */
         $user = auth()->user();
         $tab = $request->query('tab', 'sell');
 
         // 出品した商品（すべて）
-        $sellingProducts = $user->products()->latest()->get() ?? collect([]);
+        $sellingProducts = \App\Models\Product::where('user_id', $user->id)->latest()->get();
 
-        // 購入した商品（status = sold のみ）
-        $purchasedProducts = $user->purchases()
+        // 購入した商品
+        $purchasedProducts = \App\Models\Purchase::where('user_id', $user->id)
             ->whereHas('product', function ($query) {
-                $query->where('status', 'sold');
+                $query->whereIn('status', ['sold', 'completed']);
             })
             ->with('product')
             ->get();
 
-        // ▼ 購入者としての取引中 or 売却済み商品（trading, sold）
-        $buyingTrades = $user->purchases()
-            ->whereHas('product', function ($query) {
-                $query->whereIn('status', ['trading', 'sold']);
-            })
+
+        // 購入者としての取引中 or 完了
+        $buyingTrades = \App\Models\Purchase::where('user_id', $user->id)
+            ->whereIn('status', ['pending', 'sold', 'completed'])
             ->with('product')
             ->get();
 
-        // ▼ 出品者としての取引中 or 売却済み商品（trading, sold）
-        $sellingTrades = $user->products()
-            ->whereIn('status', ['trading', 'sold'])
+        // 出品者としての取引中 or 完了
+        $sellingTrades = \App\Models\Product::where('user_id', $user->id)
+            ->whereHas('purchases', function ($q) {
+                $q->whereIn('status', ['pending', 'completed']);
+            })
+            ->with(['purchases' => function ($q) {
+                $q->whereIn('status', ['pending', 'completed']);
+            }])
             ->get();
 
-        // ▼ 両方統合（ビューで出品者か購入者か判別できるように）
+        // 統合
         $tradingProducts = collect();
 
         foreach ($buyingTrades as $trade) {
             $tradingProducts->push((object)[
                 'product' => $trade->product,
-                'id' => $trade->id, // ← これを追加
+                'id' => $trade->id,
+                'status' => $trade->status, // これ重要
                 'is_seller' => false,
             ]);
         }
 
+
         foreach ($sellingTrades as $product) {
-            $relatedPurchase = $product->purchases()->whereIn('status', ['trading', 'sold'])->first();
-
-            $tradingProducts->push((object)[
-                'product' => $product,
-                'purchase_id' => $relatedPurchase ? $relatedPurchase->id : null,
-                'is_seller' => true,
-            ]);
+            $relatedPurchase = $product->purchases->first();
+            if ($relatedPurchase) {
+                $tradingProducts->push((object)[
+                    'product' => $product,
+                    'id' => $relatedPurchase->id,
+                    'status' => $relatedPurchase->status,
+                    'is_seller' => true,
+                ]);
+            }
         }
-
 
         return view('profile', compact(
             'user',
@@ -114,6 +121,9 @@ class ProductController extends Controller
             'tradingProducts'
         ));
     }
+
+
+
 
 
 
