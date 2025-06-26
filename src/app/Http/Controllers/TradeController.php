@@ -25,6 +25,15 @@ class TradeController extends Controller
 
         $messages = $trade->messages->sortBy('created_at');
 
+        Message::where('purchase_id', $trade->id)
+            ->where('user_id', '!=', Auth::id())
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        $tradeUser = Auth::id() === $trade->user_id
+            ? $trade->product->user
+            : $trade->user;
+
         $tradeUser = Auth::id() === $trade->user_id
             ? $trade->product->user
             : $trade->user;
@@ -60,23 +69,49 @@ class TradeController extends Controller
                 ->with('product')
                 ->get();
 
+            // ✅ 未読件数カウント（return の前に！）
+            $unreadCounts = [];
+            foreach ($otherTrades as $otherTrade) {
+                $unreadCount = Message::where('purchase_id', $otherTrade->id)
+                    ->where('user_id', '!=', Auth::id())
+                    ->where('is_read', false)
+                    ->count();
+
+                $unreadCounts[$otherTrade->id] = $unreadCount;
+            }
+
             return view('trade-chat-buyer', [
                 'trade' => $trade,
                 'tradeUser' => $tradeUser,
                 'messages' => $messages,
                 'otherTrades' => $otherTrades,
+                'unreadCounts' => $unreadCounts,
             ]);
         } else {
-            // 出品者用ビュー（すでに正しい）
+            // 出品者用ビュー
+
+            // ✅ 未読件数カウント（こちらも return の前に！）
+            $unreadCounts = [];
+            foreach ($otherTrades as $otherTrade) {
+                $unreadCount = Message::where('purchase_id', $otherTrade->id)
+                    ->where('user_id', '!=', Auth::id())
+                    ->where('is_read', false)
+                    ->count();
+
+                $unreadCounts[$otherTrade->id] = $unreadCount;
+            }
+
             return view('trade-chat-seller', compact(
                 'trade',
                 'tradeUser',
                 'messages',
                 'otherTrades',
-                'shouldShowRatingModal'
+                'shouldShowRatingModal',
+                'unreadCounts'
             ));
         }
     }
+
 
 
     public function sendMessage(StoreMessageRequest $request, $tradeId)

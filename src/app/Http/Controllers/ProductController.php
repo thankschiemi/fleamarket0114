@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Http\Requests\ExhibitionRequest;
+use App\Models\Message;
 
 class ProductController extends Controller
 {
@@ -71,7 +72,6 @@ class ProductController extends Controller
             ->with('product')
             ->get();
 
-
         // 購入者としての取引中 or 完了
         $buyingTrades = \App\Models\Purchase::where('user_id', $user->id)
             ->whereIn('status', ['pending', 'sold', 'completed'])
@@ -90,25 +90,41 @@ class ProductController extends Controller
 
         // 統合
         $tradingProducts = collect();
+        $unreadCounts = [];
 
         foreach ($buyingTrades as $trade) {
+            $unreadCount = Message::where('purchase_id', $trade->id)
+                ->where('user_id', '!=', $user->id)
+                ->where('is_read', false)
+                ->count();
+
+            $unreadCounts[$trade->id] = $unreadCount;
+
             $tradingProducts->push((object)[
                 'product' => $trade->product,
                 'id' => $trade->id,
-                'status' => $trade->status, // これ重要
+                'status' => $trade->status,
                 'is_seller' => false,
+                'unread_count' => $unreadCount,
             ]);
         }
-
 
         foreach ($sellingTrades as $product) {
             $relatedPurchase = $product->purchases->first();
             if ($relatedPurchase) {
+                $unreadCount = Message::where('purchase_id', $relatedPurchase->id)
+                    ->where('user_id', '!=', $user->id)
+                    ->where('is_read', false)
+                    ->count();
+
+                $unreadCounts[$relatedPurchase->id] = $unreadCount;
+
                 $tradingProducts->push((object)[
                     'product' => $product,
                     'id' => $relatedPurchase->id,
                     'status' => $relatedPurchase->status,
                     'is_seller' => true,
+                    'unread_count' => $unreadCount,
                 ]);
             }
         }
@@ -118,10 +134,10 @@ class ProductController extends Controller
             'tab',
             'sellingProducts',
             'purchasedProducts',
-            'tradingProducts'
+            'tradingProducts',
+            'unreadCounts'
         ));
     }
-
 
 
 

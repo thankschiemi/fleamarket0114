@@ -86,6 +86,10 @@
 
     <a href="{{ route('trade.show', ['trade_id' => $trade->id]) }}" class="profile__product-link">
         <div class="profile__product-card">
+            {{-- ⭐ 通知バッジ（未読メッセージ数） --}}
+            @if (!empty($trade->unread_count) && $trade->unread_count > 0)
+            <span class="notification-badge">{{ $trade->unread_count }}</span>
+            @endif
             <img src="{{ $trade->product->image_path }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $trade->product->name }}</p>
 

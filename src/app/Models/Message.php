@@ -9,7 +9,7 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['purchase_id', 'user_id', 'content', 'image_path'];
+    protected $fillable = ['purchase_id', 'user_id', 'content', 'image_path', 'is_read'];
 
 
     public function user()
