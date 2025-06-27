@@ -128,6 +128,18 @@ class ProductController extends Controller
                 ]);
             }
         }
+        $relatedPurchaseIds = \App\Models\Purchase::where('user_id', $user->id)
+            ->orWhereHas('product', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->pluck('id');
+
+        $unreadCountTotal = \App\Models\Message::where('is_read', false)
+            ->where('user_id', '!=', $user->id)
+            ->whereIn('purchase_id', $relatedPurchaseIds)
+            ->count();
+
+
 
         return view('profile', compact(
             'user',
@@ -135,7 +147,8 @@ class ProductController extends Controller
             'sellingProducts',
             'purchasedProducts',
             'tradingProducts',
-            'unreadCounts'
+            'unreadCounts',
+            'unreadCountTotal'
         ));
     }
 

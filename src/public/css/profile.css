@@ -182,6 +182,26 @@
 .profile__product-card {
     position: relative;
 }
+.notification-badge-tab {
+    position: absolute;
+    top: 10px;
+    /* 少し下げる */
+    right: -40px;
+    /* 右に近づける */
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 4px;
+    /* 少し小さめに */
+    font-size: 20px;
+    /* 文字と近いサイズに調整 */
+    line-height: 1;
+}
+
+.position-relative {
+    position: relative;
+}
+
 
 @media (min-width: 1400px) and (max-width: 1540px) {
     .profile__products {

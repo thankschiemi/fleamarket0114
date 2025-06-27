@@ -25,8 +25,15 @@
     <div class="profile__tabs">
         <a href="?tab=sell" class="profile__tab {{ $tab === 'sell' ? 'profile__tab--active' : '' }}">出品した商品</a>
         <a href="?tab=buy" class="profile__tab {{ $tab === 'buy' ? 'profile__tab--active' : '' }}">購入した商品</a>
-        <a href="?tab=trade" class="profile__tab {{ $tab === 'trade' ? 'profile__tab--active' : '' }}">取引中の商品</a>
+        <a href="?tab=trade" class="profile__tab {{ $tab === 'trade' ? 'profile__tab--active' : '' }} position-relative">
+            取引中の商品
+            @if ($unreadCountTotal > 0)
+            <span class="notification-badge-tab">{{ $unreadCountTotal }}</span>
+            @endif
+        </a>
     </div>
+
+
 </div>
 
 {{-- 出品した商品 --}}
