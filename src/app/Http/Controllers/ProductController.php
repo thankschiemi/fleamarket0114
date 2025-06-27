@@ -81,19 +81,22 @@ class ProductController extends Controller
         // 出品者としての取引中 or 完了
         $sellingTrades = \App\Models\Product::where('user_id', $user->id)
             ->whereHas('purchases', function ($q) {
-                $q->whereIn('status', ['pending', 'completed']);
+                $q->whereIn('status', ['pending', 'sold', 'completed']);
             })
             ->with(['purchases' => function ($q) {
-                $q->whereIn('status', ['pending', 'completed']);
-            }])
+                $q->whereIn('status', ['pending', 'sold', 'completed']);
+            }, 'purchases.product']) // ← ここを追加！
             ->get();
 
-        // 統合
         $tradingProducts = collect();
         $unreadCounts = [];
+        $addedPurchaseIds = []; // ✅ 重複防止用
 
+        // 購入者としての取引
         foreach ($buyingTrades as $trade) {
-            $unreadCount = Message::where('purchase_id', $trade->id)
+            if (!$trade->product || isset($addedPurchaseIds[$trade->id])) continue;
+
+            $unreadCount = \App\Models\Message::where('purchase_id', $trade->id)
                 ->where('user_id', '!=', $user->id)
                 ->where('is_read', false)
                 ->count();
@@ -106,28 +109,44 @@ class ProductController extends Controller
                 'status' => $trade->status,
                 'is_seller' => false,
                 'unread_count' => $unreadCount,
+                'latest_message_time' => \App\Models\Message::where('purchase_id', $trade->id)
+                    ->latest('created_at')->value('created_at'),
+                'role_label' => '購入済',
             ]);
+
+            $addedPurchaseIds[$trade->id] = true;
         }
 
+        // 出品者としての取引
         foreach ($sellingTrades as $product) {
-            $relatedPurchase = $product->purchases->first();
-            if ($relatedPurchase) {
-                $unreadCount = Message::where('purchase_id', $relatedPurchase->id)
+            foreach ($product->purchases as $purchase) {
+                if (!$product || isset($addedPurchaseIds[$purchase->id])) continue;
+
+                $unreadCount = \App\Models\Message::where('purchase_id', $purchase->id)
                     ->where('user_id', '!=', $user->id)
                     ->where('is_read', false)
                     ->count();
 
-                $unreadCounts[$relatedPurchase->id] = $unreadCount;
+                $unreadCounts[$purchase->id] = $unreadCount;
 
                 $tradingProducts->push((object)[
-                    'product' => $product,
-                    'id' => $relatedPurchase->id,
-                    'status' => $relatedPurchase->status,
+                    'product' => $purchase->product,
+                    'id' => $purchase->id,
+                    'status' => $purchase->status,
                     'is_seller' => true,
                     'unread_count' => $unreadCount,
+                    'latest_message_time' => \App\Models\Message::where('purchase_id', $purchase->id)
+                        ->latest('created_at')->value('created_at'),
+                    'role_label' => 'SOLD',
                 ]);
+
+                $addedPurchaseIds[$purchase->id] = true;
             }
         }
+
+        $tradingProducts = $tradingProducts->sortByDesc('latest_message_time')->values();
+
+        // 全体の未読数
         $relatedPurchaseIds = \App\Models\Purchase::where('user_id', $user->id)
             ->orWhereHas('product', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
@@ -138,8 +157,6 @@ class ProductController extends Controller
             ->where('user_id', '!=', $user->id)
             ->whereIn('purchase_id', $relatedPurchaseIds)
             ->count();
-
-
 
         return view('profile', compact(
             'user',

@@ -100,13 +100,16 @@
             <img src="{{ $trade->product->image_path }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $trade->product->name }}</p>
 
-            @if ($trade->product->status === 'completed')
-            <span class="profile__product-status">完了</span>
-            @elseif ($trade->product->status === 'trading')
-            <span class="profile__product-status">取引中</span>
-            @elseif ($trade->product->status === 'sold')
+            @if ($trade->product->status === 'sold')
+            @if ($trade->is_seller)
+            <span class="profile__product-status">SOLD</span>
+            @else
+            <span class="profile__product-status">購入済</span>
+            @endif
+            @elseif ($trade->product->status === 'trading' || $trade->status === 'pending')
             <span class="profile__product-status">取引中</span>
             @endif
+
 
 
         </div>
