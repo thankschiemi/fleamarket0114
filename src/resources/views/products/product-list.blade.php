@@ -32,24 +32,30 @@
         @continue
         @endif
 
+        @if ($product->status === 'sold')
+        {{-- ★SOLDはリンクにしない（クリック無反応） --}}
+        <div class="product-list__link product-list__link--disabled" aria-disabled="true" tabindex="-1">
+            <div class="product-list__item">
+                <img src="{{ $product->image_path }}" alt="商品画像" class="product-list__image">
+                <span class="product-list__sold">Sold</span>
+                <p class="product-list__name">{{ $product->name }}</p>
+            </div>
+        </div>
+        @else
+        {{-- 在庫ありだけリンク --}}
         <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="product-list__link">
             <div class="product-list__item">
-                {{-- 商品画像 --}}
                 <img src="{{ $product->image_path }}" alt="商品画像" class="product-list__image">
-
-                {{-- "Sold" ラベルを表示 --}}
-                @if ($product->status === 'sold')
-                <span class="product-list__sold">Sold</span>
-                @endif
-
-                {{-- 商品名 --}}
                 <p class="product-list__name">{{ $product->name }}</p>
             </div>
         </a>
+        @endif
+
         @empty
         <p class="product-list__empty">商品がありません。</p>
         @endforelse
     </div>
+
 
 </div>
 @endsection

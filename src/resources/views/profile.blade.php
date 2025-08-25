@@ -41,7 +41,8 @@
 <div class="profile__products">
     @forelse ($sellingProducts as $product)
     @if (in_array($product->status, ['available', 'sold', 'completed']))
-    <a href="{{ route('product.show', ['item_id' => $product->id]) }}" class="profile__product-link">
+    {{-- ★リンクを出さずに div で包む＝無反応 --}}
+    <div class="profile__product-link profile__product-link--disabled" aria-disabled="true" tabindex="-1">
         <div class="profile__product-card">
             <img src="{{ $product->image_path }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $product->name }}</p>
@@ -50,41 +51,42 @@
             <span class="profile__product-status">Sold</span>
             @elseif ($product->status === 'completed')
             <span class="profile__product-status">completed</span>
-
             @endif
         </div>
-    </a>
+    </div>
     @endif
     @empty
     <p class="profile__empty">商品がありません。</p>
     @endforelse
 </div>
 @endif
+
+
 
 {{-- 購入した商品 --}}
 @if ($tab === 'buy')
 <div class="profile__products">
     @forelse ($purchasedProducts as $purchase)
-    @if ($purchase->product && in_array($purchase->product->status, ['sold', 'completed']))
-    <a href="{{ route('product.show', ['item_id' => $purchase->product->id]) }}" class="profile__product-link">
+    @if ($purchase->product && in_array($purchase->product->status, ['sold','completed']))
+
+    {{-- ★購入済みは常に無反応（リンク無し） --}}
+    <div class="profile__product-link profile__product-link--disabled" aria-disabled="true" tabindex="-1">
         <div class="profile__product-card">
             <img src="{{ $purchase->product->image_path }}" alt="商品画像" class="profile__product-image">
             <p class="profile__product-name">{{ $purchase->product->name }}</p>
-
-            @if ($purchase->product->status === 'sold')
-            <span class="profile__product-status">Sold</span>
-            @elseif ($purchase->product->status === 'completed')
-            <span class="profile__product-status">completed</span>
-
-            @endif
+            <span class="profile__product-status">
+                {{ $purchase->product->status === 'sold' ? 'Sold' : 'completed' }}
+            </span>
         </div>
-    </a>
+    </div>
+
     @endif
     @empty
     <p class="profile__empty">商品がありません。</p>
     @endforelse
 </div>
 @endif
+
 
 @if ($tab === 'trade')
 <div class="profile__products">

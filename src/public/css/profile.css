@@ -201,6 +201,10 @@
 .position-relative {
     position: relative;
 }
+.profile__product-link--disabled {
+    pointer-events: none;
+    cursor: default;
+}
 
 
 @media (min-width: 1400px) and (max-width: 1540px) {
