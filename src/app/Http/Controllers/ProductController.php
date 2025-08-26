@@ -7,7 +7,10 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Http\Requests\ExhibitionRequest;
+use App\Models\Purchase;
 use App\Models\Message;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -59,101 +62,78 @@ class ProductController extends Controller
     public function showProfile(Request $request)
     {
         $user = auth()->user();
-        $tab = $request->query('tab', 'sell');
+        $tab  = $request->query('tab', 'sell');
 
         // 出品した商品（すべて）
-        $sellingProducts = \App\Models\Product::where('user_id', $user->id)->latest()->get();
+        $sellingProducts = Product::where('user_id', $user->id)->latest()->get();
 
-        // 購入した商品
-        $purchasedProducts = \App\Models\Purchase::where('user_id', $user->id)
-            ->whereHas('product', function ($query) {
-                $query->whereIn('status', ['sold', 'completed']);
+        // 購入した商品（= 完了済みのものを表示）
+        $purchasedProducts = Purchase::where('user_id', $user->id)
+            ->whereHas('product', function ($q) {
+                $q->whereIn('status', ['sold', 'completed']);
             })
             ->with('product')
             ->get();
 
-        // 購入者としての取引中 or 完了
-        $buyingTrades = \App\Models\Purchase::where('user_id', $user->id)
+        // ===========================
+        // ▼ ここが“取引中”の並び替え本体 ▼
+        // ===========================
+        $tradingPurchases = Purchase::query()
             ->whereIn('status', ['pending', 'sold', 'completed'])
-            ->with('product')
-            ->get();
-
-        // 出品者としての取引中 or 完了
-        $sellingTrades = \App\Models\Product::where('user_id', $user->id)
-            ->whereHas('purchases', function ($q) {
-                $q->whereIn('status', ['pending', 'sold', 'completed']);
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id) // 自分が購入者
+                    ->orWhereHas('product', fn($q2) => $q2->where('user_id', $user->id)); // 自分が出品者
             })
-            ->with(['purchases' => function ($q) {
-                $q->whereIn('status', ['pending', 'sold', 'completed']);
-            }, 'purchases.product']) // ← ここを追加！
+            ->with('product')
+
+            // 相手からの最新メッセージ時刻（なければ null）
+            ->addSelect([
+                'last_incoming_at' => Message::select('created_at')
+                    ->whereColumn('purchase_id', 'purchases.id')
+                    ->where('user_id', '!=', $user->id)
+                    ->orderByDesc('created_at')
+                    ->limit(1),
+                // どちらからでも最新（相手からが無い場合のフォールバック）
+                'last_message_at' => Message::select('created_at')
+                    ->whereColumn('purchase_id', 'purchases.id')
+                    ->orderByDesc('created_at')
+                    ->limit(1),
+            ])
+
+            // 未読数（相手からのみ）
+            ->withCount(['messages as unread_count' => function ($q) use ($user) {
+                $q->where('user_id', '!=', $user->id)->where('is_read', false);
+            }])
+
+            // 並び順：相手からの最新 → 無ければ全体の最新
+            ->orderByRaw('COALESCE(last_incoming_at, last_message_at) DESC')
             ->get();
 
-        $tradingProducts = collect();
-        $unreadCounts = [];
-        $addedPurchaseIds = []; // ✅ 重複防止用
+        // Blade用の形に整形（従来のキー名を維持）
+        $tradingProducts = $tradingPurchases->map(function ($p) use ($user) {
+            $isSeller = optional($p->product)->user_id === $user->id;
+            return (object) [
+                'product'             => $p->product,
+                'id'                  => $p->id,
+                'status'              => $p->status,
+                'is_seller'           => $isSeller,
+                'unread_count'        => $p->unread_count,
+                'latest_message_time' => $p->last_incoming_at ?? $p->last_message_at,
+                'role_label'          => $isSeller ? 'SOLD' : '購入済',
+            ];
+        })->values();
 
-        // 購入者としての取引
-        foreach ($buyingTrades as $trade) {
-            if (!$trade->product || isset($addedPurchaseIds[$trade->id])) continue;
+        // 個別未読数の連想配列（必要なら Blade で使えるように残す）
+        $unreadCounts = $tradingPurchases->pluck('unread_count', 'id')->toArray();
 
-            $unreadCount = \App\Models\Message::where('purchase_id', $trade->id)
-                ->where('user_id', '!=', $user->id)
-                ->where('is_read', false)
-                ->count();
-
-            $unreadCounts[$trade->id] = $unreadCount;
-
-            $tradingProducts->push((object)[
-                'product' => $trade->product,
-                'id' => $trade->id,
-                'status' => $trade->status,
-                'is_seller' => false,
-                'unread_count' => $unreadCount,
-                'latest_message_time' => \App\Models\Message::where('purchase_id', $trade->id)
-                    ->latest('created_at')->value('created_at'),
-                'role_label' => '購入済',
-            ]);
-
-            $addedPurchaseIds[$trade->id] = true;
-        }
-
-        // 出品者としての取引
-        foreach ($sellingTrades as $product) {
-            foreach ($product->purchases as $purchase) {
-                if (!$product || isset($addedPurchaseIds[$purchase->id])) continue;
-
-                $unreadCount = \App\Models\Message::where('purchase_id', $purchase->id)
-                    ->where('user_id', '!=', $user->id)
-                    ->where('is_read', false)
-                    ->count();
-
-                $unreadCounts[$purchase->id] = $unreadCount;
-
-                $tradingProducts->push((object)[
-                    'product' => $purchase->product,
-                    'id' => $purchase->id,
-                    'status' => $purchase->status,
-                    'is_seller' => true,
-                    'unread_count' => $unreadCount,
-                    'latest_message_time' => \App\Models\Message::where('purchase_id', $purchase->id)
-                        ->latest('created_at')->value('created_at'),
-                    'role_label' => 'SOLD',
-                ]);
-
-                $addedPurchaseIds[$purchase->id] = true;
-            }
-        }
-
-        $tradingProducts = $tradingProducts->sortByDesc('latest_message_time')->values();
-
-        // 全体の未読数
-        $relatedPurchaseIds = \App\Models\Purchase::where('user_id', $user->id)
+        // タブの赤丸：関連する全取引の未読合計（買い手/売り手の両方）
+        $relatedPurchaseIds = Purchase::where('user_id', $user->id)
             ->orWhereHas('product', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             })
             ->pluck('id');
 
-        $unreadCountTotal = \App\Models\Message::where('is_read', false)
+        $unreadCountTotal = Message::where('is_read', false)
             ->where('user_id', '!=', $user->id)
             ->whereIn('purchase_id', $relatedPurchaseIds)
             ->count();
@@ -168,6 +148,7 @@ class ProductController extends Controller
             'unreadCountTotal'
         ));
     }
+
 
 
 
