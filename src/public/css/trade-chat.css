@@ -36,6 +36,39 @@
     background-color: #ddd;
 }
 
+.trade-chat__sidebar {
+    background: #8e8e8e;
+    /* 画像の濃いグレー */
+    color: #fff;
+    border-radius: 1px;
+}
+
+.trade-chat__sidebar-title {
+    margin: 0 0 14px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+/* 白い角丸ボタン（商品名） */
+.trade-chat__sidebar-item {
+    display: block;
+    text-decoration: none;
+    background: #f3f3f3;
+    color: #222;
+    border-radius: 10px;
+    padding: 12px 14px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .08), 0 2px 6px rgba(0, 0, 0, .06);
+    transition: transform .08s ease, box-shadow .12s ease, background-color .12s ease;
+
+    /* 長い商品名は「…」で省略 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* メインコンテンツ */
 .trade-chat__main {
     flex: 1;
@@ -359,6 +392,7 @@
 .rating-modal__submit:hover {
     background-color: #e25454;
 }
+
 @media (max-width: 1540px) {
     .trade-chat__product-name {
         font-size: 40px;
