@@ -21,17 +21,6 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.trade-chat__sidebar-item {
-    background-color: #FFFFFF;
-    font-size: 24px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    padding: 6px;
-}
-
 .trade-chat__sidebar-item:hover {
     background-color: #ddd;
 }
