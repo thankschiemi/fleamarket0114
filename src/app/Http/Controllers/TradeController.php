@@ -13,136 +13,107 @@ class TradeController extends Controller
 {
     public function show($tradeId)
     {
+        $userId = Auth::id();
+
+        // ① 表示中の取引（買い手 or 売り手のみ閲覧可）
         $trade = Purchase::with(['product', 'product.user', 'messages.user'])
             ->where('id', $tradeId)
-            ->where(function ($query) {
-                $query->where('user_id', Auth::id())
-                    ->orWhereHas('product', function ($q) {
-                        $q->where('user_id', Auth::id());
-                    });
+            ->where(function ($q) use ($userId) {
+                $q->where('user_id', $userId) // 自分が買い手
+                    ->orWhereHas('product', fn($q2) => $q2->where('user_id', $userId)); // 自分が売り手
             })
             ->firstOrFail();
 
+        // ② メッセージ（古い→新しい）
         $messages = $trade->messages->sortBy('created_at');
 
+        // ③ 既読化（相手からの未読だけ）
         Message::where('purchase_id', $trade->id)
-            ->where('user_id', '!=', Auth::id())
+            ->where('user_id', '!=', $userId)
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
-        $tradeUser = Auth::id() === $trade->user_id
-            ? $trade->product->user
-            : $trade->user;
+        // ④ 相手ユーザー
+        $tradeUser = $userId === $trade->user_id ? $trade->product->user : $trade->user;
 
-        $tradeUser = Auth::id() === $trade->user_id
-            ? $trade->product->user
-            : $trade->user;
+        // ⑤ その他の取引（買い手・売り手の両方を全件、今見ている取引を除外）
+        $activeStatuses = ['pending', 'sold', 'completed']; // 必要なら調整
 
-        // ▼ 出品者がログインしている場合は、他の取引も取得
-        $otherTrades = collect();
-        if (Auth::id() === $trade->product->user_id) {
-            $otherTrades = Purchase::whereHas('product', function ($query) {
-                $query->where('user_id', Auth::id());
+        $otherTrades = Purchase::query()
+            ->where('id', '!=', $trade->id)
+            ->whereIn('status', $activeStatuses)
+            ->where(function ($q) use ($userId) {
+                $q->where('user_id', $userId) // 自分が買い手の取引
+                    ->orWhereHas('product', fn($q2) => $q2->where('user_id', $userId)); // 自分が売り手の取引
             })
-                ->where('id', '!=', $trade->id)
-                ->with('product')
-                ->get();
-        }
+            ->with('product')
+            ->latest('updated_at') // 並びはお好みで
+            ->get();
 
-        // ⭐ 出品者がまだ評価していない場合、モーダルを表示する
+        // ⑥ 未読件数（まとめて取得）
+        $unreadCounts = Message::selectRaw('purchase_id, COUNT(*) as cnt')
+            ->whereIn('purchase_id', $otherTrades->pluck('id'))
+            ->where('user_id', '!=', $userId)
+            ->where('is_read', false)
+            ->groupBy('purchase_id')
+            ->pluck('cnt', 'purchase_id')
+            ->toArray();
+
+        // ⑦ 出品者側モーダル（出品者がまだ評価していない場合のみ表示）
         $shouldShowRatingModal = false;
-        if (Auth::id() === $trade->product->user_id && $trade->is_rated) {
+        if ($userId === $trade->product->user_id && $trade->is_rated) {
             $alreadyRated = Rating::where('purchase_id', $trade->id)
-                ->where('reviewer_id', Auth::id())
+                ->where('reviewer_id', $userId)
                 ->exists();
-
-            if (!$alreadyRated) {
-                $shouldShowRatingModal = true;
-            }
+            if (!$alreadyRated) $shouldShowRatingModal = true;
         }
 
-        // ビューの分岐（購入者 or 出品者）
-        if (Auth::id() === $trade->user_id) {
-            // 購入者としての他の取引を取得
-            $otherTrades = Purchase::where('user_id', Auth::id())
-                ->where('id', '!=', $trade->id)
-                ->with('product')
-                ->get();
-
-            // ✅ 未読件数カウント（return の前に！）
-            $unreadCounts = [];
-            foreach ($otherTrades as $otherTrade) {
-                $unreadCount = Message::where('purchase_id', $otherTrade->id)
-                    ->where('user_id', '!=', Auth::id())
-                    ->where('is_read', false)
-                    ->count();
-
-                $unreadCounts[$otherTrade->id] = $unreadCount;
-            }
-
+        // ⑧ ビュー分岐（買い手/売り手）。※ otherTrades はどちらにも渡す
+        if ($userId === $trade->user_id) {
             return view('trade-chat-buyer', [
-                'trade' => $trade,
-                'tradeUser' => $tradeUser,
-                'messages' => $messages,
-                'otherTrades' => $otherTrades,
-                'unreadCounts' => $unreadCounts,
+                'trade'         => $trade,
+                'tradeUser'     => $tradeUser,
+                'messages'      => $messages,
+                'otherTrades'   => $otherTrades,
+                'unreadCounts'  => $unreadCounts,
             ]);
         } else {
-            // 出品者用ビュー
-
-            // ✅ 未読件数カウント（こちらも return の前に！）
-            $unreadCounts = [];
-            foreach ($otherTrades as $otherTrade) {
-                $unreadCount = Message::where('purchase_id', $otherTrade->id)
-                    ->where('user_id', '!=', Auth::id())
-                    ->where('is_read', false)
-                    ->count();
-
-                $unreadCounts[$otherTrade->id] = $unreadCount;
-            }
-
-            return view('trade-chat-seller', compact(
-                'trade',
-                'tradeUser',
-                'messages',
-                'otherTrades',
-                'shouldShowRatingModal',
-                'unreadCounts'
-            ));
+            return view('trade-chat-seller', [
+                'trade'                 => $trade,
+                'tradeUser'             => $tradeUser,
+                'messages'              => $messages,
+                'otherTrades'           => $otherTrades,
+                'unreadCounts'          => $unreadCounts,
+                'shouldShowRatingModal' => $shouldShowRatingModal,
+            ]);
         }
     }
 
-
-
     public function sendMessage(StoreMessageRequest $request, $tradeId)
     {
-        // 取引データを取得（出品者 or 購入者のみ送信可能）
         $trade = Purchase::where('id', $tradeId)
-            ->where(function ($query) {
-                $query->where('user_id', Auth::id()) // 購入者
-                    ->orWhereHas('product', function ($q) {
-                        $q->where('user_id', Auth::id()); // 出品者
-                    });
+            ->where(function ($q) {
+                $q->where('user_id', Auth::id())
+                    ->orWhereHas('product', fn($q2) => $q2->where('user_id', Auth::id()));
             })
             ->firstOrFail();
 
-        // 画像があれば保存
         $path = null;
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('message_images', 'public');
         }
 
-        // メッセージ保存
         Message::create([
             'purchase_id' => $trade->id,
-            'user_id' => Auth::id(),
-            'content' => $request->message,
-            'image_path' => $path,
+            'user_id'     => Auth::id(),
+            'content'     => $request->message,
+            'image_path'  => $path,
         ]);
 
         return redirect()->route('trade.show', ['trade_id' => $trade->id])
             ->with('success', 'メッセージを送信しました');
     }
+
     public function complete(Request $request, $tradeId)
     {
         $request->validate([
@@ -154,29 +125,26 @@ class TradeController extends Controller
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        // 重複評価防止（1回だけ）
         if ($trade->is_rated) {
             return redirect()->route('trade.show', ['trade_id' => $trade->id])
                 ->with('error', 'すでに評価済みです');
         }
 
-        // 評価を保存
         Rating::create([
-            'purchase_id' => $trade->id,
-            'reviewer_id' => Auth::id(), // ← 評価する側（購入者）
-            'reviewed_user_id' => $trade->product->user_id, // ← 評価される側（出品者）
-            'score' => $request->rating,
+            'purchase_id'     => $trade->id,
+            'reviewer_id'     => Auth::id(),
+            'reviewed_user_id' => $trade->product->user_id,
+            'score'           => $request->rating,
         ]);
 
-
-        // 取引の評価済みフラグを更新
         $trade->is_rated = true;
-        $trade->status = 'completed';
+        $trade->status   = 'completed';
         $trade->save();
 
         return redirect()->route('products.index')
             ->with('success', '取引を完了し、評価を送信しました');
     }
+
     public function submitSellerRating(Request $request, $tradeId)
     {
         $request->validate([
@@ -185,22 +153,19 @@ class TradeController extends Controller
 
         $trade = Purchase::with('product')
             ->where('id', $tradeId)
-            ->whereHas('product', function ($q) {
-                $q->where('user_id', Auth::id());
-            })
+            ->whereHas('product', fn($q) => $q->where('user_id', Auth::id()))
             ->firstOrFail();
 
-        // すでに評価済みならスキップ
         if ($trade->is_rated_by_seller) {
             return redirect()->route('trade.show', ['trade_id' => $trade->id])
                 ->with('error', 'すでに評価済みです');
         }
 
         Rating::create([
-            'purchase_id' => $trade->id,
-            'reviewer_id' => Auth::id(), // 出品者
-            'reviewed_user_id' => $trade->user_id, // 購入者
-            'score' => $request->rating,
+            'purchase_id'      => $trade->id,
+            'reviewer_id'      => Auth::id(),
+            'reviewed_user_id' => $trade->user_id,
+            'score'            => $request->rating,
         ]);
 
         $trade->is_rated_by_seller = true;
