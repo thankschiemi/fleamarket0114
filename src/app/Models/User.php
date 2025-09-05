@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Rating;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -59,5 +60,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'user_id');
+    }
+
+    public function ratingsReceived(): HasMany
+    {
+        return $this->hasMany(Rating::class, 'reviewed_user_id');
     }
 }

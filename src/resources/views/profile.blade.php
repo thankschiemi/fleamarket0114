@@ -13,14 +13,27 @@
     @endif
 
     <div class="profile__header">
-        <img src="{{ $user->profile_image_path ? asset($user->profile_image_path) : asset('images/default-avatar.jpg') }}"
-            alt="プロフィール画像" class="profile__image">
-        <p class="profile__name">{{ $user->name }}</p>
-        <div class="profile__rating">
-            ★★★★★
+        <img
+            src="{{ $user->profile_image_path ? asset($user->profile_image_path) : asset('images/default-avatar.jpg') }}"
+            alt="プロフィール画像"
+            class="profile__image profile__image--lg">
+
+        <div class="profile__namewrap">
+            <p class="profile__name">{{ $user->name }}</p>
+
+            @if(!empty($ratingCount) && $ratingCount > 0)
+            <div class="profile__stars" role="img" aria-label="評価 {{ $ratingAvg }}/5（{{ $ratingCount }}件）">
+                @for($i = 1; $i <= 5; $i++)
+                    <span class="star {{ $i <= $ratingAvg ? 'is-filled' : '' }}">★</span>
+                    @endfor
+            </div>
+            @endif
         </div>
+
         <a href="{{ route('mypage.profile') }}" class="profile__edit-button">プロフィールを編集</a>
     </div>
+
+
 
     <div class="profile__tabs">
         <a href="?tab=sell" class="profile__tab {{ $tab === 'sell' ? 'profile__tab--active' : '' }}">出品した商品</a>

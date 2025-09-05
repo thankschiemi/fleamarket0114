@@ -10,6 +10,7 @@ use App\Http\Requests\ExhibitionRequest;
 use App\Models\Purchase;
 use App\Models\Message;
 use Illuminate\Support\Facades\DB;
+use App\Models\Rating;
 
 
 class ProductController extends Controller
@@ -138,6 +139,14 @@ class ProductController extends Controller
             ->whereIn('purchase_id', $relatedPurchaseIds)
             ->count();
 
+        $ratingStats = Rating::where('reviewed_user_id', $user->id)
+            ->selectRaw('COUNT(*) AS cnt, ROUND(AVG(score), 0) AS avg_rounded')
+            ->first();
+
+        $ratingCount = (int) ($ratingStats->cnt ?? 0);
+        $ratingAvg   = $ratingCount > 0 ? (int) $ratingStats->avg_rounded : null;
+
+
         return view('profile', compact(
             'user',
             'tab',
@@ -145,15 +154,11 @@ class ProductController extends Controller
             'purchasedProducts',
             'tradingProducts',
             'unreadCounts',
-            'unreadCountTotal'
+            'unreadCountTotal',
+            'ratingAvg',
+            'ratingCount'
         ));
     }
-
-
-
-
-
-
 
     public function create()
     {
