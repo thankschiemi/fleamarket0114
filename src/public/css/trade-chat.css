@@ -320,17 +320,33 @@
     object-fit: contain;
 }
 
-.trade-chat__error-messages {
-    background-color: #ffe6e6;
-    color: #cc0000;
-    border: 1px solid #ff9999;
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    line-height: 1.6;
+/* 画面下の固定バーの少し上にエラーを固定表示 */
+:root {
+    --chat-input-height: 72px;
 }
 
+/* すでにあればそのままでOK */
+
+.trade-chat__error-messages {
+    position: fixed;
+    left: 220px;
+    /* サイドバー幅に合わせる */
+    bottom: calc(var(--chat-input-height) + 10px);
+    max-width: calc(100% - 220px - 24px);
+    background: #fff1f1;
+    color: #b30000;
+    border: 1px solid #ffb3b3;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 16px;
+    font-weight: 700;
+    z-index: 120;
+    /* 入力バーより前面 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
 .trade-chat__error-messages p {
     margin: 4px 0;
 }
@@ -438,4 +454,8 @@
         width: 40px;
         height: 40px;
     }
+        .trade-chat__error-messages {
+            left: 12px;
+            max-width: calc(100% - 24px);
+        }
 }

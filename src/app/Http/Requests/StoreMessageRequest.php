@@ -14,7 +14,7 @@ class StoreMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required_without:image|string|max:400',
+            'message' => 'required_without:image|max:400',
             'image' => 'nullable|file|mimes:jpeg,png',
         ];
     }
