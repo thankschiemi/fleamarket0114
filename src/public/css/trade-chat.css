@@ -245,20 +245,34 @@
     color: #333;
 }
 
-/* 入力フォーム */
+/* 入力バーの高さ（使い回せるように変数化） */
+:root {
+    --chat-input-height: 72px;
+}
+
+/* 固定バーの見た目（高さをはっきりさせる） */
 .trade-chat__input {
     position: fixed;
     bottom: 0;
-    left: 240px;
-    /* サイドバーの幅に合わせて */
-    width: calc(100% - 240px);
-    /* 幅も調整する */
-    background-color: #fff;
-    padding: 12px;
+    left: 220px;
+    /* サイドバー幅に合わせる */
+    width: calc(100% - 220px);
+    /* 同上 */
+    height: var(--chat-input-height);
     display: flex;
     align-items: center;
+    background: #fff;
+    padding: 8px 12px;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, .06);
     z-index: 100;
 }
+
+/* メッセージ領域の下に入力バーぶんの余白を確保（＝隠れない） */
+.trade-chat__messages {
+    padding-bottom: calc(var(--chat-input-height) + 16px);
+}
+
+
 .trade-chat__form {
     flex-grow: 1;
     display: flex;
