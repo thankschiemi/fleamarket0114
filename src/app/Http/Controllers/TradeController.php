@@ -8,6 +8,8 @@ use App\Models\Rating;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreMessageRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SellerTradeCompletedMail;
 
 class TradeController extends Controller
 {
@@ -140,6 +142,13 @@ class TradeController extends Controller
         $trade->is_rated = true;
         $trade->status   = 'completed';
         $trade->save();
+
+        // ★ 出品者に通知メール（保存後・リダイレクト前）
+        $sellerEmail = $trade->product?->user?->email;
+        if (!empty($sellerEmail)) {
+            Mail::to($sellerEmail)->send(new SellerTradeCompletedMail($trade));
+            // キュー化したい場合は ->queue(new ...);
+        }
 
         return redirect()->route('products.index')
             ->with('success', '取引を完了し、評価を送信しました');
