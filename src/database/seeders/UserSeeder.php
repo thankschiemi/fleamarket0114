@@ -10,7 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        // 既存のデフォルトユーザーを追加
         if (!User::where('email', 'default@example.com')->exists()) {
             User::create([
                 'name' => 'テストユーザー',
@@ -19,7 +18,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // ユーザーA（C001～C005の商品を出品）
         if (!User::where('email', 'usera@example.com')->exists()) {
             User::create([
                 'name' => 'ユーザーA',
@@ -28,7 +26,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // ユーザーB（C006～C010の商品を出品）
         if (!User::where('email', 'userb@example.com')->exists()) {
             User::create([
                 'name' => 'ユーザーB',
@@ -37,7 +34,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // ユーザーC（何も紐づいていないユーザー）
         if (!User::where('email', 'userc@example.com')->exists()) {
             User::create([
                 'name' => 'ユーザーC',

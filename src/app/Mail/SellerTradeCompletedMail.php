@@ -15,7 +15,7 @@ class SellerTradeCompletedMail extends Mailable
 
     public function __construct(Purchase $purchase)
     {
-        // 必要な関連を読み込んで保持
+
         $this->purchase = $purchase->load('product', 'user');
     }
 

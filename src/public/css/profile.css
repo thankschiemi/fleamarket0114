@@ -185,16 +185,12 @@
 .notification-badge-tab {
     position: absolute;
     top: 10px;
-    /* 少し下げる */
     right: -40px;
-    /* 右に近づける */
     background-color: red;
     color: white;
     border-radius: 50%;
     padding: 1px 4px;
-    /* 少し小さめに */
     font-size: 20px;
-    /* 文字と近いサイズに調整 */
     line-height: 1;
 }
 
@@ -205,40 +201,30 @@
     pointer-events: none;
     cursor: default;
 }
-/* 名前＋星をまとめて右へオフセット */
 .profile__namewrap {
     margin-left: 50px;
-    /* ← ここに左余白を移す */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
-    /* 名前と星の間のすき間 */
 }
-
-/* 名前は余白なし＆リセット */
 .profile__name {
     font-size: 36px;
     font-weight: bold;
     color: #333;
     margin: 0;
-    /* ← ここが重要（margin-left: 0） */
 }
 
-/* 星の見た目 */
 .profile__stars .star {
     font-size: 28px;
-    /* 大きめに */
     letter-spacing: 2px;
-    /* 星の間隔 */
     color: #d9d9d9;
-    /* 空の星（グレー） */
     line-height: 1;
 }
 
 .profile__stars .star.is-filled {
     color: #ffd84d;
-    /* 塗りの星（黄色） */
+
 }
 
 @media (min-width: 1400px) and (max-width: 1540px) {

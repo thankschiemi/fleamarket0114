@@ -13,7 +13,6 @@ class FavoriteController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // `favoritedByProducts()` を使用して「いいね」の追加・削除
         if ($user->favoritedByProducts()->where('product_id', $product->id)->exists()) {
             $user->favoritedByProducts()->detach($product->id);
         } else {

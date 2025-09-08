@@ -27,19 +27,17 @@ class PurchasesController extends Controller
     public function complete(Request $request, $item_id)
     {
         if (app()->environment('testing')) {
-            // 購入データを保存（テスト環境用）
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
                 'payment_method' => 'credit_card',
-                'status' => 'trading', // 修正なし（取引開始）
+                'status' => 'trading',
                 'purchase_date' => now(),
             ]);
 
-            // 商品のステータスを "sold" に変更
             $product = Product::find($item_id);
             if ($product) {
-                $product->update(['status' => 'sold']); // is_sold ではなく status を統一
+                $product->update(['status' => 'sold']);
             }
 
             return redirect()->route('products.index')->with('success', '購入が完了しました！（テスト環境）');
@@ -56,7 +54,6 @@ class PurchasesController extends Controller
         $paymentMethod = $session->payment_method_types[0] ?? 'card';
 
         if ($paymentMethod === 'konbini') {
-            // コンビニ支払いの場合、購入データを保存
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
@@ -69,7 +66,6 @@ class PurchasesController extends Controller
         }
 
         if ($session->payment_status === 'paid') {
-            // クレジットカード支払いが成功した場合、購入データを保存
             Purchase::create([
                 'user_id' => Auth::id(),
                 'product_id' => $item_id,
@@ -78,10 +74,10 @@ class PurchasesController extends Controller
                 'purchase_date' => now(),
             ]);
 
-            // 商品のステータスを "sold" に変更
+
             $product = Product::find($item_id);
             if ($product) {
-                $product->update(['status' => 'sold']); // 修正
+                $product->update(['status' => 'sold']);
             }
 
             return redirect()->route('products.index')->with('success', '購入が完了しました！');
@@ -95,13 +91,12 @@ class PurchasesController extends Controller
     {
         $trade = Purchase::findOrFail($tradeId);
 
-        // 購入者のみが受取完了できるようにする
         if ($trade->user_id !== Auth::id()) {
             return redirect()->route('trade.show', ['trade_id' => $trade->id])
                 ->with('error', 'この商品を受け取る権限がありません。');
         }
 
-        // 取引完了に変更
+
         $trade->update(['status' => 'completed']);
         $trade->product->update(['status' => 'completed']);
 

@@ -35,12 +35,12 @@ class ProductController extends Controller
         } else {
             $products = Product::query()
                 ->when(Auth::check(), function ($queryBuilder) {
-                    return $queryBuilder->where('user_id', '!=', Auth::id()); // 自分の商品は非表示
+                    return $queryBuilder->where('user_id', '!=', Auth::id());
                 })
                 ->when($query, function ($queryBuilder) use ($query) {
                     return $queryBuilder->where('name', 'LIKE', "%{$query}%");
                 })
-                ->orderByRaw("FIELD(status, 'available', 'trading', 'sold')") // 並び順を適用
+                ->orderByRaw("FIELD(status, 'available', 'trading', 'sold')")
                 ->get();
         }
 
@@ -51,24 +51,18 @@ class ProductController extends Controller
         ]);
     }
 
-
     public function show($id)
     {
         $product = Product::with(['favoritedByUsers', 'reviews.user', 'categories'])->findOrFail($id);
 
         return view('products.product-detail', compact('product'));
     }
-
-
     public function showProfile(Request $request)
     {
         $user = auth()->user();
         $tab  = $request->query('tab', 'sell');
-
-        // 出品した商品（すべて）
         $sellingProducts = Product::where('user_id', $user->id)->latest()->get();
 
-        // 購入した商品（= 完了済みのものを表示）
         $purchasedProducts = Purchase::where('user_id', $user->id)
             ->whereHas('product', function ($q) {
                 $q->whereIn('status', ['sold', 'completed']);
@@ -76,41 +70,33 @@ class ProductController extends Controller
             ->with('product')
             ->get();
 
-        // ===========================
-        // ▼ ここが“取引中”の並び替え本体 ▼
-        // ===========================
         $tradingPurchases = Purchase::query()
             ->whereIn('status', ['pending', 'sold', 'completed'])
             ->where(function ($q) use ($user) {
-                $q->where('user_id', $user->id) // 自分が購入者
-                    ->orWhereHas('product', fn($q2) => $q2->where('user_id', $user->id)); // 自分が出品者
+                $q->where('user_id', $user->id)
+                    ->orWhereHas('product', fn($q2) => $q2->where('user_id', $user->id));
             })
             ->with('product')
 
-            // 相手からの最新メッセージ時刻（なければ null）
             ->addSelect([
                 'last_incoming_at' => Message::select('created_at')
                     ->whereColumn('purchase_id', 'purchases.id')
                     ->where('user_id', '!=', $user->id)
                     ->orderByDesc('created_at')
                     ->limit(1),
-                // どちらからでも最新（相手からが無い場合のフォールバック）
                 'last_message_at' => Message::select('created_at')
                     ->whereColumn('purchase_id', 'purchases.id')
                     ->orderByDesc('created_at')
                     ->limit(1),
             ])
 
-            // 未読数（相手からのみ）
             ->withCount(['messages as unread_count' => function ($q) use ($user) {
                 $q->where('user_id', '!=', $user->id)->where('is_read', false);
             }])
 
-            // 並び順：相手からの最新 → 無ければ全体の最新
             ->orderByRaw('COALESCE(last_incoming_at, last_message_at) DESC')
             ->get();
 
-        // Blade用の形に整形（従来のキー名を維持）
         $tradingProducts = $tradingPurchases->map(function ($p) use ($user) {
             $isSeller = optional($p->product)->user_id === $user->id;
             return (object) [
@@ -124,10 +110,8 @@ class ProductController extends Controller
             ];
         })->values();
 
-        // 個別未読数の連想配列（必要なら Blade で使えるように残す）
         $unreadCounts = $tradingPurchases->pluck('unread_count', 'id')->toArray();
 
-        // タブの赤丸：関連する全取引の未読合計（買い手/売り手の両方）
         $relatedPurchaseIds = Purchase::where('user_id', $user->id)
             ->orWhereHas('product', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
@@ -146,7 +130,6 @@ class ProductController extends Controller
         $ratingCount = (int) ($ratingStats->cnt ?? 0);
         $ratingAvg   = $ratingCount > 0 ? (int) $ratingStats->avg_rounded : null;
 
-
         return view('profile', compact(
             'user',
             'tab',
@@ -162,21 +145,12 @@ class ProductController extends Controller
 
     public function create()
     {
-
         if (!auth()->check()) {
             return redirect()->route('login')->with('redirect_to', request()->fullUrl());
         }
         $categories = Category::all();
         return view('products.product-exhibit', compact('categories'));
     }
-
-
-
-
-
-
-
-
     public function store(ExhibitionRequest $request)
     {
         $data = $request->validated();
@@ -185,27 +159,20 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
 
-            // 拡張子が取得できない場合の対応
             $originalName = $file->getClientOriginalName();
             $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
             if (!$extension) {
-                $extension = 'jpg'; // 拡張子が取得できない場合はデフォルトを設定
+                $extension = 'jpg';
             }
 
-            // ランダムなファイル名を生成
             $filename = time() . '_' . uniqid() . '.' . $extension;
 
-            // public/storage/products に保存
             $file->storeAs('public/products', $filename);
 
-            // データベースには 'products/filename.jpg' の形で保存
             $imagePath = 'products/' . $filename;
         }
 
-
-
-        // 商品の保存
         $product = Product::create([
             'user_id' => auth()->id(),
             'name' => $request->name,

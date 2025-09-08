@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="trade-chat">
-    <!-- サイドバー -->
     <div class="trade-chat__sidebar">
         <h2 class="trade-chat__sidebar-title">その他の取引</h2>
 
@@ -20,7 +19,6 @@
 
 
     </div>
-    <!-- メインコンテンツ -->
     <div class="trade-chat__main">
         <header class="trade-chat__header">
             <div class="trade-chat__user">
@@ -103,7 +101,6 @@
 </div>
 @endsection
 
-<!-- 評価モーダル -->
 <div id="ratingModal" class="rating-modal" style="display: none;">
     <div class="rating-modal__content">
         <h2 class="rating-modal__title">取引が完了しました。</h2>
@@ -137,7 +134,6 @@
                 const value = this.getAttribute('data-value');
                 ratingInput.value = value;
 
-                // ハイライト切り替え
                 stars.forEach(s => {
                     s.classList.remove('active');
                     if (s.getAttribute('data-value') <= value) {
